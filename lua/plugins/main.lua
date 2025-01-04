@@ -10,4 +10,5 @@ return {
       vim.g.startuptime_tries = 10
     end,
   },
+  { 'akinsho/bufferline.nvim', version = '*', dependencies = 'nvim-tree/nvim-web-devicons' },
 }
