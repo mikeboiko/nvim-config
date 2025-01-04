@@ -1,6 +1,12 @@
 return {
   { 'stevearc/dressing.nvim', opts = {} },
-  { 'ellisonleao/gruvbox.nvim', priority = 1000, config = true },
+  {
+    'ellisonleao/gruvbox.nvim',
+    priority = 1000,
+    config = function()
+      vim.cmd([[colorscheme gruvbox]])
+    end,
+  },
   {
     'dstein64/vim-startuptime',
     -- lazy-load on a command
@@ -10,5 +16,4 @@ return {
       vim.g.startuptime_tries = 10
     end,
   },
-  { 'akinsho/bufferline.nvim', version = '*', dependencies = 'nvim-tree/nvim-web-devicons' },
 }
