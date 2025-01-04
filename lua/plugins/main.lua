@@ -1,4 +1,5 @@
 return {
+  { 'stevearc/dressing.nvim', opts = {} },
   { 'ellisonleao/gruvbox.nvim', priority = 1000, config = true },
   {
     'dstein64/vim-startuptime',
