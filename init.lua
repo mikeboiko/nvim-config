@@ -1,6 +1,4 @@
-require('config.lazy')
-
--- one-small-step-for-vimkind nvim-dap debugging
+-- For nvim-dap debugging
 if init_debug then
   require('osv').launch({ port = 8086, blocking = true })
 end
@@ -15,3 +13,5 @@ vim.cmd('source ~/.config/nvim/vimscript/init.vim')
 require('config.constants')
 require('config.keymaps')
 require('config.options')
+
+require('config.lazy')

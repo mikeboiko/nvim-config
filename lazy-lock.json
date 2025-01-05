@@ -35,6 +35,7 @@
   "tagbar": { "branch": "master", "commit": "8de7694c0aeda253073098bbc9fb890b2902ddb8" },
   "vim-airline": { "branch": "master", "commit": "7a552f415c48aed33bf7eaa3c50e78504d417913" },
   "vim-checkbox": { "branch": "master", "commit": "1000afeda19c989c13ebdc2640c4d49f77cd0143" },
+  "vim-flow": { "branch": "master", "commit": "468f73de873671b8192a9200c3ebcef9cca8c71a" },
   "vim-fugitive": { "branch": "master", "commit": "174230d6a7f2df94705a7ffd8d5413e27ec10a80" },
   "vim-gutentags": { "branch": "master", "commit": "aa47c5e29c37c52176c44e61c780032dfacef3dd" },
   "vim-log-highlighting": { "branch": "master", "commit": "1037e26f3120e6a6a2c0c33b14a84336dee2a78f" },
@@ -43,7 +44,9 @@
   "vim-repeat": { "branch": "master", "commit": "65846025c15494983dafe5e3b46c8f88ab2e9635" },
   "vim-rhubarb": { "branch": "master", "commit": "ee69335de176d9325267b0fd2597a22901d927b1" },
   "vim-scimark": { "branch": "master", "commit": "e6947e1f5dee201a01a29d147363b6ad0b020dba" },
+  "vim-scriptease": { "branch": "master", "commit": "cdb5981d47ac98221a408ae2e7cae66524d9e872" },
   "vim-sort-folds": { "branch": "master", "commit": "0c3a1d3a41c4479cf35fc3d2d9af878b710e966a" },
   "vim-startuptime": { "branch": "master", "commit": "ac2cccb5be617672add1f4f3c0a55ce99ba34e01" },
-  "vim-tmux-navigator": { "branch": "master", "commit": "d847ea942a5bb4d4fab6efebc9f30d787fd96e65" }
+  "vim-tmux-navigator": { "branch": "master", "commit": "d847ea942a5bb4d4fab6efebc9f30d787fd96e65" },
+  "vira": { "branch": "dev", "commit": "b613860612397ee43b708c70156d062d5883fd12" }
 }

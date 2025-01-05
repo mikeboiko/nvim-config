@@ -5,9 +5,9 @@ return {
   { -- img-paste.vim {{{1
     'mikeboiko/img-paste.vim',
   }, -- }}}
-  -- { -- vim-flow {{{1
-  --   'mikeboiko/vim-flow',
-  -- }, -- }}}
+  { -- vim-flow {{{1
+    'mikeboiko/vim-flow',
+  }, -- }}}
   { -- vim-markdown-folding {{{1
     'mikeboiko/vim-markdown-folding',
   }, -- }}}

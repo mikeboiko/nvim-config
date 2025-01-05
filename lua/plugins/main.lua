@@ -1,4 +1,12 @@
 return {
+  { -- vira {{{1
+    'n0v1c3/vira',
+    build = './install.sh',
+    branch = 'dev',
+  }, -- }}}
+  { -- vim-scriptease: Help with vimscript {{{1
+    'tpope/vim-scriptease',
+  }, -- }}}
   { -- ReplaceWithRegister: Replace without copying to buffer {{{1
     'vim-scripts/ReplaceWithRegister',
   }, -- }}}

@@ -19,12 +19,6 @@ else
     let vimHomeDir = $HOME . '/vimfiles'
 endif
 
-if has('mac')
-  let g:python3_host_prog='/usr/bin/python3'
-else
-  let g:python3_host_prog='/usr/bin/python'
-endif
-
 " Functions {{{1
 
 " FoldText {{{2
