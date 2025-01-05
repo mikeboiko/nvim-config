@@ -1,11 +1,13 @@
 return {
+  -- nvim-dap-ui {{{1
   {
     'rcarriga/nvim-dap-ui',
     dependencies = { 'mfussenegger/nvim-dap', 'mfussenegger/nvim-dap-python', 'nvim-neotest/nvim-nio' },
     config = function()
       require('dapui').setup()
     end,
-  },
+  }, -- }}}
+  -- one-small-step-for-vimkind {{{1
   {
     'jbyuki/one-small-step-for-vimkind',
     config = function()
@@ -32,5 +34,6 @@ return {
         require('osv').launch({ port = 8086 })
       end, { noremap = true })
     end,
-  },
+  }, -- }}}
 }
+-- vim: foldmethod=marker:foldlevel=1
