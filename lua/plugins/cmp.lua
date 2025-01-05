@@ -1,6 +1,4 @@
 return {
-  { -- {{{1
-  }, -- }}}
   { -- nvim-cmp {{{1
     'hrsh7th/nvim-cmp',
     event = 'InsertEnter',

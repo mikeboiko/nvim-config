@@ -1,4 +1,61 @@
 return {
+  { -- ReplaceWithRegister: Replace without copying to buffer {{{1
+    'vim-scripts/ReplaceWithRegister',
+  }, -- }}}
+  { -- dressing.nvim: UI {{{1
+    'stevearc/dressing.nvim',
+    opts = {},
+    config = function()
+      require('dressing').setup({
+        input = {
+          insert_only = false,
+          start_in_insert = false,
+        },
+      })
+    end,
+  }, -- }}}
+  { -- gruvbox: Theme {{{1
+    'ellisonleao/gruvbox.nvim',
+    priority = 1000,
+    config = function()
+      vim.cmd([[colorscheme gruvbox]])
+    end,
+  }, -- }}}
+  { -- gv.vim {{{1
+    'junegunn/gv.vim',
+  }, -- }}}
+  { -- indent-blankline.nvim {{{1
+    'lukas-reineke/indent-blankline.nvim',
+    main = 'ibl',
+    ---@module "ibl"
+    ---@type ibl.config
+    opts = {},
+    config = function()
+      require('ibl').setup()
+    end,
+  }, -- }}}
+  { -- markdown-preview.nvim {{{1
+    'iamcco/markdown-preview.nvim',
+    cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
+    build = 'cd app && yarn install',
+    init = function()
+      vim.g.mkdp_filetypes = { 'markdown' }
+    end,
+    ft = { 'markdown' },
+  }, -- }}}
+  { -- nvim-bqf {{{1
+    'kevinhwang91/nvim-bqf',
+    config = function()
+      require('bqf').setup({
+        auto_enable = true,
+        auto_resize_height = true,
+        func_map = {
+          split = '<C-s>',
+          tabdrop = '<C-t>',
+        },
+      })
+    end,
+  }, -- }}}
   { -- nvim-tree.lua {{{1
     'nvim-tree/nvim-tree.lua',
     version = '*',
@@ -55,62 +112,6 @@ return {
       })
     end,
   }, -- }}}
-
-  { -- vim-scimark: TUI spreadsheet {{{1
-    'mipmip/vim-scimark',
-  }, -- }}}
-  { -- indent-blankline.nvim {{{1
-    'lukas-reineke/indent-blankline.nvim',
-    main = 'ibl',
-    ---@module "ibl"
-    ---@type ibl.config
-    opts = {},
-    config = function()
-      require('ibl').setup()
-    end,
-  }, -- }}}
-  { -- nvim-bqf {{{1
-    'kevinhwang91/nvim-bqf',
-    config = function()
-      require('bqf').setup({
-        auto_enable = true,
-        auto_resize_height = true,
-        func_map = {
-          split = '<C-s>',
-          tabdrop = '<C-t>',
-        },
-      })
-    end,
-  }, -- }}}
-  { -- gv.vim {{{1
-    'junegunn/gv.vim',
-  }, -- }}}
-  { -- vim-checkbox {{{1
-    'jkramer/vim-checkbox',
-  }, -- }}}
-  { -- markdown-preview.nvim {{{1
-    'iamcco/markdown-preview.nvim',
-    cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
-    build = 'cd app && yarn install',
-    init = function()
-      vim.g.mkdp_filetypes = { 'markdown' }
-    end,
-    ft = { 'markdown' },
-  }, -- }}}
-  { -- tabular: Align things {{{1
-    'godlygeek/tabular',
-  }, -- }}}
-  { -- dressing.nvim: UI {{{1
-    'stevearc/dressing.nvim',
-    opts = {},
-  }, -- }}}
-  { -- gruvbox: Theme {{{1
-    'ellisonleao/gruvbox.nvim',
-    priority = 1000,
-    config = function()
-      vim.cmd([[colorscheme gruvbox]])
-    end,
-  }, -- }}}
   { -- nvim-ts-context-commentstring: Vue comment strings {{{1
     'JoosepAlviste/nvim-ts-context-commentstring',
     config = function()
@@ -118,6 +119,21 @@ return {
         enable_autocmd = false,
       }
     end,
+  }, -- }}}
+  { -- tabular: Align things {{{1
+    'godlygeek/tabular',
+  }, -- }}}
+  { -- vim-airline: Status bar {{{1
+    'vim-airline/vim-airline',
+  }, -- }}}
+  { -- vim-checkbox {{{1
+    'jkramer/vim-checkbox',
+  }, -- }}}
+  { -- vim-repeat: Repeat surround {{{1
+    'tpope/vim-repeat',
+  }, -- }}}
+  { -- vim-scimark: TUI spreadsheet {{{1
+    'mipmip/vim-scimark',
   }, -- }}}
   { -- vim-startup-time {{{1
     'dstein64/vim-startuptime',
@@ -127,6 +143,9 @@ return {
     init = function()
       vim.g.startuptime_tries = 10
     end,
+  }, -- }}}
+  { -- vim-surround  {{{1
+    'tpope/vim-repeat',
   }, -- }}}
   { -- vim-tmux-navigator {{{1
     'christoomey/vim-tmux-navigator',
