@@ -1,17 +1,16 @@
 return {
-  -- dressing.nvim: UI {{{1
-  { 'stevearc/dressing.nvim', opts = {} },
-  -- }}}
-  -- gruvbox: Theme {{{1
-  {
+  { -- dressing.nvim: UI {{{1
+    'stevearc/dressing.nvim',
+    opts = {},
+  }, -- }}}
+  { -- gruvbox: Theme {{{1
     'ellisonleao/gruvbox.nvim',
     priority = 1000,
     config = function()
       vim.cmd([[colorscheme gruvbox]])
     end,
   }, -- }}}
-  -- nvim-ts-context-commentstring: Vue comment strings {{{1
-  {
+  { -- nvim-ts-context-commentstring: Vue comment strings {{{1
     'JoosepAlviste/nvim-ts-context-commentstring',
     config = function()
       require('ts_context_commentstring').setup {
@@ -19,8 +18,7 @@ return {
       }
     end,
   }, -- }}}
-  -- vim-startup-time {{{1
-  {
+  { -- vim-startup-time {{{1
     'dstein64/vim-startuptime',
     -- lazy-load on a command
     cmd = 'StartupTime',
@@ -29,8 +27,7 @@ return {
       vim.g.startuptime_tries = 10
     end,
   }, -- }}}
-  -- vim-tmux-navigator {{{1
-  {
+  { -- vim-tmux-navigator {{{1
     'christoomey/vim-tmux-navigator',
     cmd = {
       'TmuxNavigateLeft',

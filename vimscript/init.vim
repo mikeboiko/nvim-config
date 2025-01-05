@@ -91,6 +91,8 @@ function! RemoveSpecialCharacters(line) " {{{3
     " Characters: " # ; /* */ // <!-- --> g:fold_marker_string
     " Remove fold marker
     let text = substitute(a:line, g:fold_marker_string.'\d\=', '', 'g')
+    " Remove {
+    let text = substitute(text, '{', '', 'g')
     " let text = substitute(a:line, g:fold_marker_string.'\d\=\|'.substitute(GetCommentString(), '%s', '', '').'\d\=\|', '', 'g')
     let text = substitute(text, substitute(GetCommentString(), '%s', '', ''), '', 'g')
     " let text = substitute(text, substitute('# %s', '%s', '', ''), '', 'g')

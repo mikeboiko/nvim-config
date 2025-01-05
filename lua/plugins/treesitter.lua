@@ -1,6 +1,5 @@
 return {
-  -- nvim-treesitter {{{1
-  {
+  { -- nvim-treesitter {{{1
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate', -- Ensures parsers are installed/updated
     event = { 'BufReadPost', 'BufNewFile' }, -- Lazy-load on file open

@@ -1,14 +1,12 @@
 return {
-  -- nvim-dap-ui {{{1
-  {
+  { -- nvim-dap-ui {{{1
     'rcarriga/nvim-dap-ui',
     dependencies = { 'mfussenegger/nvim-dap', 'mfussenegger/nvim-dap-python', 'nvim-neotest/nvim-nio' },
     config = function()
       require('dapui').setup()
     end,
   }, -- }}}
-  -- one-small-step-for-vimkind {{{1
-  {
+  { -- one-small-step-for-vimkind {{{1
     'jbyuki/one-small-step-for-vimkind',
     config = function()
       local dap = require('dap')

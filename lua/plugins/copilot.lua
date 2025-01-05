@@ -1,13 +1,11 @@
 return {
-  -- copilot-cmp {{{1
-  -- {
+  -- { -- copilot-cmp {{{1
   --   'zbirenbaum/copilot-cmp',
   --   config = function()
   --     require('copilot_cmp').setup()
   --   end,
   -- }, -- }}}
-  -- copilot.lua {{{1
-  {
+  { -- copilot.lua {{{1
     'zbirenbaum/copilot.lua',
     cmd = 'Copilot',
     event = 'InsertEnter',
@@ -23,8 +21,7 @@ return {
       })
     end,
   }, -- }}}
-  -- CopilotChat.nvim {{{1
-  {
+  { -- CopilotChat.nvim {{{1
     'CopilotC-Nvim/CopilotChat.nvim',
     dependencies = {
       { 'zbirenbaum/copilot.lua' },
