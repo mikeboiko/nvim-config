@@ -5,8 +5,8 @@ if init_debug then
   require('osv').launch({ port = 8086, blocking = true })
 end
 
--- TODO-MB [250104] - convert all of these to lua
-vim.cmd('source ~/.config/nvim/vimscript/functions.vim')
+-- TODO-MB [250104] - Convert to lua
+vim.cmd('source ~/.config/nvim/vimscript/init.vim')
 
 -- require('config.functions')
 -- require('config.commands')
