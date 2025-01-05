@@ -8,10 +8,9 @@ end
 -- TODO-MB [250104] - Convert to lua
 vim.cmd('source ~/.config/nvim/vimscript/init.vim')
 
--- require('config.functions')
+-- require('config.autocmds')
 -- require('config.commands')
-
-require('config.constants')
-require('config.keymaps')
-require('config.options')
-require('config.autocmds')
+-- require('config.constants')
+-- require('config.functions')
+-- require('config.keymaps')
+-- require('config.options')
