@@ -1,4 +1,47 @@
 return {
+  { -- {{{1
+  }, -- }}}
+  { -- indent-blankline.nvim {{{1
+    'lukas-reineke/indent-blankline.nvim',
+    main = 'ibl',
+    ---@module "ibl"
+    ---@type ibl.config
+    opts = {},
+    config = function()
+      require('ibl').setup()
+    end,
+  }, -- }}}
+  { -- nvim-bqf {{{1
+    'kevinhwang91/nvim-bqf',
+    config = function()
+      require('bqf').setup({
+        auto_enable = true,
+        auto_resize_height = true,
+        func_map = {
+          split = '<C-s>',
+          tabdrop = '<C-t>',
+        },
+      })
+    end,
+  }, -- }}}
+  { -- gv.vim {{{1
+    'junegunn/gv.vim',
+  }, -- }}}
+  { -- vim-checkbox {{{1
+    'jkramer/vim-checkbox',
+  }, -- }}}
+  { -- markdown-preview.nvim {{{1
+    'iamcco/markdown-preview.nvim',
+    cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
+    build = 'cd app && yarn install',
+    init = function()
+      vim.g.mkdp_filetypes = { 'markdown' }
+    end,
+    ft = { 'markdown' },
+  }, -- }}}
+  { -- tabular: Align things {{{1
+    'godlygeek/tabular',
+  }, -- }}}
   { -- dressing.nvim: UI {{{1
     'stevearc/dressing.nvim',
     opts = {},
