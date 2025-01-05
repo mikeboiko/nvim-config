@@ -10,7 +10,8 @@ vim.cmd('source ~/.config/nvim/vimscript/init.vim')
 
 -- require('config.autocmds')
 -- require('config.commands')
--- require('config.constants')
 -- require('config.functions')
--- require('config.keymaps')
--- require('config.options')
+
+require('config.constants')
+require('config.keymaps')
+require('config.options')
