@@ -86,8 +86,15 @@ return {
               -- Save response to a file
               local file_path = '/tmp/copilot_commit_msg'
               local file = io.open(file_path, 'w')
-              file:write(response)
-              file:close()
+              if file then
+                if file:write(response) then
+                  file:close()
+                else
+                  vim.notify('Failed to write to file', vim.log.levels.ERROR)
+                end
+              else
+                vim.notify('Failed to open file', vim.log.levels.ERROR)
+              end
 
               -- io.popen("echo vim - " .. dir .. " >> /tmp/gitdir.txt 2>&1")
               io.popen(
