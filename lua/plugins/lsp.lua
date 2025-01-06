@@ -172,11 +172,11 @@ return {
       })
 
       -- Key mappings
-      vim.api.nvim_set_keymap(
+      vim.keymap.set(
         'n',
         '<Leader>se',
         '<cmd>lua vim.diagnostic.setqflist()<CR>',
-        { noremap = true, silent = true }
+        { silent = true, desc = 'Set diagnostics in quickfix list' }
       )
     end,
   }, -- }}}

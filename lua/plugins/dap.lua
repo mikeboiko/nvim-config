@@ -23,14 +23,19 @@ return {
         callback({ type = 'server', host = config.host or '127.0.0.1', port = config.port or 8086 })
       end
 
-      vim.keymap.set('n', '<leader>db', require('dap').toggle_breakpoint, { noremap = true })
-      vim.keymap.set('n', '<leader>dc', require('dap').continue, { noremap = true })
-      vim.keymap.set('n', '<leader>do', require('dap').step_over, { noremap = true })
-      vim.keymap.set('n', '<leader>di', require('dap').step_into, { noremap = true })
+      vim.keymap.set(
+        'n',
+        '<leader>db',
+        require('dap').toggle_breakpoint,
+        { noremap = true, desc = 'dap: toggle_breakpoint' }
+      )
+      vim.keymap.set('n', '<leader>dc', require('dap').continue, { noremap = true, desc = 'dap: continue' })
+      vim.keymap.set('n', '<leader>do', require('dap').step_over, { noremap = true, desc = 'dap: step_over' })
+      vim.keymap.set('n', '<leader>di', require('dap').step_into, { noremap = true, desc = 'dap: step_into' })
 
       vim.keymap.set('n', '<leader>dl', function()
         require('osv').launch({ port = 8086 })
-      end, { noremap = true })
+      end, { noremap = true, desc = 'dap: launch neovim lua server' })
     end,
   }, -- }}}
 }
