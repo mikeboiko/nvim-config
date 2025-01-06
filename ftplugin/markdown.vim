@@ -63,8 +63,7 @@ function! s:SelectFencedCodeI()
     normal! joko
 endfunction
 
-" Use fzf-folds instead of :Tags
-nnoremap <buffer> <leader>. :Folds<cr>
+nnoremap <buffer> <leader>. :FzfLua btags<CR>
 
 nmap     <buffer>         ys`      :call <SID>SurroundWithBackticks()<CR>
 " nmap     <buffer>         va`      :call <SID>SelectFencedCodeA()<CR>
