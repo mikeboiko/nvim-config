@@ -708,24 +708,6 @@ augroup CustomFugitive
   autocmd FileType gitcommit autocmd! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
 augroup end
 
-" fzf {{{2
-
-" Remap hotkeys
-
-let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
-
-let g:fzf_action = {
-  \ 'ctrl-t': 'tab split',
-  \ 'ctrl-s': 'split',
-  \ 'ctrl-v': 'vsplit' }
-
-" Disable preview window
-let g:fzf_preview_window = []
-
-" fzf-folds {{{2
-
-let g:fzf_folds_open = 1
-
 " img-paste {{{2
 
 " let g:mdip_imgdir = 'img'
@@ -927,11 +909,6 @@ augroup CustomLastPosition
               \| exe "normal! g'\"" | endif
 augroup end
 
-augroup VimOnExit
-  autocmd!
-  " autocmd VimLeave * call fzf_mru#mrufiles#refresh()
-augroup end
-
 " General{{{3
 
 " Optimize GVim
@@ -951,8 +928,7 @@ if has('GUI')
     set guioptions -=T
 endif
 
-" Increase number of oldfiles. Original is 100. Used in fzf-vim :History
-" Don't save selected buffer naes to shadafile
+" Increase number of oldfiles. Original is 100.
 if has('nvim')
   set shada=!,'500,<50,s10,h
   " set shada^=rterm://,rfugitive
@@ -1055,11 +1031,6 @@ if has('nvim')
     autocmd TermClose *gap stopinsert
     autocmd TermOpen */dotnet-test.sh* call timer_start(20, { -> s:VimspectorDotNet(0) })
   augroup END
-endif
-
-" Required for fzf-folds
-if has('mac')
-  set runtimepath+=/usr/local/opt/fzf
 endif
 
 " Without this ctrl+a skips 8s and 9s when incrementing
@@ -1220,24 +1191,6 @@ nnoremap <leader>ctm mz:e ++ff=mac<CR>`z
 
 " Convert to Unix
 nnoremap <leader>ctu mz:e ++ff=unix<CR>:ReplaceMwithBlank<CR>`z
-
-" FZF {{{2
-
-nnoremap <c-p> :FZFMru<cr>
-nnoremap <leader>p :GFiles<cr>
-nnoremap <leader>. :Tags<cr>
-
-" https://github.com/junegunn/fzf.vim#commands
-" :Files [PATH]	Files
-" :GFiles [OPTS]	Git files (git ls-files)
-" :Maps	Normal mode mappings
-
-" Cycle through Auto-Suggestions {{{2
-inoremap <c-j> <c-n>
-inoremap <c-k> <c-p>
-
-" Dump Register {{{2
-nnoremap <leader><space> "z
 
 " End/Beginning of Line {{{2
 nnoremap <silent> H ^
