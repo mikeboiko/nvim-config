@@ -63,8 +63,6 @@ function! s:SelectFencedCodeI()
     normal! joko
 endfunction
 
-nnoremap <buffer> <leader>. :FzfLua btags<CR>
-
 nmap     <buffer>         ys`      :call <SID>SurroundWithBackticks()<CR>
 " nmap     <buffer>         va`      :call <SID>SelectFencedCodeA()<CR>
 " nmap     <buffer>         vi`      :call <SID>SelectFencedCodeI()<CR>
