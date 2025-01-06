@@ -16,8 +16,9 @@ return {
     'VonHeikemen/lsp-zero.nvim',
     config = function()
       local lsp_zero = require('lsp-zero')
-      lsp_zero.on_attach(function(client, bufnr)
+      lsp_zero.on_attach(function(_, bufnr)
         lsp_zero.default_keymaps({ buffer = bufnr })
+        local opts = {}
         vim.keymap.set('n', '<leader>h', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
         vim.keymap.set('n', '<leader>fr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
         vim.keymap.set('n', 'gR', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
@@ -128,12 +129,12 @@ return {
 
       lspconfig.lua_ls.setup({
         on_init = function(client)
-          if client.workspace_folders then
-            local path = client.workspace_folders[1].name
-            if vim.loop.fs_stat(path .. '/.luarc.json') or vim.loop.fs_stat(path .. '/.luarc.jsonc') then
-              return
-            end
-          end
+          -- if client.workspace_folders then
+          --   local path = client.workspace_folders[1].name
+          --   if vim.loop.fs_stat(path .. '/.luarc.json') or vim.loop.fs_stat(path .. '/.luarc.jsonc') then
+          --     return
+          --   end
+          -- end
 
           client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
             runtime = {

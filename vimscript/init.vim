@@ -868,23 +868,6 @@ let g:vira_issue_limit = 100
 " Editor Settings {{{1
 " Display{{{2
 
-" 256 color
-set t_Co=256
-
-" Preferred background
-set background=dark
-
-" Preferred color scheme
-silent! colorscheme gruvbox
-
-" Set GVIM Font
-" To select form availbale fonts :set guifont=*
-if has("unix")
-    set guifont=Ubuntu\ Mono\ 13
-else
-    set guifont=Consolas:h12
-endif
-
 " Display line number for current line
 set number
 
@@ -946,7 +929,7 @@ augroup end
 
 augroup VimOnExit
   autocmd!
-  autocmd VimLeave * call fzf_mru#mrufiles#refresh()
+  " autocmd VimLeave * call fzf_mru#mrufiles#refresh()
 augroup end
 
 " General{{{3
@@ -1120,7 +1103,7 @@ augroup CustomQuickFix
   autocmd FileType qf vnoremap <silent> <leader>rw :<C-u>silent lua vim.g.FancyPromptRename("Cdo", "New Name", 1)<CR>
   autocmd BufReadPost quickfix setlocal cursorline
   " Close QuickFix/Location lists automatically when it's the last window in current tab
-  autocmd BufEnter * call CloseQuickFixWindow()
+  " autocmd BufEnter * call CloseQuickFixWindow()
 augroup end
 
 " Undo Files {{{3
@@ -1620,15 +1603,3 @@ nnoremap Y y$
 
 " Yank all
 nnoremap <leader>ya mzggyG`z
-
-" Templates {{{1
-" Load template based on current file extension (:help template)
-
-augroup templates
-    " Remove ALL auto commands for the current group
-    autocmd!
-    " Expand file extension and search templates placing content at top of file
-    autocmd BufNewFile main.* silent! execute '0r $CODE/Vim/templates/skeleton.'.expand("<afile>:e")
-    " Substitute equations between the VIM_EVAL and END_EVAL equations
-    " autocmd BufNewFile * %substitute#\[:VIM_EVAL:\]\(.\{-\}\)\[:END_EVAL:\]#\=eval(submatch(1))#ge
-augroup END
