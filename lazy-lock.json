@@ -7,7 +7,7 @@
   "copilot-cmp": { "branch": "master", "commit": "15fc12af3d0109fa76b60b5cffa1373697e261d1" },
   "copilot.lua": { "branch": "master", "commit": "886ee73b6d464b2b3e3e6a7ff55ce87feac423a9" },
   "dressing.nvim": { "branch": "master", "commit": "3a45525bb182730fe462325c99395529308f431e" },
-  "fzf-lua": { "branch": "main", "commit": "60428a8dc931639ee5e88756b2d7bc896cdc20c7" },
+  "fzf-lua": { "branch": "main", "commit": "0279a58579a8c6e0da6027034981dbd61bbd0b1c" },
   "gruvbox.nvim": { "branch": "main", "commit": "68c3460a5d1d1a362318960035c9f3466d5011f5" },
   "gv.vim": { "branch": "master", "commit": "b6bb6664e2c95aa584059f195eb3a9f3cb133994" },
   "img-paste.vim": { "branch": "master", "commit": "88bb395f4a8afc31f5c49352776ebbc451da8669" },
@@ -48,5 +48,6 @@
   "vim-sort-folds": { "branch": "master", "commit": "0c3a1d3a41c4479cf35fc3d2d9af878b710e966a" },
   "vim-startuptime": { "branch": "master", "commit": "ac2cccb5be617672add1f4f3c0a55ce99ba34e01" },
   "vim-tmux-navigator": { "branch": "master", "commit": "d847ea942a5bb4d4fab6efebc9f30d787fd96e65" },
+  "vimspector": { "branch": "master", "commit": "94105123cb9dee00dc17c0c615d5d747932d15fb" },
   "vira": { "branch": "dev", "commit": "b613860612397ee43b708c70156d062d5883fd12" }
 }
