@@ -1,12 +1,4 @@
 return {
-  { -- vira {{{1
-    'n0v1c3/vira',
-    build = './install.sh',
-    branch = 'dev',
-  }, -- }}}
-  { -- vim-scriptease: Help with vimscript {{{1
-    'tpope/vim-scriptease',
-  }, -- }}}
   { -- ReplaceWithRegister: Replace without copying to buffer {{{1
     'vim-scripts/ReplaceWithRegister',
   }, -- }}}
@@ -143,6 +135,9 @@ return {
   { -- vim-scimark: TUI spreadsheet {{{1
     'mipmip/vim-scimark',
   }, -- }}}
+  { -- vim-scriptease: Help with vimscript {{{1
+    'tpope/vim-scriptease',
+  }, -- }}}
   { -- vim-startup-time {{{1
     'dstein64/vim-startuptime',
     -- lazy-load on a command
@@ -171,6 +166,11 @@ return {
       { '<c-k>', '<cmd><C-U>TmuxNavigateUp<cr>' },
       { '<c-l>', '<cmd><C-U>TmuxNavigateRight<cr>' },
     },
+  }, -- }}}
+  { -- vira {{{1
+    'n0v1c3/vira',
+    build = './install.sh',
+    branch = 'dev',
   }, -- }}}
 }
 -- vim: foldmethod=marker:foldlevel=1
