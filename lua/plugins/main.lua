@@ -124,6 +124,10 @@ return {
   }, -- }}}
   { -- vim-airline: Status bar {{{1
     'vim-airline/vim-airline',
+    config = function()
+      vim.g.airline_powerline_fonts = 1
+      vim.g.airline_section_a = [[%{GetCurrentGitRepo()}]]
+    end,
   }, -- }}}
   { -- vim-checkbox {{{1
     'jkramer/vim-checkbox',

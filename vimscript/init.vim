@@ -679,13 +679,6 @@ augroup CustomSetFileType
   autocmd BufRead,BufNewFile *.mmd setfiletype mermaid
 augroup end
 
-" _vim-plug {{{2
-
-" Plugin manager
-
-" Initialize plugin system
-let vimPlugDir = vimHomeDir . '/plugged'
-
 " ag - silver searcher {{{2
 if executable('ag')
     " Use ag instead of grep (performance increase)
@@ -693,13 +686,6 @@ if executable('ag')
     set grepprg=ag\ --silent\ --vimgrep\ --column\ $*
     set grepformat=%f:%l:%c:%m
 endif
-
-" airline {{{2
-
-" Fix font inconsistencies
-let g:airline_powerline_fonts=1
-
-let g:airline_section_a = '%{GetCurrentGitRepo()}'
 
 " fugitive {{{2
 
