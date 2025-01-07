@@ -24,16 +24,6 @@ return {
   { -- gv.vim {{{1
     'junegunn/gv.vim',
   }, -- }}}
-  { -- indent-blankline.nvim {{{1
-    'lukas-reineke/indent-blankline.nvim',
-    main = 'ibl',
-    ---@module "ibl",
-    ---@type ibl.config
-    opts = {},
-    config = function()
-      require('ibl').setup()
-    end,
-  }, -- }}}
   { -- markdown-preview.nvim {{{1
     'iamcco/markdown-preview.nvim',
     cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
