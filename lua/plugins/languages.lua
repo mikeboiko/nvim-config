@@ -1,4 +1,11 @@
 return {
+  { -- csvview {{{1
+    'hat0uma/csvview.nvim',
+    ft = { 'csv' },
+    config = function()
+      require('csvview').setup()
+    end,
+  }, -- }}}
   { -- vim-log-highlighting syntax {{{1
     'mtdl9/vim-log-highlighting',
   }, -- }}}
