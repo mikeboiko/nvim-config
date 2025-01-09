@@ -284,11 +284,7 @@ endfunction
 function! GitAddCommitPush() abort " {{{2
     " Git - add all, commit and push
 
-    if g:vira_active_issue ==? 'none' || get(g:, 'vira_commit_text_enable', '') ==? ''
-      let commit_text=''
-    else
-      let commit_text=g:vira_active_issue . ':'
-    endif
+    let commit_text=''
 
     if has('unix') " Linux
         if has('nvim')
@@ -996,7 +992,7 @@ augroup CustomOptions
   " Don't add comment automatically on new line
   autocmd FileType * setlocal formatoptions-=cro
   " Peform actions right before saving bugger
-  " autocmd BufWritePre * call OnSave()
+  autocmd BufWritePre * call OnSave()
   " Preview Window
   autocmd WinEnter * if &previewwindow | setlocal foldmethod=manual | endif
   " Enable spelling for these buffers
