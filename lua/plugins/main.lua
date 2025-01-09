@@ -123,7 +123,7 @@ return {
   { -- vim-checkbox {{{1
     'jkramer/vim-checkbox',
   }, -- }}}
-  { -- vim-repeat: Repeat surround {{{1
+  { -- vim-repeat  {{{1
     'tpope/vim-repeat',
   }, -- }}}
   { -- vim-scimark: TUI spreadsheet {{{1
@@ -141,8 +141,8 @@ return {
       vim.g.startuptime_tries = 10
     end,
   }, -- }}}
-  { -- vim-surround  {{{1
-    'tpope/vim-repeat',
+  { -- vim-surround {{{1
+    'tpope/vim-surround',
   }, -- }}}
   { -- vim-tmux-navigator {{{1
     'christoomey/vim-tmux-navigator',

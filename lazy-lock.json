@@ -48,6 +48,7 @@
   "vim-scriptease": { "branch": "master", "commit": "cdb5981d47ac98221a408ae2e7cae66524d9e872" },
   "vim-sort-folds": { "branch": "master", "commit": "0c3a1d3a41c4479cf35fc3d2d9af878b710e966a" },
   "vim-startuptime": { "branch": "master", "commit": "ac2cccb5be617672add1f4f3c0a55ce99ba34e01" },
+  "vim-surround": { "branch": "master", "commit": "3d188ed2113431cf8dac77be61b842acb64433d9" },
   "vim-tmux-navigator": { "branch": "master", "commit": "d847ea942a5bb4d4fab6efebc9f30d787fd96e65" },
   "vimspector": { "branch": "master", "commit": "94105123cb9dee00dc17c0c615d5d747932d15fb" },
   "vira": { "branch": "dev", "commit": "b613860612397ee43b708c70156d062d5883fd12" },
