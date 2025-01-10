@@ -39,8 +39,8 @@ return {
       -- `format_on_save` should run only once, before the language servers are active.
       lsp_zero.format_on_save({
         format_opts = {
-          async = false,
-          timeout_ms = 10000,
+          async = true,
+          -- timeout_ms = 10000,
         },
         servers = {
           ['null-ls'] = {
@@ -67,6 +67,7 @@ return {
 
       local null_ls = require('null-ls')
       null_ls.setup({
+        notify_format_error = false,
         sources = {
           null_ls.builtins.completion.tags,
           null_ls.builtins.diagnostics.trail_space,
@@ -154,6 +155,7 @@ return {
             },
           })
         end,
+
         settings = {
           Lua = {
             diagnostics = {
