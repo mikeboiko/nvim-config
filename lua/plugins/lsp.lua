@@ -40,7 +40,7 @@ return {
       lsp_zero.format_on_save({
         format_opts = {
           async = true,
-          -- timeout_ms = 10000,
+          timeout_ms = 10000,
         },
         servers = {
           ['null-ls'] = {
