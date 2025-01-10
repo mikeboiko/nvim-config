@@ -135,8 +135,13 @@ return {
           --     })
           --   end,
           -- },
-          lualine_y = { 'progress' },
-          lualine_z = { 'location', 'progress' },
+          lualine_y = { 'location' },
+          lualine_z = {
+            'progress',
+            function()
+              return tostring(vim.api.nvim_buf_line_count(0))
+            end,
+          },
         },
       })
     end,
