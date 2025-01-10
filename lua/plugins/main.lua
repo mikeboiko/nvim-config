@@ -113,11 +113,27 @@ return {
   { -- tabular: Align things {{{1
     'godlygeek/tabular',
   }, -- }}}
-  { -- vim-airline: Status bar {{{1
-    'vim-airline/vim-airline',
+  { -- lualine.nvim {{{1
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = function()
-      vim.g.airline_powerline_fonts = 1
-      vim.g.airline_section_a = [[%{GetCurrentGitRepo()}]]
+      require('lualine').setup({
+        sections = {
+          lualine_a = { 'GetCurrentGitRepo' },
+          lualine_b = { 'branch', 'diff', 'diagnostics' },
+          lualine_c = { { 'filename', path = 3 } },
+          lualine_x = { 'filetype' },
+          -- lualine_y = {
+          --   function()
+          --     return require('nvim-treesitter').statusline({
+          --       type_patterns = { 'function', 'method' },
+          --     })
+          --   end,
+          -- },
+          lualine_y = { 'progress' },
+          lualine_z = { 'location' },
+        },
+      })
     end,
   }, -- }}}
   { -- vim-checkbox {{{1
