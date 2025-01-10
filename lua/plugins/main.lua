@@ -114,12 +114,17 @@ return {
     'godlygeek/tabular',
   }, -- }}}
   { -- lualine.nvim {{{1
+    -- https://github.com/nvim-lualine/lualine.nvim?tab=readme-ov-file#component-specific-options
     'nvim-lualine/lualine.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = function()
       require('lualine').setup({
         sections = {
-          lualine_a = { 'GetCurrentGitRepo' },
+          lualine_a = {
+            function()
+              return vim.b.git_repo_name or ''
+            end,
+          },
           lualine_b = { 'branch', 'diff', 'diagnostics' },
           lualine_c = { { 'filename', path = 3 } },
           lualine_x = { 'filetype' },
@@ -131,7 +136,7 @@ return {
           --   end,
           -- },
           lualine_y = { 'progress' },
-          lualine_z = { 'location' },
+          lualine_z = { 'location', 'progress' },
         },
       })
     end,

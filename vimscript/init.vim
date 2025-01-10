@@ -262,15 +262,6 @@ function! GetCommentString() "{{{2
   return commentstring
 endfunction
 
-function! GetCurrentGitRepo() " {{{2
-    let result = system('basename "$(git -C ' . expand('%:h') . ' rev-parse --show-toplevel)"')
-    if v:shell_error || stridx(result, 'fatal') != -1
-        return ''
-    else
-        return substitute(result, '\n', '', 'g')
-    endif
-endfunction
-
 function! GetTODOs() " {{{2
     " TODO [171103] - Add current file ONLY option
     " Binary files that can be ignored
