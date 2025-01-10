@@ -130,9 +130,11 @@ return {
       })
     end,
   }, -- }}}
+  { -- nvim-treesitter-context {{{1
+    'nvim-treesitter/nvim-treesitter-context',
+  }, -- }}}
   { -- nvim-treesitter-textobjects {{{1
     'nvim-treesitter/nvim-treesitter-textobjects',
-    build = ':TSUpdate', -- Ensures parsers are installed/updated
   }, -- }}}
 }
 -- vim: foldmethod=marker:foldlevel=1
