@@ -4,7 +4,6 @@ return {
     event = 'InsertEnter',
     config = function()
       local cmp = require('cmp')
-      -- local cmp_action = require('lsp-zero').cmp_action()
 
       local has_words_before = function()
         if vim.bo.buftype == 'prompt' then
