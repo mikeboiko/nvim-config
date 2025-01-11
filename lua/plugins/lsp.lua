@@ -150,7 +150,9 @@ return {
             async = true,
             -- Ignore these LSP formatters, they are handled by null-ls
             filter = function(client)
-              return client.name ~= 'lua_ls'
+              local exclude_formatters = { 'lua_ls', 'volar' }
+              return not vim.tbl_contains(exclude_formatters, client.name)
+
             end,
           }
         end,
