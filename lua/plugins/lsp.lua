@@ -147,12 +147,11 @@ return {
       vim.api.nvim_create_autocmd('BufWritePre', {
         callback = function()
           vim.lsp.buf.format {
-            async = true,
+            async = false,
             -- Ignore these LSP formatters, they are handled by null-ls
             filter = function(client)
               local exclude_formatters = { 'lua_ls', 'volar' }
               return not vim.tbl_contains(exclude_formatters, client.name)
-
             end,
           }
         end,
