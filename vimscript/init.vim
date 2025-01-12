@@ -175,6 +175,7 @@ function! CloseAll() " {{{2
     cclose
     pclose
     NvimTreeClose
+    AerialClose
     " CopilotChatClose
     for bufname in ['^fugitive', '/tmp/flow', 'git/gap', '~/git/Linux/config/mani.yaml', 'dotnet-test.sh']
       let buffers = join(filter(range(1, bufnr('$')), 'buflisted(v:val) && bufname(v:val) =~# bufname'), ' ')
@@ -1414,9 +1415,6 @@ nnoremap <leader><Tab> :tabnext<CR>
 " I managed to treat them as seperate keys
 nnoremap <C-n>i <C-i>
 nnoremap <Tab> :tabprevious<CR>
-
-" TagBar {{{2
-nnoremap <leader>tb ::TagbarOpenAutoClose<CR>
 
 " Vimspector {{{2
 

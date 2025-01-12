@@ -125,17 +125,10 @@ return {
               return vim.b.git_repo_name or ''
             end,
           },
-          lualine_b = { 'branch', 'diff', 'diagnostics' },
+          lualine_b = { 'aerial' },
           lualine_c = { { 'filename', path = 3 } },
           lualine_x = { 'filetype' },
-          -- lualine_y = {
-          --   function()
-          --     return require('nvim-treesitter').statusline({
-          --       type_patterns = { 'function', 'method' },
-          --     })
-          --   end,
-          -- },
-          lualine_y = { 'location' },
+          lualine_y = { 'branch', 'diff', 'diagnostics', 'location' },
           lualine_z = {
             'progress',
             function()
