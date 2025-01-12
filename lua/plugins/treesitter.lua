@@ -12,8 +12,8 @@ return {
         -- optionally use on_attach to set keymaps when aerial has attached to a buffer
         on_attach = function(bufnr)
           -- Jump forwards/backwards with '{' and '}'
-          vim.keymap.set('n', '{', '<cmd>AerialPrev<CR>', { buffer = bufnr })
-          vim.keymap.set('n', '}', '<cmd>AerialNext<CR>', { buffer = bufnr })
+          vim.keymap.set('n', '[f', '<cmd>AerialPrev<CR>', { buffer = bufnr })
+          vim.keymap.set('n', ']f', '<cmd>AerialNext<CR>', { buffer = bufnr })
         end,
         close_automatic_events = { 'switch_buffer' },
         close_on_select = true,
@@ -112,7 +112,7 @@ return {
             enable = true,
             set_jumps = true, -- whether to set jumps in the jumplist
             goto_next_start = {
-              [']f'] = '@function.outer',
+              -- [']f'] = '@function.outer',
               [']]'] = { query = '@class.outer', desc = 'Next class start' },
               --
               -- You can use regex matching (i.e. lua pattern) and/or pass a list in a "query" key to group multiple queires.
@@ -129,7 +129,7 @@ return {
               [']['] = '@class.outer',
             },
             goto_previous_start = {
-              ['[f'] = '@function.outer',
+              -- ['[f'] = '@function.outer',
               ['[['] = '@class.outer',
             },
             goto_previous_end = {
