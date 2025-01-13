@@ -20,7 +20,6 @@ return {
             extra_args = { '--dialect', 'tsql', '--exclude-rules', 'CP02' },
           }),
           null_ls.builtins.formatting.stylua,
-          null_ls.builtins.formatting.yapf,
         },
       })
     end,
@@ -35,6 +34,7 @@ return {
 
     -- To learn what capabilities are available you can run the following command in
     -- a buffer with a started LSP client: >vim
+    -- :lua for i, c in ipairs(vim.lsp.get_clients()) do print(i, c._log_prefix) end
     -- :lua =vim.lsp.get_clients()[1].server_capabilities
     -- Note, I tried to get LSP file renaming to work with pyright, but pyright
     -- doesn't have the proper workspace capabilities.
@@ -56,6 +56,8 @@ return {
       local lspconfig = require('lspconfig')
 
       lspconfig.bashls.setup({})
+
+      lspconfig.ruff.setup({})
 
       lspconfig.pyright.setup({
         init_options = {
