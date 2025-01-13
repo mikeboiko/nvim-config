@@ -24,6 +24,32 @@ return {
   { -- gv.vim {{{1
     'junegunn/gv.vim',
   }, -- }}}
+  { -- lualine.nvim {{{1
+    -- https://github.com/nvim-lualine/lualine.nvim?tab=readme-ov-file#component-specific-options
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    config = function()
+      require('lualine').setup({
+        sections = {
+          lualine_a = {
+            function()
+              return vim.b.git_repo_name or ''
+            end,
+          },
+          lualine_b = { 'aerial' },
+          lualine_c = { { 'filename', path = 3 } },
+          lualine_x = { 'filetype' },
+          lualine_y = { 'branch', 'diff', 'diagnostics', 'location' },
+          lualine_z = {
+            'progress',
+            function()
+              return tostring(vim.api.nvim_buf_line_count(0))
+            end,
+          },
+        },
+      })
+    end,
+  }, -- }}}
   { -- markdown-preview.nvim {{{1
     'iamcco/markdown-preview.nvim',
     cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
@@ -113,27 +139,19 @@ return {
   { -- tabular: Align things {{{1
     'godlygeek/tabular',
   }, -- }}}
-  { -- lualine.nvim {{{1
-    -- https://github.com/nvim-lualine/lualine.nvim?tab=readme-ov-file#component-specific-options
-    'nvim-lualine/lualine.nvim',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
+  { -- tiny-glimmer.nvim {{{1
+    'rachartier/tiny-glimmer.nvim',
+    event = 'TextYankPost',
     config = function()
-      require('lualine').setup({
-        sections = {
-          lualine_a = {
-            function()
-              return vim.b.git_repo_name or ''
-            end,
+      require('tiny-glimmer').setup({
+        animations = {
+          fade = {
+            from_color = 'DiffDelete',
+            to_color = 'DiffAdd',
           },
-          lualine_b = { 'aerial' },
-          lualine_c = { { 'filename', path = 3 } },
-          lualine_x = { 'filetype' },
-          lualine_y = { 'branch', 'diff', 'diagnostics', 'location' },
-          lualine_z = {
-            'progress',
-            function()
-              return tostring(vim.api.nvim_buf_line_count(0))
-            end,
+          bounce = {
+            from_color = '#ff0000',
+            to_color = '#00ff00',
           },
         },
       })
