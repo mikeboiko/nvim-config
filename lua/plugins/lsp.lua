@@ -37,7 +37,7 @@ return {
     -- :lua for i, c in ipairs(vim.lsp.get_clients()) do print(i, c._log_prefix) end
     -- :lua =vim.lsp.get_clients()[1].server_capabilities
     -- Note, I tried to get LSP file renaming to work with pyright, but pyright
-    -- doesn't have the proper workspace capabilities.
+    -- doesn't have the proper workspace capabilities. I think jedi has this.
     -- This is the plugin I tried
     -- https://github.com/antosha417/nvim-lsp-file-operations?tab=readme-ov-file
 
