@@ -46,6 +46,7 @@ return {
     event = { 'BufReadPre', 'BufNewFile' },
     dependencies = {
       { 'hrsh7th/cmp-nvim-lsp' },
+      { 'b0o/schemastore.nvim' },
     },
     init = function()
       -- Reserve a space in the gutter
@@ -80,6 +81,14 @@ return {
         },
       })
 
+      lspconfig.jsonls.setup {
+        settings = {
+          json = {
+            schemas = require('schemastore').json.schemas {},
+            validate = { enable = true },
+          },
+        },
+      }
       lspconfig.lua_ls.setup({
         on_init = function(client)
           if client.workspace_folders then
