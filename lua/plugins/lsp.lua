@@ -89,6 +89,15 @@ return {
           },
         },
       }
+
+      lspconfig.yamlls.setup {
+        settings = {
+          yaml = {
+            validate = true,
+          },
+        },
+      }
+
       lspconfig.lua_ls.setup({
         on_init = function(client)
           if client.workspace_folders then
