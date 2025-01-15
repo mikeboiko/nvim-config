@@ -36,18 +36,20 @@ return {
       local chat = require('CopilotChat')
       local select = require('CopilotChat.select')
       require('CopilotChat').setup({
-        debug = true,
+        debug = false,
         model = 'claude-3.5-sonnet',
+        chat_autocomplete = false,
+        auto_follow_cursor = false,
         prompts = {
           ExplainBuffer = {
-            prompt = '/COPILOT_EXPLAIN Write an explanation for the selection as paragraphs of text.',
+            prompt = '/COPILOT_EXPLAIN\n\nWrite an explanation for the selection as paragraphs of text.',
             selection = select.buffer,
           },
           ExplainBrief = {
-            prompt = '/COPILOT_EXPLAIN Write a brief explanation for the selection as paragraphs of text.',
+            prompt = '/COPILOT_EXPLAIN\n\nWrite a brief explanation for the selection as paragraphs of text.',
           },
           Tests = {
-            prompt = '/COPILOT_GENERATE Please generate tests for my code using pytest.',
+            prompt = '/COPILOT_GENERATE\n\nPlease generate tests for my code using pytest.',
           },
         },
         mappings = {
