@@ -1174,12 +1174,6 @@ vnoremap <silent> L $
 omap H ^
 omap L $
 
-" Escape Key {{{2
-
-" Disable Highlighting
-" When I used a single escape, vim started in Replace mode everytime
-nnoremap <leader>n :noh<esc>
-
 " Folding {{{2
 
 " Fold Everything except for the current section
