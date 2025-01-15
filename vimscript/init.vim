@@ -1409,12 +1409,8 @@ nnoremap <silent> <leader>ti :call PromptAndComment(0, 'TODO: ', todoPrefix)<CR>
 nnoremap <c-t> mm:tabe <c-r>%<CR>`m
 
 " Toggle tabs
-nnoremap <leader><Tab> :tabnext<CR>
-" By default, the terminal sees Tab and Ctrl-i as the same key.
-" Using the following remap, and a config change in alacritty.yml,
-" I managed to treat them as seperate keys
-nnoremap <C-n>i <C-i>
-nnoremap <Tab> :tabprevious<CR>
+nnoremap <silent> <C-Tab> :tabnext<CR>
+nnoremap <silent> <Tab> :tabprevious<CR>
 
 " Vimspector {{{2
 
