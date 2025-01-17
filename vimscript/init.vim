@@ -1299,7 +1299,7 @@ nnoremap <leader>od :Start -wait=never "C:\Program Files\Double Commander\double
 nnoremap <C-f> :Cnext<CR>:FoldOpen<CR>
 nnoremap <C-d> :Cprev<CR>:FoldOpen<CR>
 
-nmap <silent> <leader>l :call ToggleList("Location List", 'l')<CR>
+" nmap <silent> <leader>l :call ToggleList("Location List", 'l')<CR>
 nmap <silent> <leader>q :call ToggleList("Quickfix List", 'c')<CR>
 
 " Plugins {{{2
