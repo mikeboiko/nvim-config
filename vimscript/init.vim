@@ -905,7 +905,8 @@ endif
 " Increase number of oldfiles. Original is 100.
 if has('nvim')
   set shada=!,'500,<50,s10,h
-  " set shada^=rterm://,rfugitive
+  " Exclude files beginning with r<name>
+  set shada^=rterm://,rfugitive,rman:,rhealth:
 endif
 
 " General settings required for highlighting
