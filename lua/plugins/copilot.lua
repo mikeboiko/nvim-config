@@ -53,6 +53,10 @@ return {
           },
         },
         mappings = {
+          close = {
+            normal = 'qq',
+            insert = '<C-c>',
+          },
           reset = {
             normal = '<C-r>',
             insert = '<C-r>',
