@@ -1313,9 +1313,6 @@ nnoremap <c-q> :up<CR>:call Quit()<CR>
 nnoremap <c-w> :call Quit()<CR>
 nnoremap qq :call Quit()<CR>
 
-" Close all windows in tab
-nnoremap qt :tabclose<CR>
-
 " Close without saving
 nnoremap Q :q!<CR>
 
