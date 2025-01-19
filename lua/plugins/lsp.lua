@@ -20,6 +20,7 @@ return {
             extra_args = { '--dialect', 'tsql', '--exclude-rules', 'CP02' },
           }),
           null_ls.builtins.formatting.stylua,
+          null_ls.builtins.formatting.shfmt, -- for bash scripts
         },
       })
     end,
