@@ -1192,7 +1192,7 @@ endif
 
 " Fugitive remappings
 nnoremap <leader>gd :Gvdiffsplit!<Space>
-nnoremap <leader>gdt :Git difftool -y<CR>
+nnoremap <leader>gdt :Git difftool -y --diff-filter=ACMRTUXB<CR>
 nnoremap <leader>gs :Git<CR>
 
 " Display git diff in terminal
