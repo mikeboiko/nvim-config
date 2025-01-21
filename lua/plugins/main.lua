@@ -38,7 +38,7 @@ return {
           },
           lualine_b = { 'aerial' },
           lualine_c = { { 'filename', path = 3 } },
-          lualine_x = { 'filetype' },
+          lualine_x = { 'encoding', 'fileformat', 'filetype' },
           lualine_y = { 'branch', 'diff', 'diagnostics', 'location' },
           lualine_z = {
             'progress',
