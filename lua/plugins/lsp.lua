@@ -20,7 +20,9 @@ return {
             extra_args = { '--dialect', 'tsql', '--exclude-rules', 'CP02' },
           }),
           null_ls.builtins.formatting.stylua,
-          null_ls.builtins.formatting.shfmt, -- for bash scripts
+          null_ls.builtins.formatting.shfmt.with({
+            extra_args = { '--apply-ignore' },
+          }),
         },
       })
     end,
@@ -212,6 +214,16 @@ return {
               return not vim.tbl_contains(exclude_formatters, client.name)
             end,
           }
+        end,
+      })
+
+      -- Don't format commands.sh with bashls
+      vim.api.nvim_create_autocmd('FileType', {
+        pattern = 'sh',
+        callback = function()
+          if vim.fn.expand('%:t') == 'commands.sh' then
+            vim.cmd('LspStop bashls')
+          end
         end,
       })
     end,
