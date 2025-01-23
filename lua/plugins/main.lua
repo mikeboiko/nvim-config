@@ -59,19 +59,6 @@ return {
     end,
     ft = { 'markdown' },
   }, -- }}}
-  { -- nvim-bqf {{{1
-    'kevinhwang91/nvim-bqf',
-    config = function()
-      require('bqf').setup({
-        auto_enable = true,
-        auto_resize_height = true,
-        func_map = {
-          split = '<C-s>',
-          tabdrop = '<C-t>',
-        },
-      })
-    end,
-  }, -- }}}
   { -- nvim-chainsaw: logging for all languages {{{1
     'chrisgrieser/nvim-chainsaw',
     event = 'VeryLazy',

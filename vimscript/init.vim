@@ -153,9 +153,6 @@ endif
 
 " Close location list, preview window and quit
 function! Quit()
-    if (&buftype != "quickfix")
-        lclose
-    endif
     if (!&previewwindow)
         pclose
     endif
