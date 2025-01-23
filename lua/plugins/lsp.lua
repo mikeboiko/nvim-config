@@ -27,6 +27,16 @@ return {
       })
     end,
   }, -- }}}
+  { -- nvim-lsp-file-operations {{{1
+    'antosha417/nvim-lsp-file-operations',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvim-tree/nvim-tree.lua',
+    },
+    config = function()
+      require('lsp-file-operations').setup()
+    end,
+  }, -- }}}
   { -- nvim-lspconfig {{{1
     -- Setup language servers.
     -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
@@ -35,14 +45,10 @@ return {
     -- :LspLog
     -- :LspInfo
 
-    -- To learn what capabilities are available you can run the following command in
-    -- a buffer with a started LSP client: >vim
+    -- To see what capabilities are available, you can run the following command in
+    -- a buffer with a connected LSP client:
     -- :lua for i, c in ipairs(vim.lsp.get_clients()) do print(i, c._log_prefix) end
     -- :lua =vim.lsp.get_clients()[1].server_capabilities
-    -- Note, I tried to get LSP file renaming to work with pyright, but pyright
-    -- doesn't have the proper workspace capabilities. I think jedi has this.
-    -- This is the plugin I tried
-    -- https://github.com/antosha417/nvim-lsp-file-operations?tab=readme-ov-file
 
     'neovim/nvim-lspconfig',
     cmd = 'LspInfo',
@@ -63,10 +69,13 @@ return {
 
       lspconfig.ruff.setup({})
 
-      lspconfig.pyright.setup({
-        init_options = {
-          settings = {
-            args = {},
+      lspconfig.basedpyright.setup({
+        settings = {
+          basedpyright = {
+            analysis = {
+              typeCheckingMode = 'basic',
+            },
+            settings = {},
           },
         },
       })
