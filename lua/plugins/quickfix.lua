@@ -1,10 +1,10 @@
 return {
-  { -- quicker.nvim {{{1
+  { -- quicker.nvim: editable buffer {{{1
     'stevearc/quicker.nvim',
     event = 'FileType qf',
     opts = {},
   }, -- }}}
-  { -- nvim-bqf {{{1
+  { -- nvim-bqf: preview window and handy actions {{{1
     'kevinhwang91/nvim-bqf',
     config = function()
       require('bqf').setup({
