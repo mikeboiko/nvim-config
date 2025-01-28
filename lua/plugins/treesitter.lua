@@ -15,6 +15,9 @@ return {
           vim.keymap.set('n', '[f', '<cmd>AerialPrev<CR>', { buffer = bufnr })
           vim.keymap.set('n', ']f', '<cmd>AerialNext<CR>', { buffer = bufnr })
         end,
+        layout = {
+          default_direction = 'right',
+        },
         close_automatic_events = { 'switch_buffer' },
         close_on_select = true,
       })
