@@ -37,7 +37,7 @@
   "one-small-step-for-vimkind": { "branch": "main", "commit": "b9def31568d20b16f7da9479a4174d165046fe8a" },
   "plenary.nvim": { "branch": "master", "commit": "3707cdb1e43f5cea73afb6037e6494e7ce847a66" },
   "quicker.nvim": { "branch": "master", "commit": "92e0f61a5d6422424cf7728ad323d2a06e3ab2d5" },
-  "schemastore.nvim": { "branch": "main", "commit": "67c696fc72eb478f517b3702044fa99688a8ef72" },
+  "schemastore.nvim": { "branch": "main", "commit": "e6ccd0c81e3454777c35a64314a997b6d1bfe543" },
   "tabular": { "branch": "master", "commit": "12437cd1b53488e24936ec4b091c9324cafee311" },
   "tiny-glimmer.nvim": { "branch": "main", "commit": "5d1d26f6ed945b6a86152c81223bf42006dd2ccc" },
   "vim-checkbox": { "branch": "master", "commit": "1000afeda19c989c13ebdc2640c4d49f77cd0143" },
