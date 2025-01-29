@@ -69,6 +69,7 @@ return {
 
       lspconfig.ruff.setup({})
 
+      -- Note: install basedpyright in each virtual-env
       lspconfig.basedpyright.setup({
         settings = {
           basedpyright = {
