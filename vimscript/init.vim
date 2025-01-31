@@ -1389,8 +1389,7 @@ noremap <c-z> <nop>
 " TODOs {{{2
 
 " Add new TODO above current line
-let todoPrefix = 'TODO-MB [' . strftime('%y%m%d') . '] - '
-nnoremap <silent> <leader>ti :call PromptAndComment(0, 'TODO: ', todoPrefix)<CR>
+nnoremap <silent> <leader>ti :call PromptAndComment(0, 'TODO: ', 'TODO: ')<CR>
 
 " Tabs {{{2
 
