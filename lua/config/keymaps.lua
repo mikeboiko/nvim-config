@@ -22,3 +22,18 @@ vim.keymap.set('n', 'qt', function()
     vim.cmd('tabclose')
   end
 end, { silent = true })
+
+-- Add empty comment above current line
+vim.keymap.set('n', 'co', function()
+  local comment_string = require('ts_context_commentstring').calculate_commentstring()
+  if comment_string == nil then
+    comment_string = vim.bo.commentstring
+  end
+  comment_string = comment_string:gsub('%%s', '')
+  local current_line = vim.api.nvim_get_current_line()
+  local indent = current_line:match('^%s+') or ''
+  local line = vim.api.nvim_win_get_cursor(0)[1]
+  vim.api.nvim_buf_set_lines(0, line - 1, line - 1, false, { indent .. comment_string })
+  vim.cmd('normal! k$')
+  vim.cmd('startinsert!')
+end, { desc = 'Add empty comment above' })
