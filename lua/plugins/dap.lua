@@ -38,7 +38,7 @@ return {
       -- end, { noremap = true, desc = 'dap: launch neovim lua server' })
     end,
   }, -- }}}
-  { -- {{{1
+  { -- vimspector {{{1
     'puremourning/vimspector',
     build = function()
       local install_cmd = './install_gadget.py'
