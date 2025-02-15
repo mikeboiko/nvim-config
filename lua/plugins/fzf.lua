@@ -9,7 +9,7 @@ return {
           prompt = 'Old Files❯ ',
           cwd_only = false,
           stat_file = false, -- verify files exist on disk
-          include_current_session = true, -- include bufs from current session
+          include_current_session = false, -- include bufs from current session
         },
       })
       vim.keymap.set('n', '<C-p>', ':rshada!<CR>:FzfLua oldfiles<CR>', { silent = true, desc = 'FzfLua recent files' })
