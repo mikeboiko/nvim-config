@@ -8,7 +8,8 @@ return {
         oldfiles = {
           prompt = 'Old Files❯ ',
           cwd_only = false,
-          stat_file = false, -- verify files exist on disk
+          stat_file = true, -- verify files exist on disk
+          -- stat_file = false
           include_current_session = false, -- include bufs from current session
         },
       })
