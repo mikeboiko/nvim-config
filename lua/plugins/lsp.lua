@@ -75,6 +75,7 @@ return {
           basedpyright = {
             analysis = {
               typeCheckingMode = 'basic',
+              -- typeCheckingMode = 'off',
             },
             settings = {},
           },

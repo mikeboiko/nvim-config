@@ -1341,7 +1341,7 @@ endif
 " Run Scripts {{{2
 
 " Run Script in terminal
-nnoremap <silent> <leader>rr :wa<CR>:FlowRun<CR>:$<CR>:wincmd j<CR>
+nnoremap <silent> <leader>rr :wa<CR>:call CloseAll()<CR>:FlowRun<CR>:$<CR>:wincmd j<CR>
 
 " Save Buffer {{{2
 
