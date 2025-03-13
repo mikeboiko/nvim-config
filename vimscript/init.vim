@@ -1338,11 +1338,6 @@ else
   nnoremap <leader>cw :tabe<CR>:terminal ++curwin bash -c "curl wttr.in/Calgary"<CR>
 endif
 
-" Run Scripts {{{2
-
-" Run Script in terminal
-nnoremap <silent> <leader>rr :wa<CR>:call CloseAll()<CR>:FlowRun<CR>:$<CR>:wincmd j<CR>
-
 " Save Buffer {{{2
 
 nnoremap qw :w<CR>
