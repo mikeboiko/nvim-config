@@ -39,5 +39,5 @@ vim.keymap.set('n', 'co', function()
 end, { desc = 'Add empty comment above' })
 
 -- Run Script in terminal with vim-flow
-vim.keymap.set('n', '<C-C>', ':wa<CR>:call CloseAll()<CR>:FlowRun<CR>:$<CR>:wincmd j<CR>', { silent = true })
-vim.keymap.set('i', '<C-C>', '<ESC>:wa<CR>:call CloseAll()<CR>:FlowRun<CR>:$<CR>:wincmd j<CR>', { silent = true })
+vim.keymap.set('n', '<CR>', ':wa<CR>:call CloseAll()<CR>:FlowRun<CR>:$<CR>:wincmd j<CR>', { silent = true })
+vim.keymap.set('i', '<M-CR>', '<ESC>:wa<CR>:call CloseAll()<CR>:FlowRun<CR>:$<CR>:wincmd j<CR>', { silent = true })
