@@ -6,7 +6,6 @@ return {
 
       local null_ls = require('null-ls')
       null_ls.setup({
-        notify_format_error = false,
         sources = {
           null_ls.builtins.completion.tags,
           null_ls.builtins.diagnostics.trail_space,
