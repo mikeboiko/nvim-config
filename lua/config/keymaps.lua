@@ -39,5 +39,21 @@ vim.keymap.set('n', 'co', function()
 end, { desc = 'Add empty comment above' })
 
 -- Run Script in terminal with vim-flow
-vim.keymap.set('n', '<CR>', ':wa<CR>:call CloseAll()<CR>:FlowRun<CR>:$<CR>:wincmd j<CR>', { silent = true })
-vim.keymap.set('i', '<M-CR>', '<ESC>:wa<CR>:call CloseAll()<CR>:FlowRun<CR>:$<CR>:wincmd j<CR>', { silent = true })
+-- Create an autogroup for buffer-specific mappings
+local flow_group = vim.api.nvim_create_augroup('FlowMappings', { clear = true })
+vim.api.nvim_create_autocmd('FileType', {
+  group = flow_group,
+  pattern = { '*' },
+  callback = function()
+    -- Only set mapping for normal buffers
+    if vim.bo.buftype == '' then
+      vim.keymap.set('n', '<CR>', function()
+        vim.cmd('wa')
+        vim.cmd('call CloseAll()')
+        vim.cmd('FlowRun')
+        vim.cmd('$')
+        vim.cmd('wincmd j')
+      end, { buffer = true, silent = true })
+    end
+  end,
+})
