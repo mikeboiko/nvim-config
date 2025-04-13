@@ -102,6 +102,14 @@ return {
         { silent = true, noremap = true }
       )
 
+      -- Log variable and exit
+      vim.api.nvim_set_keymap(
+        'n',
+        '<leader>le',
+        ':lua require("chainsaw").variableLog() vim.cmd("normal! oexit()")<CR>',
+        { silent = true, noremap = true }
+      )
+
       -- Log object
       vim.api.nvim_set_keymap(
         'n',
