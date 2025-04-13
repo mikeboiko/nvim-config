@@ -37,12 +37,5 @@ return {
       })
     end,
   }, -- }}}
-  { -- mini.indentscope {{{1
-    'echasnovski/mini.indentscope',
-    version = false,
-    config = function()
-      require('mini.indentscope').setup()
-    end,
-  }, -- }}}
 }
 -- vim: foldmethod=marker:foldlevel=1

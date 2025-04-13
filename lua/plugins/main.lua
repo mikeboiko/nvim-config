@@ -1,16 +1,4 @@
 return {
-  { -- dressing.nvim: UI {{{1
-    'stevearc/dressing.nvim',
-    opts = {},
-    config = function()
-      require('dressing').setup({
-        input = {
-          insert_only = false,
-          start_in_insert = false,
-        },
-      })
-    end,
-  }, -- }}}
   { -- gruvbox: Theme {{{1
     'ellisonleao/gruvbox.nvim',
     priority = 1000,
@@ -202,6 +190,20 @@ return {
         enable_autocmd = false,
       }
     end,
+  }, -- }}}
+  { -- snacks {{{
+    'folke/snacks.nvim',
+    opts = {
+      -- Fancy vim.ui.input
+      input = {
+        win = {
+          relative = 'cursor',
+          row = -3,
+          col = 0,
+        },
+      },
+      indent = {},
+    },
   }, -- }}}
   { -- substitute.nvim {{{1
     'gbprod/substitute.nvim',
