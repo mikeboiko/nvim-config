@@ -66,6 +66,7 @@ return {
 
       lspconfig.bashls.setup({})
 
+      -- Used for formatting and linting
       lspconfig.ruff.setup({})
 
       -- Note: install basedpyright in each virtual-env
@@ -73,6 +74,7 @@ return {
         settings = {
           basedpyright = {
             analysis = {
+              ignore = { '*' }, -- Using Ruff
               typeCheckingMode = 'basic',
               -- typeCheckingMode = 'off',
             },
