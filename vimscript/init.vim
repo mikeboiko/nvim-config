@@ -1381,11 +1381,6 @@ noremap <c-z> <nop>
 " noremap <c-z>c :Start! ~/clipboard.sh --write<CR>
 " noremap <c-z>v :Start! ~/clipboard.sh --read<CR>
 
-" TODOs {{{2
-
-" Add new TODO above current line
-nnoremap <silent> <leader>ti :call PromptAndComment(0, 'TODO: ', 'TODO: ')<CR>
-
 " Tabs {{{2
 
 " Open current file in new tab
