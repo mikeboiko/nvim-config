@@ -67,16 +67,23 @@ return {
       lspconfig.bashls.setup({})
 
       -- Used for formatting and linting
-      lspconfig.ruff.setup({})
+      -- https://docs.astral.sh/ruff/editors/setup/#neovim
+      lspconfig.ruff.setup({
+        init_options = {
+          settings = {
+            lint = {
+              ignore = { 'F821', 'F841' },
+            },
+          },
+        },
+      })
 
       -- Note: install basedpyright in each virtual-env
       lspconfig.basedpyright.setup({
         settings = {
           basedpyright = {
             analysis = {
-              ignore = { '*' }, -- Using Ruff
               typeCheckingMode = 'basic',
-              -- typeCheckingMode = 'off',
             },
             settings = {},
           },
@@ -205,6 +212,7 @@ return {
         '<cmd>lua vim.lsp.buf.rename()<cr>',
         { desc = 'Rename symbol under cursor across workspace' }
       )
+      vim.keymap.set('n', 'ga', ':FzfLua lsp_code_actions<cr>', { desc = 'LSP Code Actions' })
       vim.keymap.set(
         'n',
         'gd',
