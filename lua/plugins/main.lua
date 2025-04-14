@@ -206,15 +206,17 @@ return {
   { -- snacks {{{
     'folke/snacks.nvim',
     opts = {
-      -- Fancy vim.ui.input
+      bigfile = {},
+      indent = {},
+      notifier = {},
       input = {
+        -- Fancy vim.ui.input
         win = {
           relative = 'cursor',
           row = -3,
           col = 0,
         },
       },
-      indent = {},
     },
   }, -- }}}
   { -- substitute.nvim {{{1
