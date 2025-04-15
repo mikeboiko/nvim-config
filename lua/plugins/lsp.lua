@@ -198,8 +198,8 @@ return {
         '<cmd>lua vim.lsp.buf.hover()<cr>',
         { desc = 'Show hover documentation for symbol under cursor' }
       )
-      -- vim.keymap.set('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>', { desc = 'Jump to previous diagnostic' })
-      -- vim.keymap.set('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>', { desc = 'Jump to next diagnostic' })
+      vim.keymap.set('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>', { desc = 'Jump to previous diagnostic' })
+      vim.keymap.set('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>', { desc = 'Jump to next diagnostic' })
       vim.keymap.set(
         'n',
         'gD',
