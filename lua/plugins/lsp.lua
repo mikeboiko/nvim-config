@@ -126,12 +126,12 @@ return {
 
       lspconfig.lua_ls.setup({
         on_init = function(client)
-          if client.workspace_folders then
-            local path = client.workspace_folders[1].name
-            if vim.loop.fs_stat(path .. '/.luarc.json') or vim.loop.fs_stat(path .. '/.luarc.jsonc') then
-              return
-            end
-          end
+          -- if client.workspace_folders then
+          --   local path = client.workspace_folders[1].name
+          --   if vim.loop.fs_stat(path .. '/.luarc.json') or vim.loop.fs_stat(path .. '/.luarc.jsonc') then
+          --     return
+          --   end
+          -- end
 
           client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
             runtime = {
@@ -238,6 +238,8 @@ return {
 
       -- Format on save
       vim.api.nvim_create_autocmd('BufWritePre', {
+        -- Only format these filetypes
+        pattern = { '*.lua', '*.py', '*.js', '*.vue', '*.sql' },
         callback = function()
           vim.lsp.buf.format {
             async = false,
