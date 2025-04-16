@@ -37,7 +37,7 @@ return {
       local select = require('CopilotChat.select')
       require('CopilotChat').setup({
         debug = false,
-        model = 'claude-3.5-sonnet',
+        model = 'gemini-2.5-pro',
         chat_autocomplete = false,
         auto_follow_cursor = false,
         prompts = {
