@@ -11,6 +11,10 @@ end
 -- General
 vim.keymap.set('n', '<leader>nh', ':lua Snacks.notifier.show_history()<CR>', { desc = 'Show Notification History' })
 
+-- Delete keymaps
+vim.keymap.del('n', '<C-W><C-D>')
+vim.keymap.del('n', '<C-W>d')
+
 -- Resize window using <ctrl> arrow keys
 vim.keymap.set('n', '<C-Up>', '<cmd>resize +2<cr>', { desc = 'Increase Window Height' })
 vim.keymap.set('n', '<C-Down>', '<cmd>resize -2<cr>', { desc = 'Decrease Window Height' })
