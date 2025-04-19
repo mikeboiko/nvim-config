@@ -1083,18 +1083,18 @@ let mapleader="\<space>"
 " Add char to EOL {{{2
 
 " Colon
-inoremap :: <esc>mzA:<esc>`z
+" inoremap :: <esc>mzA:<esc>`z
 nnoremap <leader>a: mzA:<esc>`z
 
 " Comma
-inoremap ,, <esc>mzA,<esc>`z
+" inoremap ,, <esc>mzA,<esc>`z
 nnoremap <leader>a, mzA,<esc>`z
 
 " Period
 nnoremap <leader>a. mzA.<esc>`z
 
 " Semi-Colon
-inoremap ;; <esc>mzA;<esc>`z
+" inoremap ;; <esc>mzA;<esc>`z
 nnoremap <leader>a; mzA;<esc>`z
 
 " Clipboard {{{2
