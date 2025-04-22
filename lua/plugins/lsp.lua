@@ -115,6 +115,7 @@ return {
         },
       }
 
+      -- TODO: Fix ERROR method workspace/symbol is not supported by any of the servers registered for the current buffer
       lspconfig.yamlls.setup {
         settings = {
           yaml = {
