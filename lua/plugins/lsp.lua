@@ -115,15 +115,20 @@ return {
         },
       }
 
-      -- TODO: Fix ERROR method workspace/symbol is not supported by any of the servers registered for the current buffer
-      lspconfig.yamlls.setup {
-        settings = {
-          yaml = {
-            schemas = require('schemastore').yaml.schemas {},
-            validate = true,
-          },
-        },
-      }
+      -- lspconfig.yamlls.setup {
+      --   -- TODO: Fix ERROR method workspace/symbol is not supported by any of the servers registered for the current buffer
+      --   -- capabilities = {
+      --   --   workspace = {
+      --   --     symbol = false,
+      --   --   },
+      --   -- },
+      --   settings = {
+      --     yaml = {
+      --       schemas = require('schemastore').yaml.schemas {},
+      --       validate = true,
+      --     },
+      --   },
+      -- }
 
       lspconfig.lua_ls.setup({
         on_init = function(client)
@@ -240,7 +245,7 @@ return {
       -- Format on save
       vim.api.nvim_create_autocmd('BufWritePre', {
         -- Only format these filetypes
-        pattern = { '*.lua', '*.py', '*.js', '*.vue', '*.sql', '*.md' },
+        pattern = { '*.lua', '*.py', '*.js', '*.vue', '*.sql', '*.md', '*.yaml', '*.yml' },
         callback = function()
           vim.lsp.buf.format {
             async = false,
