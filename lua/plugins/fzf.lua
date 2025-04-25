@@ -1,4 +1,7 @@
 return {
+  { -- fzf - for bqf filtering {{{1
+    'junegunn/fzf',
+  }, -- }}}
   { -- fzf.lua {{{1
     'ibhagwan/fzf-lua',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
