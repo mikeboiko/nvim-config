@@ -245,7 +245,17 @@ return {
       -- Format on save
       vim.api.nvim_create_autocmd('BufWritePre', {
         -- Only format these filetypes
-        pattern = { '*.lua', '*.py', '*.js', '*.vue', '*.sql', '*.md', '*.yaml', '*.yml' },
+        pattern = {
+          '*.js',
+          '*.lua',
+          '*.md',
+          '*.py',
+          '*.sh',
+          '*.sql',
+          '*.vue',
+          '*.yaml',
+          '*.yml',
+        },
         callback = function()
           vim.lsp.buf.format {
             async = false,
