@@ -247,6 +247,7 @@ return {
         -- Only format these filetypes
         pattern = {
           '*.js',
+          '*.json',
           '*.lua',
           '*.md',
           '*.py',
