@@ -46,3 +46,28 @@ vim.g.FancyPromptRename = function(func, prompt, visual)
     vim.g[func](query, original)
   end)
 end
+
+-- Note, this function has an issue with wshada.
+-- I'm not using it right now, but will keep it here for reference.
+vim.api.nvim_create_user_command('FilterAndSaveOldfiles', function()
+  print('Initial v:oldfiles: ' .. vim.inspect(vim.v.oldfiles))
+  local oldfiles = vim.v.oldfiles
+  if oldfiles == nil then
+    print('Warning: vim.v.oldfiles was nil at the start.')
+    oldfiles = {}
+  end
+
+  local filtered_oldfiles = {}
+  for _, file_path in ipairs(oldfiles) do
+    if file_path:sub(1, #'/mnt/') ~= '/mnt/' then
+      table.insert(filtered_oldfiles, file_path)
+    end
+  end
+  print('Filtered oldfiles (Lua table to be set): ' .. vim.inspect(filtered_oldfiles))
+
+  vim.v.oldfiles = filtered_oldfiles
+  print('v:oldfiles after Lua assignment: ' .. vim.inspect(vim.v.oldfiles))
+
+  vim.cmd('wshada!')
+  print('Executed wshada! Removed /mnt/ from oldfiles. Check :messages for any errors.')
+end, { nargs = 0 })

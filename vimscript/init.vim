@@ -904,7 +904,7 @@ endif
 if has('nvim')
   set shada=!,'1000,<50,s10,h
   " Exclude files beginning with r<name>
-  set shada^=rterm://,rfugitive,rman:,rhealth:
+  set shada^=rterm://,rfugitive,rman:,rhealth:,r/mnt/
 endif
 
 " General settings required for highlighting
