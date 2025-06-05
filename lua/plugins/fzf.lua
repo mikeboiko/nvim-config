@@ -16,6 +16,7 @@ return {
           include_current_session = false, -- include bufs from current session
         },
       })
+      require('fzf-lua').register_ui_select({})
       vim.keymap.set('n', '<C-p>', ':rshada!<CR>:FzfLua oldfiles<CR>', { silent = true, desc = 'FzfLua recent files' })
       vim.keymap.set('n', '<leader>p', ':FzfLua git_files<CR>', { silent = true, desc = 'FzfLua git files' })
       vim.keymap.set('n', '<leader>fk', ':FzfLua keymaps<CR>', { silent = true, desc = 'FzfLua keymaps' })
