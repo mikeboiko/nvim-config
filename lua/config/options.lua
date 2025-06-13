@@ -50,6 +50,7 @@ opt.foldexpr = 'nvim_treesitter#foldexpr()'
 --     end
 --   end,
 -- })
+
 vim.diagnostic.config({
   virtual_text = true,
   -- virtual_lines = { current_line = true },
@@ -57,3 +58,7 @@ vim.diagnostic.config({
   underline = true,
   update_in_insert = false,
 })
+
+-- Enable project-specific settings
+vim.opt.exrc = true
+vim.opt.secure = true
