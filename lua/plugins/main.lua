@@ -209,7 +209,7 @@ return {
       bigfile = {},
       indent = {},
       notifier = {},
-      image = {},
+      image = { convert = { notify = false } },
       input = {
         -- Fancy vim.ui.input
         win = {
