@@ -53,7 +53,6 @@ return {
     cmd = 'LspInfo',
     event = { 'BufReadPre', 'BufNewFile' },
     dependencies = {
-      { 'hrsh7th/cmp-nvim-lsp' },
       { 'b0o/schemastore.nvim' },
     },
     init = function()

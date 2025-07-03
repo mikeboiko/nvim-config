@@ -1,51 +1,89 @@
 return {
-  { -- nvim-cmp {{{1
-    'hrsh7th/nvim-cmp',
-    event = 'InsertEnter',
-    config = function()
-      local cmp = require('cmp')
+  { -- blink.cmp {{{1
+    'saghen/blink.cmp',
+    -- optional: provides snippets for the snippet source
+    dependencies = { 'rafamadriz/friendly-snippets' },
 
-      local has_words_before = function()
-        if vim.bo.buftype == 'prompt' then
-          return false
-        end
-        local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-        return col ~= 0 and vim.api.nvim_buf_get_text(0, line - 1, 0, line - 1, col, {})[1]:match('^%s*$') == nil
-      end
+    -- use a release tag to download pre-built binaries
+    version = '1.*',
+    -- AND/OR build from source, requires nightly: https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust
+    -- build = 'cargo build --release',
+    -- If you use nix, you can build from source using latest nightly rust with:
+    -- build = 'nix run .#build-plugin',
 
-      cmp.setup({
-        sources = {
-          -- Copilot Source
-          { name = 'copilot', group_index = 2 },
-          -- Other Sources
-          { name = 'nvim_lsp', group_index = 2 },
-          { name = 'path', group_index = 2 },
-          -- { name = "luasnip", group_index = 2 },
-        },
+    ---@module 'blink.cmp'
+    ---@type blink.cmp.Config
+    opts = {
+      -- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)
+      -- 'super-tab' for mappings similar to vscode (tab to accept)
+      -- 'enter' for enter to accept
+      -- 'none' for no mappings
+      --
+      -- All presets have the following mappings:
+      -- C-space: Open menu or open docs if already open
+      -- C-n/C-p or Up/Down: Select next/previous item
+      -- C-e: Hide menu
+      -- C-k: Toggle signature help (if signature.enabled = true)
+      --
+      -- See :h blink-cmp-config-keymap for defining your own keymap
 
-        mapping = {
-          ['<CR>'] = cmp.mapping.confirm({
-            behavior = cmp.ConfirmBehavior.Insert,
-            select = true,
-          }),
-          ['<Tab>'] = vim.schedule_wrap(function(fallback)
-            if cmp.visible() and has_words_before() then
-              -- cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
-              cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
-            else
-              fallback()
+      -- I referenced this config:
+      -- https://github.com/WizardStark/dotfiles/blob/main/home/.config/nvim/lua/config/editor/blink_cmp.lua,
+      keymap = {
+        preset = 'enter',
+        ['<Tab>'] = {
+          function(cmp)
+            if cmp.is_menu_visible() then
+              return require('blink.cmp').select_next()
+            elseif cmp.snippet_active() then
+              return cmp.snippet_forward()
             end
-          end),
-          ['<S-Tab>'] = vim.schedule_wrap(function(fallback)
-            if cmp.visible() and has_words_before() then
-              cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
-            else
-              fallback()
-            end
-          end),
+          end,
+          'fallback',
         },
-      })
-    end,
+        ['<S-Tab>'] = {
+          function(cmp)
+            if cmp.is_menu_visible() then
+              return require('blink.cmp').select_prev()
+            elseif cmp.snippet_active() then
+              return cmp.snippet_backward()
+            end
+          end,
+          'fallback',
+        },
+      },
+
+      appearance = {
+        -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
+        -- Adjusts spacing to ensure icons are aligned
+        nerd_font_variant = 'mono',
+      },
+
+      -- Only show the documentation popup when manually triggered
+      completion = { documentation = { auto_show = true } },
+
+      -- Default list of enabled providers defined so that you can extend it
+      -- elsewhere in your config, without redefining it, due to `opts_extend`
+      sources = {
+        default = { 'lsp', 'path', 'snippets', 'buffer', 'copilot' },
+        providers = {
+          copilot = {
+            name = 'copilot',
+            module = 'blink-cmp-copilot',
+            score_offset = 100,
+            async = true,
+          },
+        },
+      },
+
+      -- (Default) Rust fuzzy matcher for typo resistance and significantly better performance
+      -- You may use a lua implementation instead by using `implementation = "lua"` or fallback to the lua implementation,
+      -- when the Rust fuzzy matcher is not available, by using `implementation = "prefer_rust"`
+      --
+      -- See the fuzzy documentation for more information
+      fuzzy = { implementation = 'prefer_rust_with_warning' },
+    },
+    opts_extend = { 'sources.default' },
   }, -- }}}
 }
 -- vim: foldmethod=marker:foldlevel=1

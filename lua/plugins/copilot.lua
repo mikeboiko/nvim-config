@@ -1,10 +1,7 @@
 return {
-  { -- copilot-cmp {{{1
-    'zbirenbaum/copilot-cmp',
-    config = function()
-      require('copilot_cmp').setup()
-    end,
-  }, -- }}}
+  { -- blink-cmp-copilot {{{1
+    'giuxtaposition/blink-cmp-copilot',
+  },
   { -- copilot.lua {{{1
     'zbirenbaum/copilot.lua',
     cmd = 'Copilot',
