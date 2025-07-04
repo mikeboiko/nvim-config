@@ -53,6 +53,11 @@ return {
         },
       },
 
+      -- cmdline = {
+      --   keymap = { preset = 'inherit' },
+      --   completion = { menu = { auto_show = false } },
+      -- },
+
       appearance = {
         -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
         -- Adjusts spacing to ensure icons are aligned
@@ -67,11 +72,27 @@ return {
       sources = {
         default = { 'lsp', 'path', 'snippets', 'buffer', 'copilot' },
         providers = {
+          snippets = {
+            min_keyword_length = 2,
+            score_offset = 10,
+          },
           copilot = {
             name = 'copilot',
             module = 'blink-cmp-copilot',
-            score_offset = 100,
+            score_offset = 9,
             async = true,
+          },
+          lsp = {
+            min_keyword_length = 3,
+            score_offset = 3,
+          },
+          path = {
+            min_keyword_length = 3,
+            score_offset = 2,
+          },
+          buffer = {
+            min_keyword_length = 5,
+            score_offset = 1,
           },
         },
       },

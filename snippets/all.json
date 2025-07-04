@@ -1,0 +1,6 @@
+{
+  "checkbox": {
+    "prefix": "cb",
+    "body": ["- [ ] $1"]
+  }
+}

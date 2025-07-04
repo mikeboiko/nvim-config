@@ -247,6 +247,7 @@ return {
         pattern = {
           '*.js',
           '*.json',
+          '*.jsonc',
           '*.lua',
           '*.md',
           '*.py',
