@@ -705,13 +705,7 @@ augroup CustomCommentStrings
   autocmd FileType autohotkey setlocal commentstring=;%s
 augroup end
 
-" toggleterm {{{2
-
 if has('nvim')
-  " lua require("toggleterm").setup{
-        " \ open_mapping = [[<c-\>]],
-        " \ hide_numbers = true
-        " \ }
   autocmd! TermOpen term://* lua set_terminal_keymaps()
 endif
 

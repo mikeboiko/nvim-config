@@ -1,4 +1,11 @@
 return {
+  { -- overseer.nvim {{{1
+    'stevearc/overseer.nvim',
+    opts = {},
+    config = function()
+      require('overseer').setup({})
+    end,
+  }, -- }}}
   { -- gruvbox: Theme {{{1
     'ellisonleao/gruvbox.nvim',
     priority = 1000,

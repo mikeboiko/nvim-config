@@ -3,7 +3,9 @@
   "contributes": {
     "snippets": [
       {
-        "language":[ "lua"],
+        "language": [
+          "lua"
+        ],
         "path": "./lua.json"
       },
       {
