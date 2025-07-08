@@ -63,7 +63,7 @@ return {
     config = function()
       local lspconfig = require('lspconfig')
 
-      lspconfig.bashls.setup({})
+      require('lspconfig').bashls.setup({ filetypes = { 'bash', 'sh' } })
 
       -- Used for formatting and linting
       -- https://docs.astral.sh/ruff/editors/setup/#neovim
