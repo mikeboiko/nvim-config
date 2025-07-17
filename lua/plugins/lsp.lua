@@ -10,13 +10,13 @@ return {
           null_ls.builtins.completion.tags,
           null_ls.builtins.diagnostics.trail_space,
           null_ls.builtins.diagnostics.sqlfluff.with({
-            extra_args = { '--dialect', 'tsql', '--exclude-rules', 'CP02' },
+            extra_args = { '--dialect', 'tsql', '--exclude-rules', 'CP02,LT01,LT02' },
           }),
           -- null_ls.builtins.diagnostics.vint,
           null_ls.builtins.formatting.isort,
           null_ls.builtins.formatting.prettier,
           null_ls.builtins.formatting.sqlfluff.with({
-            extra_args = { '--dialect', 'tsql', '--exclude-rules', 'CP02' },
+            extra_args = { '--dialect', 'tsql', '--exclude-rules', 'CP02,LT01,LT02' },
           }),
           null_ls.builtins.formatting.stylua,
           null_ls.builtins.formatting.shfmt.with({
@@ -260,6 +260,7 @@ return {
         callback = function()
           vim.lsp.buf.format {
             async = false,
+            timeout_ms = 2000,
             -- Ignore these LSP formatters, they are handled by null-ls
             filter = function(client)
               local exclude_formatters = { 'lua_ls', 'volar' }
