@@ -91,7 +91,7 @@ return {
 
       -- npm install -g @vue/language-server
       lspconfig.volar.setup({
-        filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
+        filetypes = { 'vue' },
         init_options = {
           typescript = {
             tsdk = '/home/mike/npm-global/lib/node_modules/typescript/lib',
@@ -100,6 +100,16 @@ return {
             hybridMode = false,
           },
         },
+      })
+
+      -- TypeScript/JavaScript language server for React
+      lspconfig.ts_ls.setup({
+        filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact' },
+        -- init_options = {
+        --   preferences = {
+        --     disableSuggestions = true,
+        --   },
+        -- },
       })
 
       lspconfig.jsonls.setup {
@@ -178,7 +188,7 @@ return {
         },
       })
 
-      -- First, install `omnisharp-roslyn` from AUR
+      -- First, install `omnisharp-roslyn-bin` from AUR
       local pid = vim.fn.getpid()
       lspconfig.omnisharp.setup({
         cmd = { '/usr/bin/omnisharp', '--languageserver', '--hostPID', tostring(pid) },
@@ -248,11 +258,14 @@ return {
           '*.js',
           '*.json',
           '*.jsonc',
+          '*.jsx',
           '*.lua',
           '*.md',
           '*.py',
           '*.sh',
           '*.sql',
+          '*.ts',
+          '*.tsx',
           '*.vue',
           '*.yaml',
           '*.yml',
@@ -263,7 +276,7 @@ return {
             timeout_ms = 2000,
             -- Ignore these LSP formatters, they are handled by null-ls
             filter = function(client)
-              local exclude_formatters = { 'lua_ls', 'volar' }
+              local exclude_formatters = { 'lua_ls', 'volar', 'ts_ls' }
               return not vim.tbl_contains(exclude_formatters, client.name)
             end,
           }

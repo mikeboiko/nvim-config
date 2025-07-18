@@ -48,6 +48,7 @@ return {
           'markdown_inline',
           'mermaid',
           'python',
+          'typescript',
           'vim',
           'vimdoc',
           'vue',
