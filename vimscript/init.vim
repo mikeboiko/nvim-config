@@ -985,7 +985,7 @@ augroup CustomOptions
 augroup end
 
 " Spelling
-set spellfile=$HOME/files/Sync/Documents/en.utf-8.add
+set spellfile=$HOME/git/Notes/Main/en.utf-8.add
 
 " Change error format for custom FindFunc() usage
 " set efm+=%f:%l:%m
