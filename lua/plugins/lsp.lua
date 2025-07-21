@@ -271,6 +271,18 @@ return {
           '*.yml',
         },
         callback = function()
+          -- Don't auto-format in work repos
+          local current_file = vim.fn.expand('%:p')
+          local excluded_paths = {
+            vim.fn.expand('~/git/GOA'),
+            vim.fn.expand('~/git/CT'),
+          }
+          for _, path in ipairs(excluded_paths) do
+            if vim.startswith(current_file, path) then
+              return
+            end
+          end
+
           vim.lsp.buf.format {
             async = false,
             timeout_ms = 2000,
