@@ -1384,18 +1384,15 @@ nnoremap <silent> <Tab> :tabprevious<CR>
 
 " Vimspector {{{2
 
-nmap <silent> <leader>db <Plug>VimspectorBreakpoints
-nmap <silent> <leader>dc :wa<CR>:execute "normal \<Plug>VimspectorContinue"<CR>
-nmap <silent> <leader>dd <Plug>VimspectorDownFrame
-nmap <silent> <leader>di <Plug>VimspectorBalloonEval
-nmap <silent> <leader>dl <Plug>VimspectorRunToCursor
-nmap <silent> <leader>dp <Plug>VimspectorPause
-nmap <silent> <leader>dr :wa<CR>:execute "normal \<Plug>VimspectorRestart"<CR>
-nmap <silent> <leader>ds <Plug>VimspectorStop
-nmap <silent> <leader>dt <Plug>VimspectorToggleBreakpoint
-nmap <silent> <leader>du <Plug>VimspectorUpFrame
-nmap <silent> <C-e> <Plug>VimspectorStepOver
-nmap <silent> <C-r> <Plug>VimspectorStepInto
+" nmap <silent> <leader>db <Plug>VimspectorBreakpoints
+" dap.list_breakpoints()*
+" nmap <silent> <leader>ds <Plug>VimspectorStop
+" nmap <silent> <leader>du <Plug>VimspectorUpFrame
+" nmap <silent> <leader>dd <Plug>VimspectorDownFrame
+" nmap <silent> <leader>di <Plug>VimspectorBalloonEval
+" nmap <silent> <leader>dl <Plug>VimspectorRunToCursor
+" nmap <silent> <leader>dp <Plug>VimspectorPause
+" nmap <silent> <leader>dr :wa<CR>:execute "normal \<Plug>VimspectorRestart"<CR>
 
 " Default mappings:
 

@@ -182,6 +182,7 @@ return {
               },
             },
             diagnostics = {
+              disable = { 'missing-fields', 'undefined-global' },
               globals = { 'init_debug', 'vim' },
             },
           },
