@@ -1188,8 +1188,8 @@ nnoremap <leader>gs :Git<CR>
 nnoremap <leader>rd :terminal git --no-pager diff<CR>
 
 " Mani commands
-nnoremap <leader>ms :Mani run git-status --parallel --tags $MANI_TAG<cr>
-nnoremap <leader>mu :Mani run git-up --parallel --tags $MANI_TAG<cr>
+nnoremap <leader>ms :Mani run git-status --parallel --tags-expr '$MANI_EXPR'<cr>
+nnoremap <leader>mu :Mani run git-up --parallel --tags-expr '$MANI_EXPR'<cr>
 
 " Add all changes, commit and push
 nnoremap <leader>gap :wa<CR>:silent call GitAddCommitPush()<CR>
