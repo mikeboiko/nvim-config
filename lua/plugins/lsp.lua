@@ -252,6 +252,19 @@ return {
         { desc = 'Find implementations of interface/class under cursor' }
       )
 
+      -- Manual LSP format mapping
+      local exclude_formatters = { 'lua_ls', 'volar', 'ts_ls' }
+      vim.keymap.set('n', '<leader>fi', function()
+        vim.lsp.buf.format {
+          async = false,
+          timeout_ms = 2000,
+          -- Use the same filter as your autocmd
+          filter = function(client)
+            return not vim.tbl_contains(exclude_formatters, client.name)
+          end,
+        }
+      end, { desc = 'Format current buffer with LSP' })
+
       -- Format on save
       vim.api.nvim_create_autocmd('BufWritePre', {
         -- Only format these filetypes
@@ -289,7 +302,6 @@ return {
             timeout_ms = 2000,
             -- Ignore these LSP formatters, they are handled by null-ls
             filter = function(client)
-              local exclude_formatters = { 'lua_ls', 'volar', 'ts_ls' }
               return not vim.tbl_contains(exclude_formatters, client.name)
             end,
           }

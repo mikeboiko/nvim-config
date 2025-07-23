@@ -153,6 +153,12 @@ return {
       vim.keymap.set('n', '<leader>dr', function()
         dap.restart()
       end, { silent = true })
+      vim.keymap.set('n', '<leader>dp', function()
+        dap.pause()
+      end, { silent = true })
+      vim.keymap.set('n', '<leader>di', function()
+        dapui.eval()
+      end, { silent = true })
     end,
   }, -- }}}
   -- { -- nvim-dap-cs {{{1
