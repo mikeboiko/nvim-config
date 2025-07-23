@@ -95,24 +95,6 @@ return {
       dap.listeners.before.event_exited['dapui_config'] = function()
         dapui.close()
       end
-    end,
-  }, -- }}}
-  { -- one-small-step-for-vimkind {{{1
-    'jbyuki/one-small-step-for-vimkind',
-    config = function()
-      local dap = require('dap')
-
-      dap.adapters.nlua = function(callback, config)
-        callback({ type = 'server', host = config.host or '127.0.0.1', port = config.port or 8086 })
-      end
-
-      dap.configurations.lua = {
-        {
-          type = 'nlua',
-          request = 'attach',
-          name = 'Attach to running Neovim instance',
-        },
-      }
 
       dap.adapters.coreclr = {
         type = 'executable',
@@ -171,6 +153,31 @@ return {
       vim.keymap.set('n', '<leader>dr', function()
         dap.restart()
       end, { silent = true })
+    end,
+  }, -- }}}
+  { -- nvim-dap-cs {{{1
+    'nicholasmata/nvim-dap-cs',
+    dependencies = { 'mfussenegger/nvim-dap' },
+    config = function()
+      require('dap-cs').setup()
+    end,
+  }, -- }}}
+  { -- one-small-step-for-vimkind {{{1
+    'jbyuki/one-small-step-for-vimkind',
+    config = function()
+      local dap = require('dap')
+
+      dap.adapters.nlua = function(callback, config)
+        callback({ type = 'server', host = config.host or '127.0.0.1', port = config.port or 8086 })
+      end
+
+      dap.configurations.lua = {
+        {
+          type = 'nlua',
+          request = 'attach',
+          name = 'Attach to running Neovim instance',
+        },
+      }
     end,
   }, -- }}}
   --   { -- vimspector {{{1
