@@ -155,13 +155,13 @@ return {
       end, { silent = true })
     end,
   }, -- }}}
-  { -- nvim-dap-cs {{{1
-    'nicholasmata/nvim-dap-cs',
-    dependencies = { 'mfussenegger/nvim-dap' },
-    config = function()
-      require('dap-cs').setup()
-    end,
-  }, -- }}}
+  -- { -- nvim-dap-cs {{{1
+  --   'nicholasmata/nvim-dap-cs',
+  --   dependencies = { 'mfussenegger/nvim-dap' },
+  --   config = function()
+  --     require('dap-cs').setup()
+  --   end,
+  -- }, -- }}}
   { -- one-small-step-for-vimkind {{{1
     'jbyuki/one-small-step-for-vimkind',
     config = function()
@@ -178,6 +178,12 @@ return {
           name = 'Attach to running Neovim instance',
         },
       }
+    end,
+  }, -- }}}
+  { -- nvim-dap-virtual-text {{{1
+    'theHamsta/nvim-dap-virtual-text',
+    config = function()
+      require('nvim-dap-virtual-text').setup({})
     end,
   }, -- }}}
   --   { -- vimspector {{{1
