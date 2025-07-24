@@ -96,7 +96,7 @@ return {
         dapui.close()
       end
 
-      dap.adapters.coreclr = {
+      dap.adapters.netcoredbg = {
         type = 'executable',
         command = '/usr/bin/netcoredbg',
         args = { '--interpreter=vscode' },
@@ -104,7 +104,7 @@ return {
 
       dap.configurations.cs = {
         {
-          type = 'coreclr',
+          type = 'netcoredbg',
           name = 'launch - netcoredbg',
           request = 'launch',
           program = function()
@@ -116,9 +116,6 @@ return {
       -- vim.keymap.set('n', '<leader>dl', function()
       --   require('osv').launch({ port = 8086 })
       -- end, { noremap = true, desc = 'dap: launch neovim lua server' })
-      vim.keymap.set('n', '<leader>db', function()
-        dap.list_breakpoints()
-      end, { silent = true })
       vim.keymap.set('n', '<leader>dc', function()
         vim.cmd('wa')
         dap.continue()
@@ -141,8 +138,11 @@ return {
       vim.keymap.set('n', '<leader>dl', function()
         dap.run_to_cursor()
       end, { silent = true })
-      vim.keymap.set('n', '<leader>dt', function()
+      vim.keymap.set('n', '<leader>db', function()
         dap.toggle_breakpoint()
+      end, { silent = true })
+      vim.keymap.set('n', '<leader>dt', function()
+        require('neotest').run.run({ strategy = 'dap' })
       end, { silent = true })
       vim.keymap.set('n', '<leader>B', function()
         dap.set_breakpoint(vim.fn.input('Breakpoint condition: '))
@@ -190,6 +190,23 @@ return {
     'theHamsta/nvim-dap-virtual-text',
     config = function()
       require('nvim-dap-virtual-text').setup({})
+    end,
+  }, -- }}}
+  { -- neotest {{{1
+    'nvim-neotest/neotest',
+    dependencies = {
+      'Issafalcon/neotest-dotnet',
+      'nvim-neotest/nvim-nio',
+      'nvim-lua/plenary.nvim',
+      'antoinemadec/FixCursorHold.nvim',
+      'nvim-treesitter/nvim-treesitter',
+    },
+    config = function()
+      require('neotest').setup({
+        adapters = {
+          require('neotest-dotnet'),
+        },
+      })
     end,
   }, -- }}}
   --   { -- vimspector {{{1
