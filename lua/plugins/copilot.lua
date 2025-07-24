@@ -34,7 +34,7 @@ return {
       local select = require('CopilotChat.select')
       require('CopilotChat').setup({
         debug = false,
-        model = 'claude-sonnet-4',
+        model = 'gpt-4.1',
         chat_autocomplete = false,
         auto_follow_cursor = false,
         prompts = {
