@@ -9,8 +9,8 @@ return {
         icons = { expanded = '▾', collapsed = '▸', current_frame = '▸' },
         mappings = {
           -- Use a table to apply multiple mappings
-          expand = { '<CR>', '<2-LeftMouse>' },
-          open = 'o',
+          expand = { 'o', '<2-LeftMouse>' },
+          open = '<CR>',
           remove = 'd',
           edit = 'e',
           repl = 'r',
@@ -18,7 +18,6 @@ return {
         },
         -- Use this to override mappings for specific elements
         element_mappings = {
-          -- Example:
           -- stacks = {
           --   open = "<CR>",
           --   expand = "o",
@@ -49,7 +48,7 @@ return {
           {
             elements = {
               'repl',
-              'console',
+              -- 'console',
             },
             size = 0.25, -- 25% of total lines
             position = 'bottom',
@@ -158,6 +157,12 @@ return {
       end, { silent = true })
       vim.keymap.set('n', '<leader>di', function()
         dapui.eval()
+      end, { silent = true })
+      vim.keymap.set('n', '<leader>du', function()
+        require('dap').up()
+      end, { silent = true })
+      vim.keymap.set('n', '<leader>dd', function()
+        require('dap').down()
       end, { silent = true })
     end,
   }, -- }}}
