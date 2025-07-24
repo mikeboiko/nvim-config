@@ -319,5 +319,8 @@ return {
       })
     end,
   }, -- }}}
+  { -- {{{1
+    'Hoffs/omnisharp-extended-lsp.nvim',
+  }, -- }}}
 }
 -- vim: foldmethod=marker:foldlevel=1

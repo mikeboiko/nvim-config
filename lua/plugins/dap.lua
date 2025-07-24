@@ -212,6 +212,10 @@ return {
           require('neotest-dotnet'),
         },
       })
+
+      vim.keymap.set('n', '<leader>ts', function()
+        require('neotest').summary.toggle()
+      end, { silent = true })
     end,
   }, -- }}}
   --   { -- vimspector {{{1
