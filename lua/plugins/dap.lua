@@ -37,10 +37,10 @@ return {
           {
             elements = {
               -- Elements can be strings or table with id and size keys.
-              { id = 'scopes', size = 0.25 },
-              'breakpoints',
-              'stacks',
+              { id = 'breakpoints', size = 0.25 },
               'watches',
+              'scopes',
+              'stacks',
             },
             size = 40, -- 40 columns
             position = 'left',
@@ -158,10 +158,10 @@ return {
       vim.keymap.set('n', '<leader>di', function()
         dapui.eval()
       end, { silent = true })
-      vim.keymap.set('n', '<leader>du', function()
+      vim.keymap.set('n', '<leader>dd', function()
         require('dap').up()
       end, { silent = true })
-      vim.keymap.set('n', '<leader>dd', function()
+      vim.keymap.set('n', '<leader>du', function()
         require('dap').down()
       end, { silent = true })
     end,
