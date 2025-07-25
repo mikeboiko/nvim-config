@@ -247,6 +247,12 @@ return {
       )
       vim.keymap.set(
         'n',
+        'gD',
+        '<cmd>lua vim.lsp.buf.type_definition()<cr>',
+        { desc = 'Jump to type definition of symbol under cursor' }
+      )
+      vim.keymap.set(
+        'n',
         'gi',
         '<cmd>lua vim.lsp.buf.implementation()<cr>',
         { desc = 'Find implementations of interface/class under cursor' }
@@ -269,6 +275,7 @@ return {
       vim.api.nvim_create_autocmd('BufWritePre', {
         -- Only format these filetypes
         pattern = {
+          '*.cs',
           '*.js',
           '*.json',
           '*.jsonc',
@@ -288,7 +295,7 @@ return {
           -- Don't auto-format in work repos
           local current_file = vim.fn.expand('%:p')
           local excluded_paths = {
-            vim.fn.expand('~/git/GOA'),
+            -- vim.fn.expand('~/git/GOA'),
             vim.fn.expand('~/git/CT'),
           }
           for _, path in ipairs(excluded_paths) do
