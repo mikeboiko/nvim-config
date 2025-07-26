@@ -129,31 +129,46 @@ return {
 
         if vim.g['dotnet_last_dll_path'] == nil then
           vim.g['dotnet_last_dll_path'] = request()
-        else
-          if
-            vim.fn.confirm('Do you want to change the path to dll?\n' .. vim.g['dotnet_last_dll_path'], '&yes\n&no', 2)
-            == 1
-          then
-            vim.g['dotnet_last_dll_path'] = request()
-          end
+          -- else
+          --   if
+          --     vim.fn.confirm('Do you want to change the path to dll?\n' .. vim.g['dotnet_last_dll_path'], '&yes\n&no', 2)
+          --     == 1
+          --   then
+          --     vim.g['dotnet_last_dll_path'] = request()
+          --   end
         end
 
         return vim.g['dotnet_last_dll_path']
       end
 
+      -- Your configurations table
       local config = {
         {
           type = 'netcoredbg',
-          name = 'launch - netcoredbg',
+          name = 'Launch DLL (netcoredbg)',
           request = 'launch',
           program = function()
             if vim.fn.confirm('Should I recompile first?', '&yes\n&no', 2) == 1 then
-              vim.g.dotnet_build_project()
+              vim.g.dotnet_build_project() -- This will prompt for project path for the build
             end
-            return vim.g.dotnet_get_dll_path()
+            return vim.g.dotnet_get_dll_path() -- This will prompt for DLL path
           end,
+          args = {},
+          cwd = function()
+            -- CWD for direct DLL launch can often be the directory containing the DLL
+            local dll_path = vim.g.dotnet_get_dll_path()
+            return vim.fn.fnamemodify(dll_path, ':h')
+          end,
+          console = 'integratedTerminal',
+          stopOnEntry = false,
+          justMyCode = false,
+          env = {
+            ASPNETCORE_ENVIRONMENT = 'Development',
+            ASPNETCORE_URLS = 'https://localhost:7125;http://localhost:5111',
+          },
         },
       }
+
       dap.configurations.cs = config
       -- }}}
 

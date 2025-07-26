@@ -71,3 +71,19 @@ vim.api.nvim_create_user_command('FilterAndSaveOldfiles', function()
   vim.cmd('wshada!')
   print('Executed wshada! Removed /mnt/ from oldfiles. Check :messages for any errors.')
 end, { nargs = 0 })
+
+-- TODO: export this function
+-- Function to find repository root (e.g., where .git is)
+local get_repo_root = function()
+  local current_file = vim.api.nvim_buf_get_name(0)
+  local current_dir = vim.fn.fnamemodify(current_file, ':h')
+  local root_dir_search_patterns = { '.git' }
+  local found_path = vim.fs.find(root_dir_search_patterns, { upward = true, path = current_dir, limit = 1 })[1]
+
+  if found_path then
+    return vim.fn.fnamemodify(found_path, ':h')
+  else
+    -- Fallback to current working directory if root marker not found
+    return vim.fn.getcwd()
+  end
+end
