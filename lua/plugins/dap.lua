@@ -48,7 +48,7 @@ return {
           {
             elements = {
               'repl',
-              -- 'console',
+              'console',
             },
             size = 0.25, -- 25% of total lines
             position = 'bottom',
@@ -111,6 +111,24 @@ return {
           end,
         },
       }
+
+      require('dap-python').setup('python3')
+      -- dap.adapters.python = {
+      --   type = 'executable',
+      --   command = 'python',
+      --   args = { '-m', 'debugpy.adapter' },
+      -- }
+      -- dap.configurations.python = {
+      --   {
+      --     type = 'python',
+      --     request = 'launch',
+      --     name = 'Launch file',
+      --     program = '${file}',
+      --     pythonPath = function()
+      --       return 'python'
+      --     end,
+      --   },
+      -- }
 
       -- vim.keymap.set('n', '<leader>dl', function()
       --   require('osv').launch({ port = 8086 })
@@ -200,6 +218,7 @@ return {
   { -- neotest {{{1
     'nvim-neotest/neotest',
     dependencies = {
+      -- 'nsidorenco/neotest-vstest',
       'Issafalcon/neotest-dotnet',
       'nvim-neotest/nvim-nio',
       'nvim-lua/plenary.nvim',
@@ -210,6 +229,9 @@ return {
       require('neotest').setup({
         adapters = {
           require('neotest-dotnet'),
+          -- require('neotest-vstest')({
+          --   sdk_path = '/usr/share/dotnet/sdk/8.0.115/',
+          -- }),
         },
       })
 
