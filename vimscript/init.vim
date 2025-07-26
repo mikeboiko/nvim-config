@@ -174,7 +174,7 @@ function! CloseAll() " {{{2
     NvimTreeClose
     AerialClose
     " CopilotChatClose
-    for bufname in ['^fugitive', '/tmp/flow', 'git/gap', '~/git/Linux/config/mani.yaml', 'dotnet-test.sh']
+    for bufname in ['^fugitive', '/tmp/flow', 'git/gap', '~/git/Linux/config/mani.yaml']
       let pattern = escape(bufname, '~.')
       let buffers = join(filter(range(1, bufnr('$')), 'buflisted(v:val) && bufname(v:val) =~ pattern'), ' ')
       if trim(buffers) !=? ''
@@ -338,15 +338,6 @@ endfunction
 
 function! InsertInlineComment(fold_marker) "{{{2
   execute 'normal! A ' . substitute(GetCommentString(), '%s', g:fold_marker_string . a:fold_marker, '')
-endfunction
-
-function! InstallVimspectorGadgets(info) " {{{2
-  if a:info.status == 'installed' || a:info.force
-    !./install_gadget.py --enable-python
-    !./install_gadget.py --enable-go --update-gadget-config
-    !./install_gadget.py --force-enable-csharp --update-gadget-config
-    !./install_gadget.py --force-enable-node --update-gadget-config
-  endif
 endfunction
 
 function! MyTabLabel(n) " {{{2
@@ -532,37 +523,6 @@ function! s:afterTermClose(...) abort
   endif
 endfunc
 
-function! s:VimspectorDotNet(i) abort
-  " Run vimspector debugger if DotNet build/test script succeeded
-  let i = a:i + 1
-
-  " Read file into memory and check if it contains the string: "Process Id:"
-  let filepath = '/tmp/dotnet-test.log'
-  let file = readfile(filepath)
-  let found = 0
-  for line in file
-    if line =~# 'Process Id:'
-      let found = 1
-      break
-    endif
-  endfor
-
-  if found
-    " Launch vimspector debugger
-    echo 'VimspectorDotNet passed'
-    call timer_start(20, { -> vimspector#Launch() })
-    return
-  else
-    " Keep retrying for 20 seconds
-    if i > 40
-      echo 'VimspectorDotNet failed'
-      return
-    endif
-    call timer_start(500, {-> s:VimspectorDotNet(i)})
-  endif
-
-endfunc
-
 augroup MyNeoterm
   autocmd!
   " The line '[Process exited ?]' is appended to the terminal buffer after the
@@ -714,91 +674,6 @@ endif
 
 let g:unstack_populate_quickfix=1
 let g:unstack_layout = "portrait"
-
-" vimspector {{{2
-
-let g:vimspector_enable_mappings = 'HUMAN'
-let g:vimspector_enable_winbar=0
-
-" See https://code.visualstudio.com/docs/python/debugging
-" https://puremourning.github.io/vimspector/schema/vimspector.schema.json
-let g:vimspector_configurations = {
-      \ 'debugpy_config': {
-      \   'adapter': 'debugpy',
-      \   'filetypes': ['python'],
-      \   'configuration': {
-      \     'request': 'launch',
-      \     'type': 'python',
-      \     'cwd': '${fileDirname}',
-      \     'args': ['*${ARGS}'],
-      \     'program': '${file}',
-      \     'python': '~/.pyenv/shims/python',
-      \     'stopOnEntry': v:false,
-      \     'console': 'integratedTerminal'
-      \   },
-      \   'breakpoints': {
-      \     'exception': {
-      \       'raised': 'Y',
-      \       'uncaught': 'Y',
-      \       'userUnhandled': 'Y'
-      \     }
-      \   }
-      \ },
-      \ 'delve_config': {
-      \   'adapter': 'vscode-go',
-      \   'filetypes': ['go'],
-      \   'configuration': {
-      \     'request': 'launch',
-      \     'program': '${fileDirname}',
-      \     'mode': 'debug',
-      \     'dlvToolPath': '$HOME/go/bin/dlv'
-      \   },
-      \   'breakpoints': {
-      \     'exception': {
-      \       'raised': 'Y',
-      \       'uncaught': 'Y',
-      \       'userUnhandled': 'Y'
-      \     }
-      \   }
-      \ },
-      \ 'vscode-js-debug': {
-      \   'adapter': 'js-debug',
-      \   'filetypes': ['javascript'],
-      \   'configuration': {
-      \     'request': 'launch',
-      \     'program': '${file}',
-      \     'cwd': '${workspaceRoot}',
-      \     'stopOnEntry': v:false
-      \   },
-      \   'breakpoints': {
-      \     'exception': {
-      \       'all': '',
-      \       'uncaught': ''
-      \     }
-      \   }
-      \ },
-      \ 'netcoredbg': {
-      \   'adapter': 'netcoredbg',
-      \   'filetypes': ['cs'],
-      \   'configuration': {
-      \     'request': 'launch',
-      \     'program': '${workspaceRoot}/bin/Debug/net7.0/dotnet-test.dll',
-      \     'args': [],
-      \     'stopAtEntry': v:false,
-      \     'cwd': '${workspaceRoot}',
-      \     'env': {}
-      \   },
-      \   'breakpoints': {
-      \     'exception': {
-      \       'raised': 'N',
-      \       'uncaught': 'N',
-      \       'userUnhandled': 'N'
-      \     }
-      \   }
-      \ }
-      \ }
-
-let g:vimspector_sidebar_width = 60
 
 " vimwiki {{{2
 
@@ -996,7 +871,6 @@ if has('nvim')
     autocmd!
     autocmd TermOpen *gap, startinsert
     autocmd TermClose *gap stopinsert
-    autocmd TermOpen */dotnet-test.sh* call timer_start(20, { -> s:VimspectorDotNet(0) })
   augroup END
 endif
 
@@ -1382,23 +1256,6 @@ nnoremap <c-t> mm:tabe <c-r>%<CR>`m
 " Toggle tabs
 nnoremap <silent> <C-Tab> :tabnext<CR>
 nnoremap <silent> <Tab> :tabprevious<CR>
-
-" Vimspector {{{2
-
-" Default mappings:
-
-" <leader+CR> |                                  | Edit variable value
-" F3          | <Plug>VimspectorStop             | Stop debugging.
-" F4          | <Plug>VimspectorRestart          | Restart debugging.
-" F5          | <Plug>VimspectorContinue         | When debugging, continue. Otherwise start debugging.
-" F6          | <Plug>VimspectorPause            | Pause debuggee.
-" <leader>F8  | <Plug>VimspectorRunToCursor      | Run to Cursor
-" F9          | <Plug>VimspectorToggleBreakpoint | Toggle line breakpoint on the current line.
-" F10         | <Plug>VimspectorStepOver         | Step Over
-" F11         | <Plug>VimspectorStepInto         | Step Into
-" Shift F11   | <Plug>VimspectorStepOut          | Step out of current function scope
-
-" In order to see Traceback, add __traceback__ to Watch Window
 
 " Vira {{{2
 
