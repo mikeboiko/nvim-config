@@ -3,6 +3,7 @@ return {
     'rcarriga/nvim-dap-ui',
     dependencies = { 'mfussenegger/nvim-dap', 'mfussenegger/nvim-dap-python', 'nvim-neotest/nvim-nio' },
     config = function()
+      -- dap-ui config {{{2
       local dap, dapui = require('dap'), require('dapui')
 
       dapui.setup({
@@ -48,7 +49,7 @@ return {
           {
             elements = {
               'repl',
-              'console',
+              -- 'console',
             },
             size = 0.25, -- 25% of total lines
             position = 'bottom',
@@ -94,42 +95,100 @@ return {
       dap.listeners.before.event_exited['dapui_config'] = function()
         dapui.close()
       end
+      -- }}}
 
+      -- C# dap config {{{2
       dap.adapters.netcoredbg = {
         type = 'executable',
         command = '/usr/bin/netcoredbg',
         args = { '--interpreter=vscode' },
       }
 
-      dap.configurations.cs = {
+      vim.g.dotnet_build_project = function()
+        local default_path = vim.fn.getcwd() .. '/'
+        if vim.g['dotnet_last_proj_path'] ~= nil then
+          default_path = vim.g['dotnet_last_proj_path']
+        end
+        local path = vim.fn.input('Path to your *proj file', default_path, 'file')
+        vim.g['dotnet_last_proj_path'] = path
+        local cmd = 'dotnet build -c Debug ' .. path .. ' > /dev/null'
+        print('')
+        print('Cmd to execute: ' .. cmd)
+        local f = os.execute(cmd)
+        if f == 0 then
+          print('\nBuild: ✔️ ')
+        else
+          print('\nBuild: ❌ (code: ' .. f .. ')')
+        end
+      end
+
+      vim.g.dotnet_get_dll_path = function()
+        local request = function()
+          return vim.fn.input('Path to dll', vim.fn.getcwd() .. '/bin/Debug/', 'file')
+        end
+
+        if vim.g['dotnet_last_dll_path'] == nil then
+          vim.g['dotnet_last_dll_path'] = request()
+        else
+          if
+            vim.fn.confirm('Do you want to change the path to dll?\n' .. vim.g['dotnet_last_dll_path'], '&yes\n&no', 2)
+            == 1
+          then
+            vim.g['dotnet_last_dll_path'] = request()
+          end
+        end
+
+        return vim.g['dotnet_last_dll_path']
+      end
+
+      local config = {
         {
           type = 'netcoredbg',
           name = 'launch - netcoredbg',
           request = 'launch',
           program = function()
-            return vim.fn.input('Path to dll', vim.fn.getcwd() .. '/bin/Debug/', 'file')
+            if vim.fn.confirm('Should I recompile first?', '&yes\n&no', 2) == 1 then
+              vim.g.dotnet_build_project()
+            end
+            return vim.g.dotnet_get_dll_path()
           end,
         },
       }
+      dap.configurations.cs = config
+      -- }}}
 
-      require('dap-python').setup('python3')
-      -- dap.adapters.python = {
-      --   type = 'executable',
-      --   command = 'python',
-      --   args = { '-m', 'debugpy.adapter' },
-      -- }
-      -- dap.configurations.python = {
-      --   {
-      --     type = 'python',
-      --     request = 'launch',
-      --     name = 'Launch file',
-      --     program = '${file}',
-      --     pythonPath = function()
-      --       return 'python'
-      --     end,
-      --   },
-      -- }
+      -- TODO: remove plugin?
+      -- require('dap-python').setup('python3')
 
+      -- python dap config {{{2
+      dap.adapters.python = {
+        type = 'executable',
+        command = 'python',
+        args = { '-m', 'debugpy.adapter' },
+      }
+      dap.configurations.python = {
+        {
+          type = 'python',
+          request = 'launch',
+          name = 'Launch Current File',
+          program = '${file}', -- nvim-dap will resolve this to the current buffer's file
+          pythonPath = function()
+            -- Optional: Use a virtual environment Python if available
+            local venv = os.getenv('VIRTUAL_ENV')
+            if venv then
+              return venv .. '/bin/python'
+            end
+            return 'python' -- Default to system python
+          end,
+          args = function()
+            -- Optional: Prompt for arguments
+            return vim.fn.input('Run arguments: ', '', 'file')
+          end,
+        },
+      }
+      -- }}}
+
+      -- dap keymaps {{{2
       -- vim.keymap.set('n', '<leader>dl', function()
       --   require('osv').launch({ port = 8086 })
       -- end, { noremap = true, desc = 'dap: launch neovim lua server' })
@@ -182,6 +241,7 @@ return {
       vim.keymap.set('n', '<leader>du', function()
         require('dap').down()
       end, { silent = true })
+      -- }}}
     end,
   }, -- }}}
   -- { -- nvim-dap-cs {{{1
