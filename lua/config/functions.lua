@@ -89,4 +89,18 @@ M.get_repo_root = function()
   end
 end
 
+-- Function to find DLL file in repo root
+M.find_dotnet_dll = function()
+  local repo_root = M.get_repo_root()
+  local repo_name = vim.fn.fnamemodify(repo_root, ':t')
+  local dll_pattern = repo_name .. '.dll'
+  local dll_path = vim.fs.find(dll_pattern, { path = repo_root, type = 'file', limit = 1 })[1]
+  return dll_path
+end
+
+-- vim.keymap.set('n', '<c-b>', function()
+--   local dll_name = M.find_dotnet_dll()
+--   vim.notify(vim.inspect(dll_name), nil, { title = '🪚 repo_root', ft = 'lua' })
+-- end, { silent = true })
+
 return M

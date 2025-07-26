@@ -104,8 +104,8 @@ return {
         args = { '--interpreter=vscode' },
       }
 
+      local funcs = require('config.functions')
       vim.g.dotnet_build_project = function()
-        local funcs = require('config.functions')
         local repo_root = funcs.get_repo_root()
         local cmd = 'dotnet build -c Debug ' .. repo_root .. ' > /dev/null'
         local f = os.execute(cmd)
@@ -116,7 +116,8 @@ return {
 
       vim.g.dotnet_get_dll_path = function()
         local request = function()
-          return vim.fn.input('Path to dll', vim.fn.getcwd() .. '/bin/Debug/', 'file')
+          -- return vim.fn.input('Path to dll', vim.fn.getcwd() .. '/bin/Debug/', 'file')
+          return funcs.find_dotnet_dll()
         end
 
         if vim.g['dotnet_last_dll_path'] == nil then
