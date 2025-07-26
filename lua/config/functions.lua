@@ -1,3 +1,5 @@
+local M = {}
+
 local function get_visual_selection()
   local bufnr = vim.api.nvim_get_current_buf()
   local start_pos = vim.api.nvim_buf_get_mark(bufnr, '<')
@@ -72,9 +74,8 @@ vim.api.nvim_create_user_command('FilterAndSaveOldfiles', function()
   print('Executed wshada! Removed /mnt/ from oldfiles. Check :messages for any errors.')
 end, { nargs = 0 })
 
--- TODO: export this function
 -- Function to find repository root (e.g., where .git is)
-local get_repo_root = function()
+M.get_repo_root = function()
   local current_file = vim.api.nvim_buf_get_name(0)
   local current_dir = vim.fn.fnamemodify(current_file, ':h')
   local root_dir_search_patterns = { '.git' }
@@ -87,3 +88,5 @@ local get_repo_root = function()
     return vim.fn.getcwd()
   end
 end
+
+return M

@@ -105,19 +105,11 @@ return {
       }
 
       vim.g.dotnet_build_project = function()
-        local default_path = vim.fn.getcwd() .. '/'
-        if vim.g['dotnet_last_proj_path'] ~= nil then
-          default_path = vim.g['dotnet_last_proj_path']
-        end
-        local path = vim.fn.input('Path to your *proj file', default_path, 'file')
-        vim.g['dotnet_last_proj_path'] = path
-        local cmd = 'dotnet build -c Debug ' .. path .. ' > /dev/null'
-        print('')
-        print('Cmd to execute: ' .. cmd)
+        local funcs = require('config.functions')
+        local repo_root = funcs.get_repo_root()
+        local cmd = 'dotnet build -c Debug ' .. repo_root .. ' > /dev/null'
         local f = os.execute(cmd)
-        if f == 0 then
-          print('\nBuild: ✔️ ')
-        else
+        if f ~= 0 then
           print('\nBuild: ❌ (code: ' .. f .. ')')
         end
       end
