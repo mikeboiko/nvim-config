@@ -157,7 +157,6 @@ return {
           justMyCode = false,
           env = {
             ASPNETCORE_ENVIRONMENT = 'Development',
-            ASPNETCORE_URLS = 'https://localhost:7125;http://localhost:5111',
           },
         },
       }
@@ -190,7 +189,8 @@ return {
           end,
           args = function()
             -- Optional: Prompt for arguments
-            return vim.fn.input('Run arguments: ', '', 'file')
+            local input = vim.fn.input('Run arguments: ')
+            return vim.split(input, ' ')
           end,
         },
       }
