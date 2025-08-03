@@ -141,9 +141,9 @@ return {
           name = 'Launch DLL (netcoredbg)',
           request = 'launch',
           program = function()
-            if vim.fn.confirm('Should I recompile first?', '&yes\n&no', 2) == 1 then
-              vim.g.dotnet_build_project() -- This will prompt for project path for the build
-            end
+            -- if vim.fn.confirm('Should I recompile first?', '&yes\n&no', 2) == 1 then
+            vim.g.dotnet_build_project()
+            -- end
             return vim.g.dotnet_get_dll_path() -- This will prompt for DLL path
           end,
           args = {},
