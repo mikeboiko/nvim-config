@@ -49,7 +49,7 @@ return {
           {
             elements = {
               'repl',
-              -- 'console',
+              'console',
             },
             size = 0.25, -- 25% of total lines
             position = 'bottom',
@@ -85,6 +85,10 @@ return {
           max_value_lines = 100, -- Can be integer or nil.
         },
       })
+
+      -- Nicer looking dap signs
+      vim.fn.sign_define('DapBreakpoint', { text = '🟥' })
+      vim.fn.sign_define('DapStopped', { text = '▶️' })
 
       dap.listeners.after.event_initialized['dapui_config'] = function()
         dapui.open()
