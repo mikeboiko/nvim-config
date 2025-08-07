@@ -87,7 +87,7 @@ return {
       })
 
       -- Nicer looking dap signs
-      vim.fn.sign_define('DapBreakpoint', { text = '🟥' })
+      vim.fn.sign_define('DapBreakpoint', { text = '🔴' })
       vim.fn.sign_define('DapStopped', { text = '▶️' })
 
       dap.listeners.after.event_initialized['dapui_config'] = function()
