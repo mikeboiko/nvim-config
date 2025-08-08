@@ -245,7 +245,7 @@ return {
         dap.pause()
       end, { silent = true })
       vim.keymap.set('n', '<leader>di', function()
-        dapui.eval()
+        dapui.eval(nil, { enter = true })
       end, { silent = true })
       vim.keymap.set('n', '<leader>dd', function()
         require('dap').up()
