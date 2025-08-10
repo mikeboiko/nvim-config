@@ -84,8 +84,10 @@ return {
       -- Automated git commit messages
       vim.g.CopilotCommitMsg = function(dir)
         chat.ask(
-          "#git:unstaged\n\nWrite commit message for the change with commitizen convention. Make sure the title has maximum 50 characters and message is wrapped at 72 characters. Don't include any text except for the commit message in your output, because this text will be used for automated git commit messages. Don't wrap in ```",
+          "Write commit message for the change with commitizen convention. Make sure the title has maximum 50 characters and message is wrapped at 72 characters. Don't include any text except for the commit message in your output, because this text will be used for automated git commit messages. Don't wrap in ```",
           {
+            sticky = { '#gitdiff:unstaged' },
+            -- model = 'gpt-4.1',
             callback = function(response)
               -- Save response to a file
               local file_path = '/tmp/copilot_commit_msg'
