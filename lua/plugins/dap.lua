@@ -312,15 +312,5 @@ return {
       end, { silent = true })
     end,
   }, -- }}}
-  --   { -- vimspector {{{1
-  --     'puremourning/vimspector',
-  --     build = function()
-  --       local install_cmd = './install_gadget.py'
-  --       vim.fn.system(install_cmd .. ' --enable-python')
-  --       vim.fn.system(install_cmd .. ' --enable-go --update-gadget-config')
-  --       vim.fn.system(install_cmd .. ' --force-enable-csharp --update-gadget-config')
-  --       vim.fn.system(install_cmd .. ' --force-enable-node --update-gadget-config')
-  --     end,
-  --   }, -- }}}
 }
 -- vim: foldmethod=marker:foldlevel=1
