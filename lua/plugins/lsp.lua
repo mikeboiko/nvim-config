@@ -1,4 +1,7 @@
 return {
+  { -- lsp-overloads {{{1
+    'Issafalcon/lsp-overloads.nvim',
+  }, -- }}}
   { -- none-ls {{{1
     'nvimtools/none-ls.nvim',
     config = function()
@@ -193,6 +196,11 @@ return {
       local pid = vim.fn.getpid()
       lspconfig.omnisharp.setup({
         cmd = { '/usr/bin/omnisharp', '--languageserver', '--hostPID', tostring(pid) },
+        on_attach = function(client, _)
+          if client.server_capabilities.signatureHelpProvider then
+            require('lsp-overloads').setup(client, {})
+          end
+        end,
       })
 
       -- Key mappings
@@ -326,7 +334,7 @@ return {
       })
     end,
   }, -- }}}
-  { -- {{{1
+  { -- omnisharp-extended-lsp {{{1
     'Hoffs/omnisharp-extended-lsp.nvim',
   }, -- }}}
 }

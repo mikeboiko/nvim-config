@@ -16,6 +16,7 @@
   "img-paste.vim": { "branch": "master", "commit": "88bb395f4a8afc31f5c49352776ebbc451da8669" },
   "lazy.nvim": { "branch": "main", "commit": "6c3bda4aca61a13a9c63f1c1d1b16b9d3be90d7a" },
   "lazydev.nvim": { "branch": "main", "commit": "2367a6c0a01eb9edb0464731cc0fb61ed9ab9d2c" },
+  "lsp-overloads.nvim": { "branch": "main", "commit": "9c06b65ade3f624615784b8810b10b75cd971d13" },
   "lualine.nvim": { "branch": "master", "commit": "a94fc68960665e54408fe37dcf573193c4ce82c9" },
   "markdown-preview.nvim": { "branch": "master", "commit": "a923f5fc5ba36a3b17e289dc35dc17f66d0548ee" },
   "mini.comment": { "branch": "main", "commit": "871746069a28e35d04a66f88bc0e6831779ccc40" },
