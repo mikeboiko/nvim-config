@@ -93,7 +93,7 @@ return {
               local file_path = '/tmp/copilot_commit_msg'
               local file = io.open(file_path, 'w')
               if file then
-                if file:write(response) then
+                if file:write(response.content) then
                   file:close()
                 else
                   vim.notify('Failed to write to file', vim.log.levels.ERROR)
