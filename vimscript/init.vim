@@ -424,18 +424,6 @@ function! PromptAndComment(inline_comment, prompt_text, comment_prefix) " {{{2
 
 endfunction
 
-function! SetCurrentWorkingDirectory() " {{{2
-    " A standalone function to set the working directory to the project's root, or
-    " to the parent directory of the current file if a root can't be found:
-    let cph = expand('%:p:h', 1)
-    if cph =~ '^.\+://' | retu | en
-    for mkr in ['.git/', '.hg/', '.svn/', '.bzr/', '_darcs/', '.vimprojects']
-        let wd = call('find'.(mkr =~ '/$' ? 'dir' : 'file'), [mkr, cph.';'])
-        if wd != '' | let &acd = 0 | brea | en
-    endfo
-    exe 'lc!' fnameescape(wd == '' ? cph : substitute(wd, mkr.'$', '.', ''))
-endfunction
-
 function! ToggleList(bufname, pfx) " {{{2
     " Toggle QuickFix/Location List, don't change focus
     let buflist = GetBufferList()
@@ -833,7 +821,7 @@ let g:clipboard = {
 set splitright
 
 " Automatically change current directory when new file is opened
-set autochdir
+" set autochdir
 
 " This diables tmux mouse features while inside vim
 set mouse=a

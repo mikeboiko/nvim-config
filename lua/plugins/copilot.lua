@@ -21,7 +21,6 @@ return {
   { -- CopilotChat.nvim {{{1
     'CopilotC-Nvim/CopilotChat.nvim',
     dependencies = {
-      { 'zbirenbaum/copilot.lua' },
       { 'nvim-lua/plenary.nvim', branch = 'master' }, -- for curl, log and async functions
     },
     build = 'make tiktoken', -- Only on MacOS or Linux
@@ -38,6 +37,7 @@ return {
         model = 'claude-sonnet-4',
         chat_autocomplete = false,
         auto_follow_cursor = false,
+        -- auto_insert_mode = true,
         prompts = {
           ExplainBuffer = {
             prompt = '/COPILOT_EXPLAIN\n\nWrite an explanation for the selection as paragraphs of text.',
@@ -84,9 +84,9 @@ return {
       -- Automated git commit messages
       vim.g.CopilotCommitMsg = function(dir)
         chat.ask(
-          "Write commit message for the change with commitizen convention. Make sure the title has maximum 50 characters and message is wrapped at 72 characters. Don't include any text except for the commit message in your output, because this text will be used for automated git commit messages. Don't wrap in ```",
+          "#gitdiff:unstaged Write commit message for the change with commitizen convention. Make sure the title has maximum 50 characters and message is wrapped at 72 characters. Don't include any text except for the commit message in your output, because this text will be used for automated git commit messages. Don't wrap in ```",
           {
-            sticky = { '#gitdiff:unstaged' },
+            -- sticky = { '#gitdiff:unstaged' },
             -- model = 'gpt-4.1',
             callback = function(response)
               -- Save response to a file
