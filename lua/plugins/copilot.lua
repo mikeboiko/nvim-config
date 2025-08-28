@@ -34,7 +34,8 @@ return {
       require('CopilotChat').setup({
         debug = false,
         -- https://docs.github.com/en/copilot/reference/ai-models/supported-models#supported-ai-models-per-copilot-plan
-        model = 'claude-sonnet-4',
+        model = 'gpt-4.1',
+        -- model = 'claude-sonnet-4',
         chat_autocomplete = false,
         auto_follow_cursor = false,
         -- auto_insert_mode = true,
