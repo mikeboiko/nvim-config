@@ -821,7 +821,7 @@ let g:clipboard = {
 set splitright
 
 " Automatically change current directory when new file is opened
-" set autochdir
+set autochdir
 
 " This diables tmux mouse features while inside vim
 set mouse=a
