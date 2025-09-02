@@ -1,7 +1,7 @@
 return {
   { -- nvim-dap-ui {{{1
     'rcarriga/nvim-dap-ui',
-    dependencies = { 'mfussenegger/nvim-dap', 'mfussenegger/nvim-dap-python', 'nvim-neotest/nvim-nio' },
+    dependencies = { 'mfussenegger/nvim-dap', 'nvim-neotest/nvim-nio' },
     config = function()
       -- dap-ui config {{{2
       local dap, dapui = require('dap'), require('dapui')
@@ -168,9 +168,6 @@ return {
       dap.configurations.cs = config
       -- }}}
 
-      -- TODO: remove plugin?
-      -- require('dap-python').setup('python3')
-
       -- python dap config {{{2
       dap.adapters.python = {
         type = 'executable',
@@ -206,6 +203,7 @@ return {
       -- end, { noremap = true, desc = 'dap: launch neovim lua server' })
       vim.keymap.set('n', '<leader>dc', function()
         vim.cmd('wa')
+        funcs.load_launch_json_for_repo()
         dap.continue()
       end, { silent = true })
       vim.keymap.set('n', '<C-e>', function()
