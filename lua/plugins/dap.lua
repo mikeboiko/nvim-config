@@ -203,7 +203,8 @@ return {
       -- end, { noremap = true, desc = 'dap: launch neovim lua server' })
       vim.keymap.set('n', '<leader>dc', function()
         vim.cmd('wa')
-        funcs.load_launch_json_for_repo()
+        -- TODO: revert
+        -- funcs.load_launch_json_for_repo()
         dap.continue()
       end, { silent = true })
       vim.keymap.set('n', '<C-e>', function()
