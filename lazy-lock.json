@@ -10,7 +10,7 @@
   "csvview.nvim": { "branch": "main", "commit": "22c9450d19749aa80cc42f0c968cb9dd57726ece" },
   "friendly-snippets": { "branch": "main", "commit": "572f5660cf05f8cd8834e096d7b4c921ba18e175" },
   "fzf": { "branch": "master", "commit": "416aff86e9d550d0a34af9d3cc12dfede25354c3" },
-  "fzf-lua": { "branch": "main", "commit": "091bcd0c925199b1371ea81ec79278611d299627" },
+  "fzf-lua": { "branch": "main", "commit": "4f70778e705d2039ba9246af4c03f594c41ed02d" },
   "gruvbox.nvim": { "branch": "main", "commit": "a56f758f9d3eed0b8afbab6ea3ee523887755aed" },
   "gv.vim": { "branch": "master", "commit": "b6bb6664e2c95aa584059f195eb3a9f3cb133994" },
   "img-paste.vim": { "branch": "master", "commit": "88bb395f4a8afc31f5c49352776ebbc451da8669" },
