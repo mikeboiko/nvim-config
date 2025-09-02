@@ -7,7 +7,7 @@ return {
   }, -- }}}
   { -- vim-flow {{{1
     'mikeboiko/vim-flow',
-    cmd = { 'FlowRun' },
+    cmd = { 'FlowRun', 'FlowDebug' },
   }, -- }}}
   { -- vim-markdown-folding {{{1
     'mikeboiko/vim-markdown-folding',

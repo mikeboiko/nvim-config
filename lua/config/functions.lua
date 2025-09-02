@@ -100,37 +100,6 @@ end
 
 -- vim.keymap.set('n', '<c-b>', function()
 --   local dll_name = M.find_dotnet_dll()
---   vim.notify(vim.inspect(dll_name), nil, { title = '🪚 repo_root', ft = 'lua' })
 -- end, { silent = true })
-
-M.load_launch_json_for_repo = function()
-  local repo_root = M.get_repo_root()
-  local launch_path = repo_root .. '/.vscode/launch.json'
-
-  local ok, lines = pcall(vim.fn.readfile, launch_path)
-  if not ok then
-    -- vim.notify('Failed to read ' .. launch_path, vim.log.levels.ERROR)
-    return
-  end
-
-  local json = vim.fn.json_decode(lines)
-  if not json or not json.configurations then
-    vim.notify('Invalid JSON in ' .. launch_path, vim.log.levels.ERROR)
-    return
-  end
-
-  local dap = require('dap')
-  local filetype = vim.bo.filetype
-
-  -- Clear existing configurations for this filetype
-  dap.configurations[filetype] = {}
-
-  -- Add configurations from launch.json
-  for _, config in ipairs(json.configurations) do
-    if config.type == filetype then
-      table.insert(dap.configurations[filetype], config)
-    end
-  end
-end
 
 return M
