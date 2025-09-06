@@ -610,7 +610,6 @@ let g:loaded_netrwPlugin = 1
 augroup CustomSetFileType
   autocmd!
   autocmd BufRead,BufNewFile *.sebol setfiletype sebol
-  autocmd BufRead,BufNewFile *.mmd setfiletype mermaid
 augroup end
 
 " ag - silver searcher {{{2
@@ -647,7 +646,6 @@ let g:mkdp_refresh_slow = 1
 augroup CustomCommentStrings
   autocmd!
   autocmd FileType kql setlocal commentstring=//%s
-  autocmd FileType mermaid setlocal commentstring=\%\%%s
   autocmd FileType sebol setlocal commentstring=!%s
   autocmd FileType vader setlocal commentstring=#%s
   autocmd FileType autohotkey setlocal commentstring=;%s
