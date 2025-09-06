@@ -108,6 +108,7 @@ return {
         args = { '--interpreter=vscode' },
       }
 
+      -- TODO: Move these functions to csharp lua fle
       local funcs = require('config.functions')
       vim.g.dotnet_build_project = function()
         local repo_root = funcs.get_repo_root()
@@ -203,6 +204,7 @@ return {
       -- end, { noremap = true, desc = 'dap: launch neovim lua server' })
       vim.keymap.set('n', '<leader>dc', function()
         vim.cmd('wa')
+        vim.cmd('call CloseAll()')
         -- require('config.dap.functions').load_launch_json_for_repo()
         dap.continue()
       end, { silent = true })

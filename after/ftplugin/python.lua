@@ -1,1 +1,7 @@
 vim.keymap.set('n', '<leader>.', ':FzfLua treesitter<CR>', { silent = true, desc = 'FzfLua treesitter', buffer = true })
+
+vim.keymap.set('n', '<leader>dc', function()
+  vim.cmd('wa')
+  vim.cmd('call CloseAll()')
+  vim.cmd('FlowDebug')
+end, { buffer = true, silent = true })

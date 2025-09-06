@@ -61,13 +61,6 @@ vim.api.nvim_create_autocmd('FileType', {
         vim.cmd('$')
         vim.cmd('wincmd j')
       end, { buffer = true, silent = true })
-      vim.keymap.set('n', '<leader>df', function()
-        vim.cmd('wa')
-        vim.cmd('call CloseAll()')
-        vim.cmd('FlowDebug')
-        vim.cmd('$')
-        vim.cmd('wincmd j')
-      end, { buffer = true, silent = true })
     end
   end,
 })
