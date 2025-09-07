@@ -130,6 +130,9 @@ return {
         },
       }
 
+      -- For TOML
+      vim.lsp.enable('taplo')
+
       -- lspconfig.yamlls.setup {
       --   -- TODO: Fix ERROR method workspace/symbol is not supported by any of the servers registered for the current buffer
       --   -- capabilities = {
@@ -297,6 +300,7 @@ return {
           '*.py',
           '*.sh',
           '*.sql',
+          '*.toml',
           '*.ts',
           '*.tsx',
           '*.vue',

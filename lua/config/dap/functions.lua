@@ -1,44 +1,39 @@
 local M = {}
 
+local function find_venv_path()
+  local current_dir = vim.fn.getcwd()
+
+  while current_dir ~= '/' do
+    local venv_path = current_dir .. '/.venv'
+    if vim.fn.isdirectory(venv_path) == 1 then
+      return venv_path .. '/bin/python'
+    end
+
+    -- Move up one directory
+    current_dir = vim.fn.fnamemodify(current_dir, ':h')
+  end
+
+  return nil -- No venv found
+end
+
 -- Adapter configurations for different languages
 -- TODO: Create common config object, which will be inherited by all of these
 local adapter_configs = {
   python = {
-    name = 'python file',
+    name = 'python',
     type = 'python',
     request = 'launch',
     console = 'integratedTerminal',
-    program = '${file}', -- nvim-dap will resolve this to the current buffer's file
-    justMyCode = false,
-  },
-  python_module = {
-    name = 'python module',
-    type = 'python',
-    module = 'yok',
-    request = 'launch',
-    console = 'integratedTerminal',
-    justMyCode = false,
+    pythonPath = find_venv_path() or 'python',
+    -- justMyCode = false,
   },
   node = {
     name = 'main',
-    type = 'node2',
+    type = 'node',
     request = 'launch',
     program = '',
     console = 'integratedTerminal',
   },
-}
-
--- Language-specific configurations
-local language_configs = {
-  python = {
-    pattern = 'python%s+(.*)',
-    adapter = 'python',
-  },
-  node = {
-    pattern = 'node%s+(.*)',
-    adapter = 'node2',
-  },
-  -- Add more languages as needed
 }
 
 -- Launch configurations from .vscode/launch.json
@@ -77,36 +72,36 @@ local function parse_command(cmd)
   -- Extract the first command after shebang. Ex: python
   local first_word = cmd:match('#!/[^\n]*\n([^%s]+)')
 
-  if first_word then
-    local config = language_configs[first_word]
-    if config then
-      -- Extract the second word to check for module flag (-m)
-      local second_word = cmd:match('#!/[^\n]*\n[^%s]+%s+([^%s]+)')
-      -- Extract the third word (module)
-      local third_word = cmd:match('#!/[^\n]*\n[^%s]+%s+[^%s]+%s+([^%s]+)')
-
-      -- Determine adapter based on second word
-      local adapter_key = first_word
-      local args, module, file_name
-
-      if second_word == '-m' then
-        adapter_key = first_word .. '_module'
-        -- Extract args (everything after the 3rd word)
-        args = cmd:match('#!/[^\n]*\n[^%s]+%s+[^%s]+%s+[^%s]+%s+(.*)')
-        module = third_word
-        file_name = nil
-      else
-        -- Extract args (everything after the 2nd word)
-        args = cmd:match('#!/[^\n]*\n[^%s]+%s+[^%s]+%s+(.*)')
-        module = nil
-        file_name = second_word
-      end
-
-      return args, adapter_key, module, file_name
-    end
+  if not first_word then
+    return nil, nil, nil, nil
   end
 
-  return nil, nil, nil
+  -- Extract the second word to check for module flag (-m)
+  local second_word = cmd:match('#!/[^\n]*\n[^%s]+%s+([^%s]+)')
+  -- Extract the third word (module)
+  local third_word = cmd:match('#!/[^\n]*\n[^%s]+%s+[^%s]+%s+([^%s]+)')
+
+  -- Determine adapter based on second word
+  local adapter_key = first_word
+  local args, module, file_name
+
+  if first_word == 'uv' then
+    adapter_key = 'python'
+  end
+
+  if first_word == 'uv' or second_word == '-m' then -- module
+    -- Extract args (everything after the 3rd word)
+    args = cmd:match('#!/[^\n]*\n[^%s]+%s+[^%s]+%s+[^%s]+%s+(.*)')
+    module = third_word
+    file_name = nil
+  else -- file
+    -- Extract args (everything after the 2nd word)
+    args = cmd:match('#!/[^\n]*\n[^%s]+%s+[^%s]+%s+(.*)')
+    module = nil
+    file_name = second_word
+  end
+
+  return args, adapter_key, module, file_name
 end
 
 M.flow_debug = function(cmd)
@@ -141,7 +136,7 @@ M.flow_debug = function(cmd)
 
   -- Add dap configuration
   table.insert(dap.configurations[filetype], config)
-  -- vim.notify(vim.inspect(config), nil, { title = 'dap config', ft = 'lua' })
+  vim.notify(vim.inspect(config), nil, { title = 'dap config', ft = 'lua' })
 
   dap.continue()
 end
