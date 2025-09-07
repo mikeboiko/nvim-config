@@ -757,7 +757,7 @@ endif
 
 " Increase number of oldfiles. Original is 100.
 if has('nvim')
-  set shada=!,'1000,<50,s10,h
+  set shada=!,'2000,<50,s10,h
   " Exclude files beginning with r<name>
   set shada^=rterm://,rfugitive,rman:,rhealth:,r/mnt/
 endif
@@ -1184,10 +1184,9 @@ vnoremap <silent> <leader>rw :<C-u>silent lua vim.g.FancyPromptRename("RenameWor
 " Reports {{{2
 
 if has('nvim')
-  nnoremap <leader>tp :tabe term://cd ~/git/Tables/finances; python main.py print_balances<CR>:$<CR>
+  nnoremap <leader>tp :tabe term://cd ~/git/Tables/finances; uv run finances print_balances<CR>:$<CR>
   nnoremap <leader>cw :tabe term://curl wttr.in/Calgary?m"<CR>
 else
-  nnoremap <leader>tp :tabe<CR>:terminal ++curwin bash -c "python ~/git/Tables/scripts/tables.py cli -f printbalance"<CR><CR>
   nnoremap <leader>cw :tabe<CR>:terminal ++curwin bash -c "curl wttr.in/Calgary"<CR>
 endif
 
