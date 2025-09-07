@@ -64,3 +64,6 @@ vim.api.nvim_create_autocmd('FileType', {
     end
   end,
 })
+
+-- Fix standard Ctrl-i mapping. Not sure which of my plugins is breaking it.
+vim.keymap.set('n', '<C-i>', '<C-i>')
