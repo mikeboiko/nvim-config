@@ -17,14 +17,15 @@ local function find_venv_path()
 end
 
 -- Adapter configurations for different languages
--- TODO: Create common config object, which will be inherited by all of these
 local adapter_configs = {
   python = {
     name = 'python',
     type = 'python',
     request = 'launch',
     console = 'integratedTerminal',
-    pythonPath = find_venv_path() or 'python',
+    pythonPath = function()
+      return find_venv_path() or 'python'
+    end,
     -- justMyCode = false,
   },
   node = {
@@ -136,7 +137,7 @@ M.flow_debug = function(cmd)
 
   -- Add dap configuration
   table.insert(dap.configurations[filetype], config)
-  vim.notify(vim.inspect(config), nil, { title = 'dap config', ft = 'lua' })
+  -- vim.notify(vim.inspect(config), nil, { title = 'dap config', ft = 'lua' })
 
   dap.continue()
 end

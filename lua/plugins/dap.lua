@@ -202,10 +202,13 @@ return {
       -- vim.keymap.set('n', '<leader>dl', function()
       --   require('osv').launch({ port = 8086 })
       -- end, { noremap = true, desc = 'dap: launch neovim lua server' })
-      vim.keymap.set('n', '<leader>dc', function()
+      vim.keymap.set('n', '<leader>df', function()
         vim.cmd('wa')
         vim.cmd('call CloseAll()')
         -- require('config.dap.functions').load_launch_json_for_repo()
+        dap.continue()
+      end, { silent = true })
+      vim.keymap.set('n', '<leader>dc', function()
         dap.continue()
       end, { silent = true })
       vim.keymap.set('n', '<C-e>', function()
@@ -298,6 +301,7 @@ return {
       -- 'nsidorenco/neotest-vstest',
       'Issafalcon/neotest-dotnet',
       'nvim-neotest/nvim-nio',
+      'nvim-neotest/neotest-python',
       'nvim-lua/plenary.nvim',
       'antoinemadec/FixCursorHold.nvim',
       'nvim-treesitter/nvim-treesitter',
@@ -306,6 +310,7 @@ return {
       require('neotest').setup({
         adapters = {
           require('neotest-dotnet'),
+          require('neotest-python'),
           -- require('neotest-vstest')({
           --   sdk_path = '/usr/share/dotnet/sdk/8.0.115/',
           -- }),
