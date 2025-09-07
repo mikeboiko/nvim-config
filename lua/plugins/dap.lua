@@ -294,9 +294,6 @@ return {
   }, -- }}}
   { -- neotest {{{1
     'nvim-neotest/neotest',
-    -- TODO: remove commit pin after issue #531 is resolved
-    -- commit = '52fca6717ef972113ddd6ca223e30ad0abb2800c',
-    branch = 'fix/subprocess/load-adapters',
     dependencies = {
       -- 'nsidorenco/neotest-vstest',
       'Issafalcon/neotest-dotnet',
