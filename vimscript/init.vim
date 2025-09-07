@@ -1184,7 +1184,7 @@ vnoremap <silent> <leader>rw :<C-u>silent lua vim.g.FancyPromptRename("RenameWor
 " Reports {{{2
 
 if has('nvim')
-  nnoremap <leader>tp :tabe term://cd ~/git/Tables/finances; uv run finances print_balances<CR>:$<CR>
+  nnoremap <leader>tp :tabe term://cd ~/git/Tables; uv run finances balances print_balances<CR>:$<CR>
   nnoremap <leader>cw :tabe term://curl wttr.in/Calgary?m"<CR>
 else
   nnoremap <leader>cw :tabe<CR>:terminal ++curwin bash -c "curl wttr.in/Calgary"<CR>
