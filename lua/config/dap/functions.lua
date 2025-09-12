@@ -26,6 +26,7 @@ local adapter_configs = {
     pythonPath = function()
       return find_venv_path() or 'python'
     end,
+    -- pythonArgs = { '-Xfrozen_modules=off' },
     -- justMyCode = false,
   },
   node = {
