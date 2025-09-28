@@ -25,9 +25,9 @@ return {
           null_ls.builtins.formatting.shfmt.with({
             extra_args = { '--apply-ignore' },
           }),
-          -- null_ls.builtins.formatting.csharpier.with({
-          --   filetypes = { 'cs', 'xml' },
-          -- }),
+          null_ls.builtins.formatting.csharpier.with({
+            filetypes = { 'cs', 'xml' },
+          }),
         },
       })
     end,
@@ -289,7 +289,7 @@ return {
       vim.api.nvim_create_autocmd('BufWritePre', {
         -- Only format these filetypes
         pattern = {
-          -- '*.csproj',
+          '*.csproj',
           '*.cs',
           '*.js',
           '*.json',
