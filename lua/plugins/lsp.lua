@@ -67,13 +67,12 @@ return {
       vim.opt.signcolumn = 'yes'
     end,
     config = function()
-      local lspconfig = require('lspconfig')
-
-      require('lspconfig').bashls.setup({ filetypes = { 'bash', 'sh' } })
+      vim.lsp.config('bashls', { filetypes = { 'bash', 'sh' } })
+      vim.lsp.enable('bashls')
 
       -- Used for formatting and linting
       -- https://docs.astral.sh/ruff/editors/setup/#neovim
-      lspconfig.ruff.setup({
+      vim.lsp.config('ruff', {
         init_options = {
           settings = {
             lint = {
@@ -82,9 +81,10 @@ return {
           },
         },
       })
+      vim.lsp.enable('ruff')
 
       -- Note: install basedpyright in each virtual-env
-      lspconfig.basedpyright.setup({
+      vim.lsp.config('basedpyright', {
         settings = {
           basedpyright = {
             analysis = {
@@ -94,22 +94,25 @@ return {
           },
         },
       })
+      vim.lsp.enable('basedpyright')
 
-      -- npm install -g @vue/language-server
-      lspconfig.volar.setup({
-        filetypes = { 'vue' },
-        init_options = {
-          typescript = {
-            tsdk = '/home/mike/npm-global/lib/node_modules/typescript/lib',
-          },
-          vue = {
-            hybridMode = false,
-          },
-        },
-      })
+      -- TODO: volar is deprecated, use vue_ls instead.
+      -- -- npm install -g @vue/language-server
+      -- vim.lsp.config('volar', {
+      --   filetypes = { 'vue' },
+      --   init_options = {
+      --     typescript = {
+      --       tsdk = '/home/mike/npm-global/lib/node_modules/typescript/lib',
+      --     },
+      --     vue = {
+      --       hybridMode = false,
+      --     },
+      --   },
+      -- })
+      -- vim.lsp.enable('volar')
 
       -- TypeScript/JavaScript language server for React
-      lspconfig.ts_ls.setup({
+      vim.lsp.config('ts_ls', {
         filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact' },
         -- init_options = {
         --   preferences = {
@@ -117,8 +120,9 @@ return {
         --   },
         -- },
       })
+      vim.lsp.enable('ts_ls')
 
-      lspconfig.jsonls.setup {
+      vim.lsp.config('jsonls', {
         init_options = {
           provideFormatter = false,
         },
@@ -128,7 +132,8 @@ return {
             validate = { enable = true },
           },
         },
-      }
+      })
+      vim.lsp.enable('jsonls')
 
       -- For TOML
       vim.lsp.enable('taplo')
@@ -148,7 +153,7 @@ return {
       --   },
       -- }
 
-      lspconfig.lua_ls.setup({
+      vim.lsp.config('lua_ls', {
         on_init = function(client)
           -- if client.workspace_folders then
           --   local path = client.workspace_folders[1].name
@@ -197,10 +202,11 @@ return {
           },
         },
       })
+      vim.lsp.enable('lua_ls')
 
       -- First, install `omnisharp-roslyn-bin` from AUR
       local pid = vim.fn.getpid()
-      lspconfig.omnisharp.setup({
+      vim.lsp.config('omnisharp', {
         cmd = { '/usr/bin/omnisharp', '--languageserver', '--hostPID', tostring(pid) },
         on_attach = function(client, _)
           if client.server_capabilities.signatureHelpProvider then
@@ -208,6 +214,7 @@ return {
           end
         end,
       })
+      vim.lsp.enable('omnisharp')
 
       -- Key mappings
       vim.keymap.set(
