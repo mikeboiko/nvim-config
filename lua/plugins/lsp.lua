@@ -1,4 +1,17 @@
 return {
+  { -- mason {{{1
+    'mason-org/mason.nvim',
+    opts = {},
+    config = function()
+      require('mason').setup({
+        registries = {
+          'github:mason-org/mason-registry',
+          'github:Crashdummyy/mason-registry',
+        },
+      })
+      -- Run command :MasonInstall roslyn
+    end,
+  },
   { -- lsp-overloads {{{1
     'Issafalcon/lsp-overloads.nvim',
   }, -- }}}
@@ -42,6 +55,14 @@ return {
       require('lsp-file-operations').setup()
     end,
   }, -- }}}
+  { -- roslyn {{{1
+    'seblyng/roslyn.nvim',
+    ---@module 'roslyn.config'
+    ---@type RoslynNvimConfig
+    opts = {
+      -- your configuration comes here; leave empty for default settings
+    },
+  },
   { -- nvim-lspconfig {{{1
     -- Setup language servers.
     -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
@@ -204,18 +225,6 @@ return {
       })
       vim.lsp.enable('lua_ls')
 
-      -- First, install `omnisharp-roslyn-bin` from AUR
-      local pid = vim.fn.getpid()
-      vim.lsp.config('omnisharp', {
-        cmd = { '/usr/bin/omnisharp', '--languageserver', '--hostPID', tostring(pid) },
-        on_attach = function(client, _)
-          if client.server_capabilities.signatureHelpProvider then
-            require('lsp-overloads').setup(client, {})
-          end
-        end,
-      })
-      vim.lsp.enable('omnisharp')
-
       -- Key mappings
       vim.keymap.set(
         'n',
@@ -348,9 +357,6 @@ return {
         end,
       })
     end,
-  }, -- }}}
-  { -- omnisharp-extended-lsp {{{1
-    'Hoffs/omnisharp-extended-lsp.nvim',
   }, -- }}}
 }
 -- vim: foldmethod=marker:foldlevel=1
