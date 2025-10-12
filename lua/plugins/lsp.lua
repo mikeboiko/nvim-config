@@ -258,12 +258,6 @@ return {
       )
       vim.keymap.set(
         'n',
-        'gD',
-        '<cmd>lua vim.lsp.buf.declaration()<cr>',
-        { desc = 'Jump to declaration of symbol under cursor' }
-      )
-      vim.keymap.set(
-        'n',
         'gR',
         '<cmd>lua vim.lsp.buf.rename()<cr>',
         { desc = 'Rename symbol under cursor across workspace' }

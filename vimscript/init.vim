@@ -1066,7 +1066,7 @@ nnoremap <leader>gm :call GitMerge()<cr>
 
 " Go to Definition{{{2
 
-" Preview definition and focus on fold
+map gI mm:tabe %<CR>`mgizMzvzz
 map gT mm:tabe %<CR>`mgDzMzvzz
 map gt mm:tabe %<CR>`mgdzMzvzz
 map gs mm:sp %<CR>`mgdzMzvzz
