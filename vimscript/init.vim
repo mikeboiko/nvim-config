@@ -271,23 +271,7 @@ function! GetTODOs() " {{{2
     set wildignore-=*.jpg,*.docx,*.xlsm,*.mp4
 endfunction
 
-function! GitAddCommitPush() abort " {{{2
-    " Git - add all, commit and push
 
-    let commit_text=''
-
-    if has('unix') " Linux
-        if has('nvim')
-            exe 'sp term://bash ~/git/Linux/git/gap'
-        else
-            exe 'term ++close bash --login -c "export TERM=tmux-256color; '.$HOME.'/git/Linux/git/gap '.commit_text.'"'
-        endif
-    else " Windows
-        exe '!"C:\Program Files\Git\usr\bin\bash.exe" ~/git/Linux/git/gap '.commit_text
-    endif
-    redraw!
-
-endfunction
 
 function! GitDeleteBranch() abort " {{{2
     " Delete branch for active vira issue
@@ -1052,7 +1036,7 @@ nnoremap <leader>ms :Mani run git-status --parallel --tags-expr '$MANI_EXPR'<cr>
 nnoremap <leader>mu :Mani run git-up --parallel --tags-expr '$MANI_EXPR'<cr>
 
 " Add all changes, commit and push
-nnoremap <leader>gap :wa<CR>:silent call GitAddCommitPush()<CR>
+nnoremap <leader>gap :wa<CR>:silent lua require('config.functions').git_add_commit_push()<CR>
 nnoremap <silent> <leader>ag :wa<CR>:silent lua vim.g.CopilotCommitMsg(vim.fn.getcwd())<CR>
 
 " Create new git branch based on active vira issue

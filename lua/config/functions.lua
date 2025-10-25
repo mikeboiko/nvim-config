@@ -102,4 +102,33 @@ end
 --   local dll_name = M.find_dotnet_dll()
 -- end, { silent = true })
 
+-- Git: add all, commit, and push
+function M.git_add_commit_push()
+  -- Open terminal in a new split, keep it in insert, then return focus to original window
+  local prev_win = vim.api.nvim_get_current_win()
+  vim.cmd('split')
+  local gap = vim.fn.expand('~/git/Linux/git/gap')
+  -- Use :terminal (preferred over vim.fn.termopen)
+  vim.cmd('terminal bash ' .. vim.fn.fnameescape(gap))
+  local term_win = vim.api.nvim_get_current_win()
+  local term_buf = vim.api.nvim_get_current_buf()
+  -- Enter insert (terminal) now and whenever we return to this buffer
+  vim.cmd('startinsert')
+  vim.api.nvim_create_autocmd('BufEnter', {
+    buffer = term_buf,
+    callback = function()
+      if vim.api.nvim_get_current_win() == term_win then
+        vim.cmd('startinsert')
+      end
+    end,
+  })
+  -- After a short delay, restore focus to the original window and leave insert there
+  vim.defer_fn(function()
+    if vim.api.nvim_win_is_valid(prev_win) then
+      vim.api.nvim_set_current_win(prev_win)
+      vim.cmd('stopinsert')
+    end
+  end, 20)
+end
+
 return M
