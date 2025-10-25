@@ -1035,10 +1035,6 @@ nnoremap <leader>rd :terminal git --no-pager diff<CR>
 nnoremap <leader>ms :Mani run git-status --parallel --tags-expr '$MANI_EXPR'<cr>
 nnoremap <leader>mu :Mani run git-up --parallel --tags-expr '$MANI_EXPR'<cr>
 
-" Add all changes, commit and push
-nnoremap <leader>gap :wa<CR>:silent lua require('config.functions').git_add_commit_push()<CR>
-nnoremap <silent> <leader>ag :wa<CR>:silent lua vim.g.CopilotCommitMsg(vim.fn.getcwd())<CR>
-
 " Create new git branch based on active vira issue
 nnoremap <leader>gnb :call GitNewBranch()<cr>
 

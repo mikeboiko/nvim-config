@@ -11,6 +11,12 @@ end
 -- General
 vim.keymap.set('n', '<leader>nh', ':lua Snacks.notifier.show_history()<CR>', { desc = 'Show Notification History' })
 
+-- Git: Add all changes, commit, and push
+vim.keymap.set('n', '<leader>gap', function()
+  vim.cmd('wa')
+  require('config.functions').git_add_commit_push()
+end, { silent = true, desc = 'Git add/commit/push (gap)' })
+
 -- Delete keymaps
 vim.keymap.del('n', '<C-W><C-D>')
 vim.keymap.del('n', '<C-W>d')
