@@ -159,6 +159,11 @@ return {
   }, -- }}}
   { -- nvim-treesitter-context {{{1
     'nvim-treesitter/nvim-treesitter-context',
+    config = function()
+      require 'treesitter-context'.setup {
+        max_lines = 6,
+      }
+    end,
   }, -- }}}
   { -- nvim-treesitter-textobjects {{{1
     'nvim-treesitter/nvim-treesitter-textobjects',
