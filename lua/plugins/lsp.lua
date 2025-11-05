@@ -108,6 +108,7 @@ return {
       vim.lsp.config('basedpyright', {
         settings = {
           basedpyright = {
+            configFile = vim.fn.expand('~/git/Linux/config/pyrightconfig.json'),
             analysis = {
               typeCheckingMode = 'basic',
             },
