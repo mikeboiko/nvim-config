@@ -353,5 +353,12 @@ return {
       })
     end,
   }, -- }}}
+  { -- powershell.nvim {{{1
+    'TheLeoP/powershell.nvim',
+    ---@type powershell.user_config
+    opts = {
+      bundle_path = '/opt/powershell-editor-services',
+    },
+  }, -- }}}
 }
 -- vim: foldmethod=marker:foldlevel=1
