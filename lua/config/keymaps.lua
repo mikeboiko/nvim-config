@@ -17,6 +17,17 @@ vim.keymap.set('n', '<leader>gap', function()
   require('config.functions').git_add_commit_push()
 end, { silent = true, desc = 'Git add/commit/push (gap)' })
 
+-- Git: AI-generated commit message
+vim.keymap.set('n', '<leader>ag', function()
+  local git_dir = vim.fn.systemlist('git rev-parse --show-toplevel')[1]
+  if vim.v.shell_error ~= 0 then
+    vim.notify('Not in a git repository', vim.log.levels.ERROR)
+    return
+  end
+  vim.fn.system('git -C ' .. git_dir .. ' add -A')
+  vim.g.CopilotCommitMsg(git_dir)
+end, { silent = true, desc = 'AI-generated commit message (ag)' })
+
 -- Delete keymaps
 vim.keymap.del('n', '<C-W><C-D>')
 vim.keymap.del('n', '<C-W>d')
