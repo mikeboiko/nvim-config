@@ -286,12 +286,12 @@ return {
       }
     end,
   }, -- }}}
-  { -- nvim-dap-virtual-text {{{1
-    'theHamsta/nvim-dap-virtual-text',
-    config = function()
-      require('nvim-dap-virtual-text').setup({})
-    end,
-  }, -- }}}
+  -- { -- nvim-dap-virtual-text {{{1
+  --   'theHamsta/nvim-dap-virtual-text',
+  --   config = function()
+  --     require('nvim-dap-virtual-text').setup({})
+  --   end,
+  -- }, -- }}}
   { -- neotest {{{1
     'nvim-neotest/neotest',
     dependencies = {
