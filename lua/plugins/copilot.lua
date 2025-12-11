@@ -91,7 +91,7 @@ return {
             -- model = 'gpt-4.1',
             callback = function(response)
               -- Save response to a file
-              local file_path = '/tmp/copilot_commit_msg'
+              local file_path = '/tmp/COMMIT_EDITMSG'
               local file = io.open(file_path, 'w')
               if file then
                 if file:write(response.content) then
@@ -103,18 +103,56 @@ return {
                 vim.notify('Failed to open file', vim.log.levels.ERROR)
               end
 
-              -- io.popen("echo vim - " .. dir .. " >> /tmp/gitdir.txt 2>&1")
-              io.popen(
-                "bash -c 'git -C "
-                  .. dir
-                  .. ' add -A; git -C '
-                  .. dir
-                  .. ' commit -F '
-                  .. file_path
-                  .. '; git -C '
-                  .. dir
-                  .. " push > /dev/null 2>&1'"
-                -- .. " >> /tmp/gitdir.txt 2>&1"
+              local stdout = {}
+              local stderr = {}
+              vim.fn.jobstart(
+                {
+                  'bash',
+                  '-c',
+                  'git -C '
+                    .. vim.fn.shellescape(dir)
+                    .. ' add -A && git -C '
+                    .. vim.fn.shellescape(dir)
+                    .. ' commit -F '
+                    .. file_path
+                    .. ' && git -C '
+                    .. vim.fn.shellescape(dir)
+                    .. ' push',
+                },
+                {
+                  on_stdout = function(_, data)
+                    if data then
+                      for _, line in ipairs(data) do
+                        if line ~= '' then
+                          table.insert(stdout, line)
+                        end
+                      end
+                    end
+                  end,
+                  on_stderr = function(_, data)
+                    if data then
+                      for _, line in ipairs(data) do
+                        if line ~= '' then
+                          table.insert(stderr, line)
+                        end
+                      end
+                    end
+                  end,
+                  on_exit = function(_, code)
+                    if code == 0 then
+                      vim.notify('Copilot commit and push successful', vim.log.levels.INFO)
+                    else
+                      local err_msg = table.concat(stderr, '\n')
+                      if err_msg == '' then
+                        err_msg = table.concat(stdout, '\n')
+                      end
+                      if err_msg == '' then
+                        err_msg = 'Unknown error (exit code ' .. code .. ')'
+                      end
+                      vim.notify('Copilot commit failed:\n' .. err_msg, vim.log.levels.ERROR)
+                    end
+                  end,
+                }
               )
               -- vim.cmd("silent Git -C " .. dir .. "push")
             end,
