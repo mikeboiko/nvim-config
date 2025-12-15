@@ -34,8 +34,7 @@ return {
       require('CopilotChat').setup({
         debug = false,
         -- https://docs.github.com/en/copilot/reference/ai-models/supported-models#supported-ai-models-per-copilot-plan
-        model = 'gpt-4.1',
-        -- model = 'claude-sonnet-4',
+        model = 'oswe-vscode-prime',
         chat_autocomplete = false,
         auto_follow_cursor = false,
         -- auto_insert_mode = true,
@@ -105,55 +104,52 @@ return {
 
               local stdout = {}
               local stderr = {}
-              vim.fn.jobstart(
-                {
-                  'bash',
-                  '-c',
-                  'unset PYTEST_ADDOPTS; git -C '
-                    .. vim.fn.shellescape(dir)
-                    .. ' add -A && git -C '
-                    .. vim.fn.shellescape(dir)
-                    .. ' commit -F '
-                    .. file_path
-                    .. ' && git -C '
-                    .. vim.fn.shellescape(dir)
-                    .. ' push',
-                },
-                {
-                  on_stdout = function(_, data)
-                    if data then
-                      for _, line in ipairs(data) do
-                        if line ~= '' then
-                          table.insert(stdout, line)
-                        end
+              vim.fn.jobstart({
+                'bash',
+                '-c',
+                'unset PYTEST_ADDOPTS; git -C '
+                  .. vim.fn.shellescape(dir)
+                  .. ' add -A && git -C '
+                  .. vim.fn.shellescape(dir)
+                  .. ' commit -F '
+                  .. file_path
+                  .. ' && git -C '
+                  .. vim.fn.shellescape(dir)
+                  .. ' push',
+              }, {
+                on_stdout = function(_, data)
+                  if data then
+                    for _, line in ipairs(data) do
+                      if line ~= '' then
+                        table.insert(stdout, line)
                       end
                     end
-                  end,
-                  on_stderr = function(_, data)
-                    if data then
-                      for _, line in ipairs(data) do
-                        if line ~= '' then
-                          table.insert(stderr, line)
-                        end
+                  end
+                end,
+                on_stderr = function(_, data)
+                  if data then
+                    for _, line in ipairs(data) do
+                      if line ~= '' then
+                        table.insert(stderr, line)
                       end
                     end
-                  end,
-                  on_exit = function(_, code)
-                    if code == 0 then
-                      vim.notify('Copilot commit and push successful', vim.log.levels.INFO)
-                    else
-                      local err_msg = table.concat(stderr, '\n')
-                      if err_msg == '' then
-                        err_msg = table.concat(stdout, '\n')
-                      end
-                      if err_msg == '' then
-                        err_msg = 'Unknown error (exit code ' .. code .. ')'
-                      end
-                      vim.notify('Copilot commit failed:\n' .. err_msg, vim.log.levels.ERROR)
+                  end
+                end,
+                on_exit = function(_, code)
+                  if code == 0 then
+                    vim.notify('Copilot commit and push successful', vim.log.levels.INFO)
+                  else
+                    local err_msg = table.concat(stderr, '\n')
+                    if err_msg == '' then
+                      err_msg = table.concat(stdout, '\n')
                     end
-                  end,
-                }
-              )
+                    if err_msg == '' then
+                      err_msg = 'Unknown error (exit code ' .. code .. ')'
+                    end
+                    vim.notify('Copilot commit failed:\n' .. err_msg, vim.log.levels.ERROR)
+                  end
+                end,
+              })
               -- vim.cmd("silent Git -C " .. dir .. "push")
             end,
           }
