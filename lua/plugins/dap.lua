@@ -102,9 +102,20 @@ return {
       -- }}}
 
       -- C# dap config {{{2
+      -- TODO: temporary until netcoredbg is updated in AUR
+      local netcoredbg = vim.fn.exepath('netcoredbg-samsung')
+      if netcoredbg == '' then
+        local candidate = vim.fn.expand('~/.local/bin/netcoredbg-samsung')
+        if vim.fn.executable(candidate) == 1 then
+          netcoredbg = candidate
+        else
+          netcoredbg = vim.fn.exepath('netcoredbg')
+        end
+      end
+
       dap.adapters.netcoredbg = {
         type = 'executable',
-        command = '/usr/bin/netcoredbg',
+        command = netcoredbg,
         args = { '--interpreter=vscode' },
       }
 
