@@ -21,18 +21,35 @@ return {
       -- https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTINS.md
 
       local null_ls = require('null-ls')
+
+      local function sqlfluff_extra_args(params)
+        local exclude_rules_tsql = 'CP02,LT01,LT02'
+        local exclude_rules_postgres = 'RF04'
+
+        local dialect = 'postgres'
+        local exclude_rules = exclude_rules_postgres
+
+        local bufname = params.bufname or ''
+        if bufname:find('/git/GOA/', 1, true) or bufname:find('/git/Yokogawa/TSD-BE/', 1, true) then
+          dialect = 'tsql'
+          exclude_rules = exclude_rules_tsql
+        end
+
+        return { '--dialect', dialect, '--exclude-rules', exclude_rules }
+      end
+
       null_ls.setup({
         sources = {
           null_ls.builtins.completion.tags,
           null_ls.builtins.diagnostics.trail_space,
           null_ls.builtins.diagnostics.sqlfluff.with({
-            extra_args = { '--dialect', 'tsql', '--exclude-rules', 'CP02,LT01,LT02' },
+            extra_args = sqlfluff_extra_args,
           }),
           -- null_ls.builtins.diagnostics.vint,
           null_ls.builtins.formatting.isort,
           null_ls.builtins.formatting.prettier,
           null_ls.builtins.formatting.sqlfluff.with({
-            extra_args = { '--dialect', 'tsql', '--exclude-rules', 'CP02,LT01,LT02' },
+            extra_args = sqlfluff_extra_args,
           }),
           null_ls.builtins.formatting.stylua,
           null_ls.builtins.formatting.shfmt.with({
