@@ -75,8 +75,6 @@ vim.api.nvim_create_autocmd('FileType', {
         vim.cmd('wa')
         vim.cmd('call CloseAll()')
         vim.cmd('FlowRun')
-        vim.cmd('$')
-        vim.cmd('wincmd j')
       end, { buffer = true, silent = true })
     end
   end,
