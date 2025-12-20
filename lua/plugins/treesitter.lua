@@ -28,7 +28,7 @@ return {
   { -- nvim-treesitter {{{1
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate', -- Ensures parsers are installed/updated
-    event = { 'BufReadPost', 'BufNewFile' }, -- Lazy-load on file open
+    lazy = false,
     config = function()
       require('nvim-treesitter.configs').setup({
         -- A list of parser names, or "all" (the five listed parsers should always be installed)

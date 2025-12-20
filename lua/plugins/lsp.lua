@@ -350,7 +350,7 @@ return {
 
           vim.lsp.buf.format {
             async = false,
-            timeout_ms = 2000,
+            timeout_ms = 3000,
             -- Ignore these LSP formatters, they are handled by null-ls
             filter = function(client)
               return not vim.tbl_contains(exclude_formatters, client.name)
