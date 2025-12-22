@@ -21,8 +21,10 @@ return {
       -- https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTINS.md
 
       local null_ls = require('null-ls')
+      -- local utils = require('null-ls.utils')
 
       null_ls.setup({
+        -- root_dir = utils.root_pattern('*.sln', '*.csproj', '.git'),
         sources = {
           null_ls.builtins.completion.tags,
           null_ls.builtins.diagnostics.trail_space,
@@ -281,15 +283,21 @@ return {
       )
 
       -- Manual LSP format mapping
-      local exclude_formatters = { 'lua_ls', 'volar', 'ts_ls' }
+      local exclude_formatters = { 'lua_ls', 'volar', 'ts_ls', 'roslyn' }
+      local function format_filter(client)
+        local ext = vim.fn.expand('%:e')
+        if ext == 'cs' or ext == 'csproj' then
+          return client.name == 'null-ls'
+        end
+        return not vim.tbl_contains(exclude_formatters, client.name)
+      end
+
       vim.keymap.set('n', '<leader>fi', function()
         vim.lsp.buf.format {
           async = false,
           timeout_ms = 2000,
           -- Use the same filter as your autocmd
-          filter = function(client)
-            return not vim.tbl_contains(exclude_formatters, client.name)
-          end,
+          filter = format_filter,
         }
       end, { desc = 'Format current buffer with LSP' })
 
@@ -332,9 +340,7 @@ return {
             async = false,
             timeout_ms = 3000,
             -- Ignore these LSP formatters, they are handled by null-ls
-            filter = function(client)
-              return not vim.tbl_contains(exclude_formatters, client.name)
-            end,
+            filter = format_filter,
           }
         end,
       })
