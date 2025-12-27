@@ -46,6 +46,7 @@
   "roslyn.nvim": { "branch": "main", "commit": "4deb46ce892c279d3183661342c93aa2ec9716c6" },
   "schemastore.nvim": { "branch": "main", "commit": "60f1b3d1bde39396cdfb1362dd207970ec57e731" },
   "snacks.nvim": { "branch": "main", "commit": "fe7cfe9800a182274d0f868a74b7263b8c0c020b" },
+  "snap.nvim": { "branch": "main", "commit": "781d05a9727206f3c47181d89a58ee77520d0bda" },
   "substitute.nvim": { "branch": "main", "commit": "9db749a880e3dd3b0eb57f698aa8f1e1630e1f25" },
   "tabular": { "branch": "master", "commit": "12437cd1b53488e24936ec4b091c9324cafee311" },
   "tiny-glimmer.nvim": { "branch": "main", "commit": "e83bab26665c2dd4153b8a24e172e674e7c6dee7" },

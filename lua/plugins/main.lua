@@ -299,4 +299,15 @@ return {
     branch = 'dev',
     cmd = { 'ViraIssues', 'ViraLoadProject' },
   },
+  { -- snap.nvim screenshots
+    'mistweaverco/snap.nvim',
+    version = 'v1.4.5',
+    ---@type SnapUserConfig
+    opts = {
+      copy_to_clipboard = {
+        image = true,
+        html = false,
+      },
+    },
+  },
 }
