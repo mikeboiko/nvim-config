@@ -1,12 +1,11 @@
 return {
-  { -- conflict-marker.vim {{{1
+  { -- conflict-marker.vim
     'rhysd/conflict-marker.vim',
-  }, -- }}}
-  { -- vim-fugitive: Git wrapper {{{1
+  },
+  { -- vim-fugitive: Git wrapper
     'tpope/vim-fugitive',
-  }, -- }}}
-  { -- vim-rhubarb: GitHub integration with fugitive {{{1
+  },
+  { -- vim-rhubarb: GitHub integration with fugitive
     'tpope/vim-rhubarb',
-  }, -- }}}
+  },
 }
--- vim: foldmethod=marker:foldlevel=1

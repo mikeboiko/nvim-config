@@ -1,8 +1,8 @@
 return {
-  { -- blink-cmp-copilot {{{1
+  { -- blink-cmp-copilot
     'giuxtaposition/blink-cmp-copilot',
   },
-  { -- copilot.lua {{{1
+  { -- copilot.lua
     'zbirenbaum/copilot.lua',
     cmd = 'Copilot',
     event = 'InsertEnter',
@@ -17,8 +17,8 @@ return {
         },
       })
     end,
-  }, -- }}}
-  { -- CopilotChat.nvim {{{1
+  },
+  { -- CopilotChat.nvim
     'CopilotC-Nvim/CopilotChat.nvim',
     dependencies = {
       { 'nvim-lua/plenary.nvim', branch = 'master' }, -- for curl, log and async functions
@@ -157,6 +157,5 @@ return {
         -- chat.close()
       end
     end,
-  }, -- }}}
+  },
 }
--- vim: foldmethod=marker:foldlevel=1

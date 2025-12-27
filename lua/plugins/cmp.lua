@@ -1,5 +1,5 @@
 return {
-  { -- blink.cmp {{{1
+  { -- blink.cmp
     'saghen/blink.cmp',
     -- optional: provides snippets for the snippet source
     dependencies = { 'rafamadriz/friendly-snippets' },
@@ -105,6 +105,5 @@ return {
       fuzzy = { implementation = 'prefer_rust_with_warning' },
     },
     opts_extend = { 'sources.default' },
-  }, -- }}}
+  },
 }
--- vim: foldmethod=marker:foldlevel=1

@@ -1,5 +1,5 @@
 return {
-  { -- aerial.nvim {{{1
+  { -- aerial.nvim
     'stevearc/aerial.nvim',
     opts = {},
     -- Optional dependencies
@@ -24,8 +24,8 @@ return {
     end,
     -- You probably also want to set a keymap to toggle aerial
     vim.keymap.set('n', '<leader>tb', '<cmd>AerialToggle<CR>'),
-  }, -- }}}
-  { -- nvim-treesitter {{{1
+  },
+  { -- nvim-treesitter
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate', -- Ensures parsers are installed/updated
     lazy = false,
@@ -156,17 +156,16 @@ return {
         },
       })
     end,
-  }, -- }}}
-  { -- nvim-treesitter-context {{{1
+  },
+  { -- nvim-treesitter-context
     'nvim-treesitter/nvim-treesitter-context',
     config = function()
       require 'treesitter-context'.setup {
         max_lines = 6,
       }
     end,
-  }, -- }}}
-  { -- nvim-treesitter-textobjects {{{1
+  },
+  { -- nvim-treesitter-textobjects
     'nvim-treesitter/nvim-treesitter-textobjects',
-  }, -- }}}
+  },
 }
--- vim: foldmethod=marker:foldlevel=1

@@ -1,8 +1,8 @@
 return {
-  { -- fzf - for bqf filtering {{{1
+  { -- fzf - for bqf filtering
     'junegunn/fzf',
-  }, -- }}}
-  { -- fzf.lua {{{1
+  },
+  { -- fzf.lua
     'ibhagwan/fzf-lua',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     opts = {},
@@ -23,6 +23,5 @@ return {
       vim.keymap.set('n', '<C-.>', ':FzfLua tags_grep<CR>', { silent = true, desc = 'FzfLua ctags' })
       vim.keymap.set('n', '<leader>.', ':FzfLua btags<CR>', { silent = true, desc = 'FzfLua buffer tags' })
     end,
-  }, -- }}}
+  },
 }
--- vim: foldmethod=marker:foldlevel=1

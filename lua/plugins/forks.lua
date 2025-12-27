@@ -1,19 +1,18 @@
 return {
-  { -- auto-pairs {{{1
+  { -- auto-pairs
     'mikeboiko/auto-pairs',
-  }, -- }}}
-  { -- img-paste.vim {{{1
+  },
+  { -- img-paste.vim
     'mikeboiko/img-paste.vim',
-  }, -- }}}
-  { -- vim-flow {{{1
+  },
+  { -- vim-flow
     'mikeboiko/vim-flow',
     cmd = { 'FlowRun', 'FlowDebug' },
-  }, -- }}}
-  { -- vim-markdown-folding {{{1
+  },
+  { -- vim-markdown-folding
     'mikeboiko/vim-markdown-folding',
-  }, -- }}}
-  { -- vim-sort-folds {{{1
+  },
+  { -- vim-sort-folds
     'mikeboiko/vim-sort-folds',
-  }, -- }}}
+  },
 }
--- vim: foldmethod=marker:foldlevel=1

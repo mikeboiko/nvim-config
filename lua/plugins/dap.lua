@@ -1,9 +1,9 @@
 return {
-  { -- nvim-dap-ui {{{1
+  { -- nvim-dap-ui
     'rcarriga/nvim-dap-ui',
     dependencies = { 'mfussenegger/nvim-dap', 'nvim-neotest/nvim-nio' },
     config = function()
-      -- dap-ui config {{{2
+      -- dap-ui config
       local dap, dapui = require('dap'), require('dapui')
 
       dapui.setup({
@@ -99,9 +99,8 @@ return {
       dap.listeners.before.event_exited['dapui_config'] = function()
         dapui.close()
       end
-      -- }}}
 
-      -- C# dap config {{{2
+      -- C# dap config
 
       dap.adapters.netcoredbg = {
         type = 'executable',
@@ -168,9 +167,8 @@ return {
       }
 
       dap.configurations.cs = config
-      -- }}}
 
-      -- python dap config {{{2
+      -- python dap config
       dap.adapters.python = {
         type = 'executable',
         command = 'python',
@@ -197,9 +195,8 @@ return {
           end,
         },
       }
-      -- }}}
 
-      -- dap keymaps {{{2
+      -- dap keymaps
       -- vim.keymap.set('n', '<leader>dl', function()
       --   require('osv').launch({ port = 8086 })
       -- end, { noremap = true, desc = 'dap: launch neovim lua server' })
@@ -259,17 +256,16 @@ return {
       vim.keymap.set('n', '<leader>du', function()
         require('dap').down()
       end, { silent = true })
-      -- }}}
     end,
-  }, -- }}}
-  -- { -- nvim-dap-cs {{{1
+  },
+  -- { -- nvim-dap-cs
   --   'nicholasmata/nvim-dap-cs',
   --   dependencies = { 'mfussenegger/nvim-dap' },
   --   config = function()
   --     require('dap-cs').setup()
   --   end,
-  -- }, -- }}}
-  { -- one-small-step-for-vimkind {{{1
+  -- },
+  { -- one-small-step-for-vimkind
     'jbyuki/one-small-step-for-vimkind',
     config = function()
       local dap = require('dap')
@@ -286,14 +282,14 @@ return {
         },
       }
     end,
-  }, -- }}}
-  -- { -- nvim-dap-virtual-text {{{1
+  },
+  -- { -- nvim-dap-virtual-text
   --   'theHamsta/nvim-dap-virtual-text',
   --   config = function()
   --     require('nvim-dap-virtual-text').setup({})
   --   end,
-  -- }, -- }}}
-  { -- neotest {{{1
+  -- },
+  { -- neotest
     'nvim-neotest/neotest',
     dependencies = {
       -- 'nsidorenco/neotest-vstest',
@@ -321,6 +317,5 @@ return {
         require('neotest').summary.toggle()
       end, { silent = true })
     end,
-  }, -- }}}
+  },
 }
--- vim: foldmethod=marker:foldlevel=1

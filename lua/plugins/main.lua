@@ -1,15 +1,15 @@
 return {
-  { -- gruvbox: Theme {{{1
+  { -- gruvbox: Theme
     'ellisonleao/gruvbox.nvim',
     priority = 1000,
     config = function()
       vim.cmd([[colorscheme gruvbox]])
     end,
-  }, -- }}}
-  { -- gv.vim {{{1
+  },
+  { -- gv.vim
     'junegunn/gv.vim',
-  }, -- }}}
-  { -- lualine.nvim {{{1
+  },
+  { -- lualine.nvim
     -- https://github.com/nvim-lualine/lualine.nvim?tab=readme-ov-file#component-specific-options
     'nvim-lualine/lualine.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
@@ -34,8 +34,8 @@ return {
         },
       })
     end,
-  }, -- }}}
-  { -- markdown-preview.nvim {{{1
+  },
+  { -- markdown-preview.nvim
     'iamcco/markdown-preview.nvim',
     cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
     build = 'cd app && yarn install',
@@ -43,8 +43,8 @@ return {
       vim.g.mkdp_filetypes = { 'markdown' }
     end,
     ft = { 'markdown' },
-  }, -- }}}
-  { -- nvim-chainsaw: logging for all languages {{{1
+  },
+  { -- nvim-chainsaw: logging for all languages
     'chrisgrieser/nvim-chainsaw',
     event = 'VeryLazy',
     opts = {}, -- required even if left empty
@@ -126,8 +126,8 @@ return {
         { silent = true, noremap = true }
       )
     end,
-  }, -- }}}
-  { -- nvim-tree.lua {{{1
+  },
+  { -- nvim-tree.lua
     'nvim-tree/nvim-tree.lua',
     version = '*',
     lazy = false,
@@ -182,8 +182,8 @@ return {
         },
       })
     end,
-  }, -- }}}
-  { -- lazydev {{{1
+  },
+  { -- lazydev
     'folke/lazydev.nvim',
     ft = 'lua', -- only load on lua files
     opts = {
@@ -195,16 +195,16 @@ return {
         { 'nvim-dap-ui' },
       },
     },
-  }, -- }}}
-  { -- nvim-ts-context-commentstring: Vue comment strings {{{1
+  },
+  { -- nvim-ts-context-commentstring: Vue comment strings
     'JoosepAlviste/nvim-ts-context-commentstring',
     config = function()
       require('ts_context_commentstring').setup {
         enable_autocmd = false,
       }
     end,
-  }, -- }}}
-  { -- snacks {{{
+  },
+  { -- snacks
     'folke/snacks.nvim',
     opts = {
       bigfile = {},
@@ -220,8 +220,8 @@ return {
         },
       },
     },
-  }, -- }}}
-  { -- substitute.nvim {{{1
+  },
+  { -- substitute.nvim
     'gbprod/substitute.nvim',
     config = function()
       require('substitute').setup({})
@@ -230,11 +230,11 @@ return {
       vim.keymap.set('n', 'S', require('substitute').eol, { noremap = true })
       vim.keymap.set('x', 's', require('substitute').visual, { noremap = true })
     end,
-  }, -- }}}
-  { -- tabular: Align things {{{1
+  },
+  { -- tabular: Align things
     'godlygeek/tabular',
-  }, -- }}}
-  { -- tiny-glimmer.nvim {{{1
+  },
+  { -- tiny-glimmer.nvim
     'rachartier/tiny-glimmer.nvim',
     event = 'TextYankPost',
     config = function()
@@ -251,20 +251,20 @@ return {
         },
       })
     end,
-  }, -- }}}
-  { -- vim-checkbox {{{1
+  },
+  { -- vim-checkbox
     'jkramer/vim-checkbox',
-  }, -- }}}
-  { -- vim-repeat  {{{1
+  },
+  { -- vim-repeat
     'tpope/vim-repeat',
-  }, -- }}}
-  { -- vim-scimark: TUI spreadsheet {{{1
+  },
+  { -- vim-scimark: TUI spreadsheet
     'mipmip/vim-scimark',
-  }, -- }}}
-  { -- vim-scriptease: Help with vimscript {{{1
+  },
+  { -- vim-scriptease: Help with vimscript
     'tpope/vim-scriptease',
-  }, -- }}}
-  { -- vim-startup-time {{{1
+  },
+  { -- vim-startup-time
     'dstein64/vim-startuptime',
     -- lazy-load on a command
     cmd = 'StartupTime',
@@ -272,11 +272,11 @@ return {
     init = function()
       vim.g.startuptime_tries = 10
     end,
-  }, -- }}}
-  { -- vim-surround {{{1
+  },
+  { -- vim-surround
     'tpope/vim-surround',
-  }, -- }}}
-  { -- vim-tmux-navigator {{{1
+  },
+  { -- vim-tmux-navigator
     'christoomey/vim-tmux-navigator',
     cmd = {
       'TmuxNavigateLeft',
@@ -292,12 +292,11 @@ return {
       { '<c-k>', '<cmd><C-U>TmuxNavigateUp<cr>' },
       { '<c-l>', '<cmd><C-U>TmuxNavigateRight<cr>' },
     },
-  }, -- }}}
-  { -- vira {{{1
+  },
+  { -- vira
     'n0v1c3/vira',
     build = './install.sh',
     branch = 'dev',
     cmd = { 'ViraIssues', 'ViraLoadProject' },
-  }, -- }}}
+  },
 }
--- vim: foldmethod=marker:foldlevel=1

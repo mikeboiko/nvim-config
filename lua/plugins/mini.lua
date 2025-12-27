@@ -1,5 +1,5 @@
 return {
-  { -- mini.comment {{{1
+  { -- mini.comment
     'echasnovski/mini.comment',
     version = false,
     config = function()
@@ -36,6 +36,5 @@ return {
         },
       })
     end,
-  }, -- }}}
+  },
 }
--- vim: foldmethod=marker:foldlevel=1

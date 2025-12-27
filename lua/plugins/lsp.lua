@@ -1,5 +1,5 @@
 return {
-  { -- mason {{{1
+  { -- mason
     'mason-org/mason.nvim',
     opts = {},
     config = function()
@@ -12,10 +12,10 @@ return {
       -- Run command :MasonInstall roslyn
     end,
   },
-  { -- lsp-overloads {{{1
+  { -- lsp-overloads
     'Issafalcon/lsp-overloads.nvim',
-  }, -- }}}
-  { -- none-ls {{{1
+  },
+  { -- none-ls
     'nvimtools/none-ls.nvim',
     config = function()
       -- https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTINS.md
@@ -43,8 +43,8 @@ return {
         },
       })
     end,
-  }, -- }}}
-  { -- nvim-lsp-file-operations {{{1
+  },
+  { -- nvim-lsp-file-operations
     'antosha417/nvim-lsp-file-operations',
     dependencies = {
       'nvim-lua/plenary.nvim',
@@ -53,8 +53,8 @@ return {
     config = function()
       require('lsp-file-operations').setup()
     end,
-  }, -- }}}
-  { -- roslyn {{{1
+  },
+  { -- roslyn
     'seblyng/roslyn.nvim',
     ---@module 'roslyn.config'
     ---@type RoslynNvimConfig
@@ -62,7 +62,7 @@ return {
       -- your configuration comes here; leave empty for default settings
     },
   },
-  { -- nvim-lspconfig {{{1
+  { -- nvim-lspconfig
     -- Setup language servers.
     -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
 
@@ -354,15 +354,15 @@ return {
         end,
       })
     end,
-  }, -- }}}
-  { -- powershell.nvim {{{1
+  },
+  { -- powershell.nvim
     'TheLeoP/powershell.nvim',
     ---@type powershell.user_config
     opts = {
       bundle_path = '/opt/powershell-editor-services',
     },
-  }, -- }}}
-  { -- nvim-origami folding {{{1
+  },
+  { -- nvim-origami folding
     'chrisgrieser/nvim-origami',
     event = 'VeryLazy',
     opts = {}, -- needed even when using default config
@@ -372,5 +372,5 @@ return {
       vim.opt.foldlevel = 99
       vim.opt.foldlevelstart = 99
     end,
-  }, -- }}}
+  },
 }

@@ -1,6 +1,5 @@
 return {
-  { -- vim-gutentags: Auto-generate ctags {{{1
+  { -- vim-gutentags: Auto-generate ctags
     'ludovicchabant/vim-gutentags',
-  }, -- }}}
+  },
 }
--- vim: foldmethod=marker:foldlevel=1

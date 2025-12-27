@@ -1,18 +1,18 @@
 return {
-  { -- csvview {{{1
+  { -- csvview
     'hat0uma/csvview.nvim',
     ft = { 'csv' },
     config = function()
       require('csvview').setup()
     end,
-  }, -- }}}
-  { -- vim-log-highlighting syntax {{{1
+  },
+  { -- vim-log-highlighting syntax
     'mtdl9/vim-log-highlighting',
-  }, -- }}}
-  { -- vim-ps1: powershell syntax {{{1
+  },
+  { -- vim-ps1: powershell syntax
     'PProvost/vim-ps1',
-  }, -- }}}
-  { -- which-key.nvim {{{1
+  },
+  { -- which-key.nvim
     'folke/which-key.nvim',
     event = 'VeryLazy',
     opts = {
@@ -29,6 +29,5 @@ return {
         desc = 'Buffer Local Keymaps (which-key)',
       },
     },
-  }, -- }}}
+  },
 }
--- vim: foldmethod=marker:foldlevel=1

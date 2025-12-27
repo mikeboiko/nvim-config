@@ -1,10 +1,10 @@
 return {
-  { -- quicker.nvim: editable buffer {{{1
+  { -- quicker.nvim: editable buffer
     'stevearc/quicker.nvim',
     event = 'FileType qf',
     opts = {},
-  }, -- }}}
-  { -- nvim-bqf: preview window and handy actions {{{1
+  },
+  { -- nvim-bqf: preview window and handy actions
     'kevinhwang91/nvim-bqf',
     config = function()
       require('bqf').setup({
@@ -16,6 +16,5 @@ return {
         },
       })
     end,
-  }, -- }}}
+  },
 }
--- vim: foldmethod=marker:foldlevel=1
