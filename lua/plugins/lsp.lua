@@ -106,6 +106,8 @@ return {
       -- Note: install basedpyright in each virtual-env
       vim.lsp.config('basedpyright', {
         settings = {
+          autoImportCompletions = true,
+          disableOrganizeImports = true, -- use ruff instead
           basedpyright = {
             analysis = {
               typeCheckingMode = 'basic',
