@@ -362,5 +362,15 @@ return {
       bundle_path = '/opt/powershell-editor-services',
     },
   }, -- }}}
+  { -- nvim-origami folding {{{1
+    'chrisgrieser/nvim-origami',
+    event = 'VeryLazy',
+    opts = {}, -- needed even when using default config
+
+    -- recommended: disable vim's auto-folding
+    init = function()
+      vim.opt.foldlevel = 99
+      vim.opt.foldlevelstart = 99
+    end,
+  }, -- }}}
 }
--- vim: foldmethod=marker:foldlevel=1
