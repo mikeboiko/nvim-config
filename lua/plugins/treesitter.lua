@@ -27,133 +27,137 @@ return {
   },
   { -- nvim-treesitter
     'nvim-treesitter/nvim-treesitter',
+    branch = 'main',
     build = ':TSUpdate', -- Ensures parsers are installed/updated
     lazy = false,
     config = function()
-      require('nvim-treesitter.configs').setup({
-        -- A list of parser names, or "all" (the five listed parsers should always be installed)
-        ensure_installed = {
-          'c_sharp',
-          'diff',
-          'git_config',
-          'git_rebase',
-          'gitattributes',
-          'gitcommit',
-          'gitignore',
-          'go',
-          'javascript',
-          'json',
-          'lua',
-          'markdown',
-          'markdown_inline',
-          'mermaid',
-          'python',
-          'typescript',
-          'vim',
-          'vimdoc',
-          'vue',
-          'yaml',
-        },
+      local ts = require('nvim-treesitter')
 
-        -- Install parsers synchronously (only applied to `ensure_installed`)
-        sync_install = false,
+      -- Track buffers waiting for parser installation: { lang = { [buf] = true, ... } }
+      local waiting_buffers = {}
+      -- Track languages currently being installed to avoid duplicate install tasks
+      local installing_langs = {}
 
-        -- Automatically install missing parsers when entering buffer
-        -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-        auto_install = true,
+      local group = vim.api.nvim_create_augroup('TreesitterSetup', { clear = true })
 
-        highlight = {
-          enable = true,
+      -- Enable treesitter for a buffer
+      local function enable_treesitter(buf, lang)
+        if not vim.api.nvim_buf_is_valid(buf) then
+          return false
+        end
 
-          -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-          -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-          -- Using this option may slow down your editor, and you may see some duplicate highlights.
-          -- Instead of true it can also be a list of languages
-          additional_vim_regex_highlighting = false,
-        },
-        textobjects = {
-          select = {
-            enable = true,
+        local ok = pcall(vim.treesitter.start, buf, lang)
+        if ok then
+          vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end
+        return ok
+      end
 
-            -- Automatically jump forward to textobj, similar to targets.vim
-            lookahead = true,
+      -- Install core parsers after lazy.nvim finishes loading all plugins
+      vim.api.nvim_create_autocmd('User', {
+        group = group,
+        pattern = 'LazyDone',
+        once = true,
+        desc = 'Install core treesitter parsers',
+        callback = function()
+          ts.install({
+            'c_sharp',
+            'diff',
+            'git_config',
+            'git_rebase',
+            'gitattributes',
+            'gitcommit',
+            'gitignore',
+            'go',
+            'javascript',
+            'json',
+            'lua',
+            'markdown',
+            'markdown_inline',
+            'mermaid',
+            'python',
+            'typescript',
+            'vim',
+            'vimdoc',
+            'vue',
+            'yaml',
+          }, {
+            max_jobs = 8,
+          })
+        end,
+      })
 
-            keymaps = {
-              -- You can use the capture groups defined in textobjects.scm
-              ['af'] = '@function.outer',
-              ['if'] = '@function.inner',
-              ['ac'] = '@class.outer',
-              -- You can optionally set descriptions to the mappings (used in the desc parameter of
-              -- nvim_buf_set_keymap) which plugins like which-key display
-              ['ic'] = { query = '@class.inner', desc = 'Select inner part of a class region' },
-              -- You can also use captures from other query groups like `locals.scm`
-              ['as'] = { query = '@scope', query_group = 'locals', desc = 'Select language scope' },
-            },
-            -- You can choose the select mode (default is charwise 'v')
-            --
-            -- Can also be a function which gets passed a table with the keys
-            -- * query_string: eg '@function.inner'
-            -- * method: eg 'v' or 'o'
-            -- and should return the mode ('v', 'V', or '<c-v>') or a table
-            -- mapping query_strings to modes.
-            selection_modes = {
-              ['@parameter.outer'] = 'v', -- charwise
-              ['@function.outer'] = 'V', -- linewise
-              ['@class.outer'] = '<c-v>', -- blockwise
-            },
-            -- If you set this to `true` (default is `false`) then any textobject is
-            -- extended to include preceding or succeeding whitespace. Succeeding
-            -- whitespace has priority in order to act similarly to eg the built-in
-            -- `ap`.
-            --
-            -- Can also be a function which gets passed a table with the keys
-            -- * query_string: eg '@function.inner'
-            -- * selection_mode: eg 'v'
-            -- and should return true of false
-            include_surrounding_whitespace = true,
-          },
-          move = {
-            enable = true,
-            set_jumps = true, -- whether to set jumps in the jumplist
-            goto_next_start = {
-              -- [']f'] = '@function.outer',
-              [']]'] = { query = '@class.outer', desc = 'Next class start' },
-              --
-              -- You can use regex matching (i.e. lua pattern) and/or pass a list in a "query" key to group multiple queires.
-              [']o'] = '@loop.*',
-              -- ["]o"] = { query = { "@loop.inner", "@loop.outer" } }
-              --
-              -- You can pass a query group to use query from `queries/<lang>/<query_group>.scm file in your runtime path.
-              -- Below example nvim-treesitter's `locals.scm` and `folds.scm`. They also provide highlights.scm and indent.scm.
-              -- [']s'] = { query = '@scope', query_group = 'locals', desc = 'Next scope' },
-              [']z'] = { query = '@fold', query_group = 'folds', desc = 'Next fold' },
-            },
-            goto_next_end = {
-              [']F'] = '@function.outer',
-              [']['] = '@class.outer',
-            },
-            goto_previous_start = {
-              -- ['[f'] = '@function.outer',
-              ['[['] = '@class.outer',
-            },
-            goto_previous_end = {
-              ['[F'] = '@function.outer',
-              ['[]'] = '@class.outer',
-            },
-            -- Below will go to either the start or the end, whichever is closer.
-            -- Use if you want more granular movements
-            -- Make it even more gradual by adding multiple queries and regex.
-            -- goto_next = {
-            -- ["]d"] = "@conditional.outer",
-            -- },
-            -- goto_previous = {
-            -- ["[d"] = "@conditional.outer",
-            -- }
-          },
-        },
-        indent = {
-          enable = true,
-        },
+      local ignore_filetypes = {
+        checkhealth = true,
+        lazy = true,
+        mason = true,
+        qf = true,
+        snacks_dashboard = true,
+        snacks_notif = true,
+        snacks_win = true,
+        toggleterm = true,
+      }
+
+      -- Auto-install parsers and enable highlighting on FileType
+      vim.api.nvim_create_autocmd('FileType', {
+        group = group,
+        desc = 'Enable treesitter highlighting and indentation',
+        callback = function(event)
+          if ignore_filetypes[event.match] then
+            return
+          end
+
+          local lang = vim.treesitter.language.get_lang(event.match) or event.match
+          local buf = event.buf
+
+          if not enable_treesitter(buf, lang) then
+            -- Parser not available, queue buffer (set handles duplicates)
+            waiting_buffers[lang] = waiting_buffers[lang] or {}
+            waiting_buffers[lang][buf] = true
+
+            -- Only start install if not already in progress
+            if not installing_langs[lang] then
+              installing_langs[lang] = true
+              local task = ts.install({ lang })
+
+              -- Register callback for when installation completes
+              if task and task.await then
+                task:await(function()
+                  vim.schedule(function()
+                    installing_langs[lang] = nil
+
+                    -- Enable treesitter on all waiting buffers for this language
+                    local buffers = waiting_buffers[lang]
+                    if buffers then
+                      for b in pairs(buffers) do
+                        enable_treesitter(b, lang)
+                      end
+                      waiting_buffers[lang] = nil
+                    end
+                  end)
+                end)
+              else
+                -- Fallback: clear state if task doesn't support await
+                installing_langs[lang] = nil
+                waiting_buffers[lang] = nil
+              end
+            end
+          end
+        end,
+      })
+
+      -- Clean up waiting buffers when buffer is deleted
+      vim.api.nvim_create_autocmd('BufDelete', {
+        group = group,
+        desc = 'Clean up treesitter waiting buffers',
+        callback = function(event)
+          for lang, buffers in pairs(waiting_buffers) do
+            buffers[event.buf] = nil
+            if next(buffers) == nil then
+              waiting_buffers[lang] = nil
+            end
+          end
+        end,
       })
     end,
   },
@@ -167,5 +171,6 @@ return {
   },
   { -- nvim-treesitter-textobjects
     'nvim-treesitter/nvim-treesitter-textobjects',
+    branch = 'main',
   },
 }
