@@ -61,6 +61,7 @@ return {
         desc = 'Install core treesitter parsers',
         callback = function()
           ts.install({
+            'bash',
             'c_sharp',
             'diff',
             'git_config',
