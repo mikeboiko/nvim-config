@@ -34,8 +34,7 @@ return {
       require('CopilotChat').setup({
         debug = false,
         -- https://docs.github.com/en/copilot/reference/ai-models/supported-models#supported-ai-models-per-copilot-plan
-        -- model = 'oswe-vscode-prime',
-        model = 'grok-code-fast-1',
+        model = 'oswe-vscode-prime',
         chat_autocomplete = false,
         auto_follow_cursor = false,
         -- auto_insert_mode = true,
