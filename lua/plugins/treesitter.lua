@@ -76,6 +76,7 @@ return {
             'markdown',
             'markdown_inline',
             'mermaid',
+            'powershell',
             'python',
             'typescript',
             'vim',
