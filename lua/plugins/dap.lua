@@ -305,7 +305,10 @@ return {
         adapters = {
           require('neotest-dotnet'),
           require('neotest-python')({
-            dap = { justMyCode = true },
+            dap = {
+              justMyCode = true,
+              env = { PYTEST_ADDOPTS = '-n 0' },
+            },
           }),
           -- require('neotest-vstest')({
           --   sdk_path = '/usr/share/dotnet/sdk/8.0.115/',
