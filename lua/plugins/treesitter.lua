@@ -78,6 +78,7 @@ return {
             'mermaid',
             'powershell',
             'python',
+            'sql',
             'toml',
             'typescript',
             'vim',
