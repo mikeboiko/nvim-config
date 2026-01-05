@@ -64,6 +64,7 @@ return {
             'bash',
             'c_sharp',
             'diff',
+            'dockerfile',
             'git_config',
             'git_rebase',
             'gitattributes',
