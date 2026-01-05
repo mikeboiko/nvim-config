@@ -370,9 +370,14 @@ return {
     opts = {}, -- needed even when using default config
 
     -- recommended: disable vim's auto-folding
-    init = function()
+    config = function()
       vim.opt.foldlevel = 99
       vim.opt.foldlevelstart = 99
+      require('origami').setup {
+        foldKeymaps = {
+          setup = false, -- modifies `h`, `l`, `^`, and `$`
+        },
+      }
     end,
   },
 }
