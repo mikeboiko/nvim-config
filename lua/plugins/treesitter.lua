@@ -94,7 +94,10 @@ return {
       })
 
       local ignore_filetypes = {
+        ['blink-cmp-documentation'] = true,
+        ['blink-cmp-menu'] = true,
         checkhealth = true,
+        fugitive = true,
         fzf = true,
         lazy = true,
         mason = true,
