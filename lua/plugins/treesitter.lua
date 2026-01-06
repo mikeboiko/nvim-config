@@ -95,6 +95,7 @@ return {
 
       local ignore_filetypes = {
         checkhealth = true,
+        fzf = true,
         lazy = true,
         mason = true,
         qf = true,
