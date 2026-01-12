@@ -87,6 +87,18 @@ return {
       vim.opt.signcolumn = 'yes'
     end,
     config = function()
+      -- I couldn't figure out how to disable roslyn formatting in a cleaner way
+      vim.api.nvim_create_autocmd('LspAttach', {
+        group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+        callback = function(ev)
+          local client = vim.lsp.get_client_by_id(ev.data.client_id)
+          if client and client.name == 'roslyn' then
+            client.server_capabilities.documentFormattingProvider = false
+            client.server_capabilities.documentRangeFormattingProvider = false
+          end
+        end,
+      })
+
       vim.lsp.config('bashls', { filetypes = { 'bash', 'sh' } })
       vim.lsp.enable('bashls')
 
