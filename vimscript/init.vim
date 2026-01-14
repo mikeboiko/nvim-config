@@ -629,7 +629,7 @@ let g:mkdp_refresh_slow = 1
 
 augroup CustomCommentStrings
   autocmd!
-  autocmd FileType kql setlocal commentstring=//%s
+  autocmd FileType kusto setlocal commentstring=//%s
   autocmd FileType sebol setlocal commentstring=!%s
   autocmd FileType vader setlocal commentstring=#%s
   autocmd FileType autohotkey setlocal commentstring=;%s
