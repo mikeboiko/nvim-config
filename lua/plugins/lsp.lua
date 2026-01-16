@@ -169,8 +169,11 @@ return {
       })
       vim.lsp.enable('jsonls')
 
-      -- For TOML
+      -- toml
       vim.lsp.enable('taplo')
+
+      -- rust
+      vim.lsp.enable('rust_analyzer')
 
       -- lspconfig.yamlls.setup {
       --   -- TODO: Fix ERROR method workspace/symbol is not supported by any of the servers registered for the current buffer
@@ -187,6 +190,7 @@ return {
       --   },
       -- }
 
+      -- lua
       vim.lsp.config('lua_ls', {
         on_init = function(client)
           -- if client.workspace_folders then
@@ -327,6 +331,7 @@ return {
           '*.lua',
           '*.md',
           '*.py',
+          '*.rs',
           '*.sh',
           '*.sql',
           '*.toml',
