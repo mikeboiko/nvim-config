@@ -115,6 +115,7 @@ return {
         mason = true,
         qf = true,
         snacks_dashboard = true,
+        snacks_input = true,
         snacks_notif = true,
         snacks_notif_history = true,
         snacks_win = true,
