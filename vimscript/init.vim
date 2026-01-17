@@ -911,7 +911,7 @@ augroup CustomFileTypes
   " HTML/js/css/etc
   autocmd FileType html,javascript,json,vue,css,scss,yml,yaml,markdown,vim,javascriptreact,typescriptreact setlocal tabstop=2 shiftwidth=2 softtabstop=2
   " Markdown -Fix the syntax highlighting that randomly stops
-  autocmd FileType markdown set foldexpr=NestedMarkdownFolds()
+  " autocmd FileType markdown set foldexpr=NestedMarkdownFolds()
 augroup end
 
 " Mappings{{{1

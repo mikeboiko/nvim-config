@@ -9,9 +9,6 @@ return {
     'mikeboiko/vim-flow',
     cmd = { 'FlowRun', 'FlowDebug' },
   },
-  { -- vim-markdown-folding
-    'mikeboiko/vim-markdown-folding',
-  },
   { -- vim-sort-folds
     'mikeboiko/vim-sort-folds',
   },

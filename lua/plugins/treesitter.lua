@@ -111,6 +111,7 @@ return {
         fugitive = true,
         fzf = true,
         lazy = true,
+        lazy_backdrop = true,
         log = true,
         mason = true,
         qf = true,
