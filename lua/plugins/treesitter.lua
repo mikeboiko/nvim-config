@@ -121,6 +121,7 @@ return {
         snacks_notif_history = true,
         snacks_win = true,
         snacks_win_backdrop = true,
+        text = true,
         toggleterm = true,
       }
       -- Auto-install parsers and enable highlighting on FileType
