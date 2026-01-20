@@ -104,6 +104,7 @@ return {
         ['blink-cmp-menu'] = true,
         ['dap-repl'] = true,
         aerial = true,
+        bigfile = true,
         checkhealth = true,
         conf = true,
         dapui_breakpoints = true,
