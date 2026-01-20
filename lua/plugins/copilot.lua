@@ -109,7 +109,7 @@ return {
                 '-c',
                 'unset PYTEST_ADDOPTS; git -C '
                   .. vim.fn.shellescape(dir)
-                  .. ' add -A && git -C '
+                  .. ' -C '
                   .. vim.fn.shellescape(dir)
                   .. ' commit -F '
                   .. file_path
