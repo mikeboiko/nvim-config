@@ -63,6 +63,7 @@ return {
           ts.install({
             'bash',
             'c_sharp',
+            'caddy',
             'diff',
             'dockerfile',
             'git_config',
