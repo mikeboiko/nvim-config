@@ -72,6 +72,7 @@ return {
             'gitcommit',
             'gitignore',
             'go',
+            'html',
             'javascript',
             'json',
             'jsx',
