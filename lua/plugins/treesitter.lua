@@ -33,11 +33,6 @@ return {
     config = function()
       local ts = require('nvim-treesitter')
 
-      -- Track buffers waiting for parser installation: { lang = { [buf] = true, ... } }
-      local waiting_buffers = {}
-      -- Track languages currently being installed to avoid duplicate install tasks
-      local installing_langs = {}
-
       local group = vim.api.nvim_create_augroup('TreesitterSetup', { clear = true })
 
       -- Enable treesitter for a buffer
@@ -98,96 +93,17 @@ return {
         end,
       })
 
-      local ignore_filetypes = {
-        NvimTree = true,
-        ['blink-cmp-documentation'] = true,
-        ['blink-cmp-menu'] = true,
-        ['dap-repl'] = true,
-        aerial = true,
-        bigfile = true,
-        checkhealth = true,
-        conf = true,
-        dapui_breakpoints = true,
-        dapui_console = true,
-        dapui_hover = true,
-        dapui_scopes = true,
-        dapui_stacks = true,
-        dapui_watches = true,
-        fugitive = true,
-        fzf = true,
-        lazy = true,
-        lazy_backdrop = true,
-        log = true,
-        mason = true,
-        qf = true,
-        snacks_dashboard = true,
-        snacks_input = true,
-        snacks_notif = true,
-        snacks_notif_history = true,
-        snacks_win = true,
-        snacks_win_backdrop = true,
-        text = true,
-        toggleterm = true,
-      }
-      -- Auto-install parsers and enable highlighting on FileType
+      -- Enable treesitter highlighting and indentation on FileType
       vim.api.nvim_create_autocmd('FileType', {
         group = group,
         desc = 'Enable treesitter highlighting and indentation',
         callback = function(event)
-          if ignore_filetypes[event.match] then
+          if not event.match or event.match == '' then
             return
           end
 
           local lang = vim.treesitter.language.get_lang(event.match) or event.match
-          local buf = event.buf
-
-          if not enable_treesitter(buf, lang) then
-            -- Parser not available, queue buffer (set handles duplicates)
-            waiting_buffers[lang] = waiting_buffers[lang] or {}
-            waiting_buffers[lang][buf] = true
-
-            -- Only start install if not already in progress
-            if not installing_langs[lang] then
-              installing_langs[lang] = true
-              local task = ts.install({ lang })
-
-              -- Register callback for when installation completes
-              if task and task.await then
-                task:await(function()
-                  vim.schedule(function()
-                    installing_langs[lang] = nil
-
-                    -- Enable treesitter on all waiting buffers for this language
-                    local buffers = waiting_buffers[lang]
-                    if buffers then
-                      for b in pairs(buffers) do
-                        enable_treesitter(b, lang)
-                      end
-                      waiting_buffers[lang] = nil
-                    end
-                  end)
-                end)
-              else
-                -- Fallback: clear state if task doesn't support await
-                installing_langs[lang] = nil
-                waiting_buffers[lang] = nil
-              end
-            end
-          end
-        end,
-      })
-
-      -- Clean up waiting buffers when buffer is deleted
-      vim.api.nvim_create_autocmd('BufDelete', {
-        group = group,
-        desc = 'Clean up treesitter waiting buffers',
-        callback = function(event)
-          for lang, buffers in pairs(waiting_buffers) do
-            buffers[event.buf] = nil
-            if next(buffers) == nil then
-              waiting_buffers[lang] = nil
-            end
-          end
+          enable_treesitter(event.buf, lang)
         end,
       })
     end,
