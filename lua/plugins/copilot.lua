@@ -146,7 +146,7 @@ return {
                       end
                     end
                     vim.notify(
-                      string.format('Copilot commit (%s): %s', repo, title or '(no commit title)'),
+                      string.format('Copilot commit (%s):\n%s', repo, title or '(no commit title)'),
                       vim.log.levels.INFO
                     )
                   else
