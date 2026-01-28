@@ -137,7 +137,18 @@ return {
                 end,
                 on_exit = function(_, code)
                   if code == 0 then
-                    vim.notify('Copilot commit and push successful', vim.log.levels.INFO)
+                    local repo = vim.fn.fnamemodify(dir, ':t')
+                    local title
+                    for line in (response.content or ''):gmatch('[^\r\n]+') do
+                      if line:match('%S') and not line:match('^```') then
+                        title = line
+                        break
+                      end
+                    end
+                    vim.notify(
+                      string.format('Copilot commit (%s): %s', repo, title or '(no commit title)'),
+                      vim.log.levels.INFO
+                    )
                   else
                     local err_msg = table.concat(stderr, '\n')
                     if err_msg == '' then
