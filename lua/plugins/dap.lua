@@ -25,8 +25,7 @@ return {
           -- }
         },
         -- Expand lines larger than the window
-        -- Requires >= 0.7
-        expand_lines = vim.fn.has('nvim-0.7') == 1,
+        expand_lines = true,
         -- Layouts define sections of the screen to place windows.
         -- The position can be "left", "right", "top" or "bottom".
         -- The size specifies the height/width depending on position. It can be an Int
@@ -35,7 +34,7 @@ return {
         -- Elements are the elements shown in the layout (in order).
         -- Layouts are opened in order so that earlier layouts take priority in window sizing.
         layouts = {
-          {
+          { -- layout 1
             elements = {
               -- Elements can be strings or table with id and size keys.
               { id = 'breakpoints', size = 0.25 },
@@ -46,10 +45,17 @@ return {
             size = 40, -- 40 columns
             position = 'left',
           },
-          {
+          { -- layout 2
             elements = {
               'repl',
               'console',
+            },
+            size = 0.25, -- 25% of total lines
+            position = 'bottom',
+          },
+          { -- layout 3
+            elements = {
+              'repl',
             },
             size = 0.25, -- 25% of total lines
             position = 'bottom',
@@ -90,8 +96,18 @@ return {
       vim.fn.sign_define('DapBreakpoint', { text = '🔴' })
       vim.fn.sign_define('DapStopped', { text = '▶️' })
 
+      -- Layout 1: Sidebar (breakpoints, watches, etc.)
+      -- Layout 2: Bottom with Repl & Console (Default)
+      -- Layout 3: Bottom with Repl only (For C#)
       dap.listeners.after.event_initialized['dapui_config'] = function()
-        dapui.open()
+        dapui.open({ layout = 1 })
+        if vim.bo.filetype == 'cs' then
+          dapui.close({ layout = 2 })
+          dapui.open({ layout = 3 })
+        else
+          dapui.close({ layout = 3 })
+          dapui.open({ layout = 2 })
+        end
       end
       dap.listeners.before.event_terminated['dapui_config'] = function()
         dapui.close()
