@@ -175,20 +175,28 @@ return {
       -- rust
       vim.lsp.enable('rust_analyzer')
 
-      -- lspconfig.yamlls.setup {
-      --   -- TODO: Fix ERROR method workspace/symbol is not supported by any of the servers registered for the current buffer
-      --   -- capabilities = {
-      --   --   workspace = {
-      --   --     symbol = false,
-      --   --   },
-      --   -- },
-      --   settings = {
-      --     yaml = {
-      --       schemas = require('schemastore').yaml.schemas {},
-      --       validate = true,
-      --     },
-      --   },
-      -- }
+      vim.lsp.config('yamlls', {
+        -- TODO: Fix ERROR method workspace/symbol is not supported by any of the servers registered for the current buffer
+        -- capabilities = {
+        --   workspace = {
+        --     symbol = false,
+        --   },
+        -- },
+        settings = {
+          yaml = {
+            schemaStore = {
+              -- You must disable built-in schemaStore support if you want to use
+              -- this plugin and its advanced options like `ignore`.
+              enable = false,
+              -- Avoid TypeError: Cannot read properties of undefined (reading 'length')
+              url = "",
+            },
+            schemas = require('schemastore').yaml.schemas {},
+            validate = true,
+          },
+        },
+      })
+      vim.lsp.enable('yamlls')
 
       -- lua
       vim.lsp.config('lua_ls', {
