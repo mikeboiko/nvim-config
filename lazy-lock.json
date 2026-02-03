@@ -4,7 +4,7 @@
   "aerial.nvim": { "branch": "master", "commit": "7a6a42791eb2b54a7115c7db4488981f93471770" },
   "auto-pairs": { "branch": "master", "commit": "c3382942cef7977db50ba2275e4a7ce1d75cb5d0" },
   "blink-cmp-copilot": { "branch": "main", "commit": "439cff78780c033aa23cf061d7315314b347e3c1" },
-  "blink.cmp": { "branch": "main", "commit": "b19413d214068f316c78978b08264ed1c41830ec" },
+  "blink.cmp": { "branch": "main", "commit": "bc54f81b6d92f91dac06c77c3ffccec5291e98cd" },
   "conflict-marker.vim": { "branch": "master", "commit": "62742b2ffe7a433988759c67b5c5a22eff74a14b" },
   "copilot.lua": { "branch": "master", "commit": "9b8d77c6c847c83c784c05f5f86b4821ed90d3a1" },
   "csvview.nvim": { "branch": "main", "commit": "8d068c526ab5ade68226de036d533298cd93a399" },

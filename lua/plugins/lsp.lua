@@ -189,7 +189,7 @@ return {
               -- this plugin and its advanced options like `ignore`.
               enable = false,
               -- Avoid TypeError: Cannot read properties of undefined (reading 'length')
-              url = "",
+              url = '',
             },
             schemas = require('schemastore').yaml.schemas {},
             validate = true,
@@ -401,6 +401,9 @@ return {
       require('origami').setup {
         foldKeymaps = {
           setup = false, -- modifies `h`, `l`, `^`, and `$`
+        },
+        autoFold = {
+          enabled = false,
         },
       }
     end,
