@@ -42,7 +42,8 @@ return {
         end
 
         local ok = pcall(vim.treesitter.start, buf, lang)
-        if ok then
+        -- TODO: Remove this after csharp treesitter parser is fixed
+        if ok and lang ~= 'c_sharp' then
           vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
         end
         return ok
