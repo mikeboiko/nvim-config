@@ -6,8 +6,9 @@ return {
       require('csvview').setup()
     end,
   },
-  { -- vim-log-highlighting syntax
-    'mtdl9/vim-log-highlighting',
+  { -- log-highlight.nvim
+    'fei6409/log-highlight.nvim',
+    opts = {},
   },
   { -- vim-ps1: powershell syntax
     'PProvost/vim-ps1',
