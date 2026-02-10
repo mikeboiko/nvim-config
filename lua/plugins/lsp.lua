@@ -15,35 +15,6 @@ return {
   { -- lsp-overloads
     'Issafalcon/lsp-overloads.nvim',
   },
-  { -- none-ls
-    'nvimtools/none-ls.nvim',
-    config = function()
-      -- https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTINS.md
-
-      local null_ls = require('null-ls')
-      -- local utils = require('null-ls.utils')
-
-      null_ls.setup({
-        -- root_dir = utils.root_pattern('*.sln', '*.csproj', '.git'),
-        sources = {
-          null_ls.builtins.completion.tags,
-          null_ls.builtins.diagnostics.trail_space,
-          null_ls.builtins.diagnostics.sqlfluff,
-          -- null_ls.builtins.diagnostics.vint,
-          null_ls.builtins.formatting.isort,
-          null_ls.builtins.formatting.prettier,
-          null_ls.builtins.formatting.sqlfluff,
-          null_ls.builtins.formatting.stylua,
-          null_ls.builtins.formatting.shfmt.with({
-            extra_args = { '--apply-ignore' },
-          }),
-          null_ls.builtins.formatting.csharpier.with({
-            filetypes = { 'cs', 'xml' },
-          }),
-        },
-      })
-    end,
-  },
   { -- nvim-lsp-file-operations
     'antosha417/nvim-lsp-file-operations',
     dependencies = {
@@ -306,70 +277,6 @@ return {
         '<cmd>lua vim.lsp.buf.implementation()<cr>',
         { desc = 'Find implementations of interface/class under cursor' }
       )
-
-      -- Manual LSP format mapping
-      local exclude_formatters = { 'lua_ls', 'volar', 'ts_ls', 'roslyn' }
-      local function format_filter(client)
-        local ext = vim.fn.expand('%:e')
-        if ext == 'cs' or ext == 'csproj' then
-          return client.name == 'null-ls'
-        end
-        return not vim.tbl_contains(exclude_formatters, client.name)
-      end
-
-      vim.keymap.set('n', '<leader>fi', function()
-        vim.lsp.buf.format {
-          async = false,
-          timeout_ms = 2000,
-          -- Use the same filter as your autocmd
-          filter = format_filter,
-        }
-      end, { desc = 'Format current buffer with LSP' })
-
-      -- Format on save
-      vim.api.nvim_create_autocmd('BufWritePre', {
-        -- Only format these filetypes
-        pattern = {
-          '*.csproj',
-          '*.cs',
-          '*.js',
-          '*.json',
-          '*.jsonc',
-          '*.jsx',
-          '*.lua',
-          '*.md',
-          '*.py',
-          '*.rs',
-          '*.sh',
-          '*.sql',
-          '*.toml',
-          '*.ts',
-          '*.tsx',
-          '*.vue',
-          '*.yaml',
-          '*.yml',
-        },
-        callback = function()
-          -- Don't auto-format in work repos
-          local current_file = vim.fn.expand('%:p')
-          local excluded_paths = {
-            -- vim.fn.expand('~/git/GOA'),
-            vim.fn.expand('~/git/CT'),
-          }
-          for _, path in ipairs(excluded_paths) do
-            if vim.startswith(current_file, path) then
-              return
-            end
-          end
-
-          vim.lsp.buf.format {
-            async = false,
-            timeout_ms = 3000,
-            -- Ignore these LSP formatters, they are handled by null-ls
-            filter = format_filter,
-          }
-        end,
-      })
 
       -- Don't format commands.sh with bashls
       vim.api.nvim_create_autocmd('FileType', {
