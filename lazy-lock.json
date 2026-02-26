@@ -52,7 +52,7 @@
   "tabular": { "branch": "master", "commit": "12437cd1b53488e24936ec4b091c9324cafee311" },
   "tiny-glimmer.nvim": { "branch": "main", "commit": "932e6c2cc4a43ce578f007db1f8f61ad6798f938" },
   "vim-checkbox": { "branch": "master", "commit": "6fd826fc0d74ca57be25b89016f9291ed9df61b0" },
-  "vim-flow": { "branch": "master", "commit": "c873fac7ed4110745a7df059b7264e2158fe1277" },
+  "vim-flow": { "branch": "master", "commit": "2afe0d9f3109e83d228f318a04ca0cfc72ea0409" },
   "vim-fugitive": { "branch": "master", "commit": "61b51c09b7c9ce04e821f6cf76ea4f6f903e3cf4" },
   "vim-gutentags": { "branch": "master", "commit": "aa47c5e29c37c52176c44e61c780032dfacef3dd" },
   "vim-ps1": { "branch": "master", "commit": "839cec1550e09fc902c74103053e9e765051083d" },

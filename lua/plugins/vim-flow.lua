@@ -1,5 +1,5 @@
 return {
-  -- vim-flow
   'mikeboiko/vim-flow',
+  -- dir = '~/git/OpenSource/vim-flow',
   cmd = { 'FlowRun', 'FlowDebug' },
 }
