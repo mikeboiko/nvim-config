@@ -174,7 +174,14 @@ function! CloseAll() " {{{2
     NvimTreeClose
     AerialClose
     " CopilotChatClose
-    for bufname in ['^fugitive', '/tmp/flow', 'git/gap', '~/git/Linux/config/mani.yaml']
+
+    " Close flow-managed terminal buffers (force to handle running jobs).
+    let flow_buffers = join(filter(range(1, bufnr('$')), 'bufexists(v:val) && getbufvar(v:val, "nvim_flow_terminal", 0) == 1'), ' ')
+    if trim(flow_buffers) !=? ''
+      silent! exe 'bdelete! '. flow_buffers
+    endif
+
+    for bufname in ['^fugitive', 'git/gap', '~/git/Linux/config/mani.yaml']
       let pattern = escape(bufname, '~.')
       let buffers = join(filter(range(1, bufnr('$')), 'buflisted(v:val) && bufname(v:val) =~ pattern'), ' ')
       if trim(buffers) !=? ''

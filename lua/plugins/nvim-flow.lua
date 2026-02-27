@@ -7,6 +7,7 @@ return {
   opts = {
     config_file = '.flow.yml',
     terminal_height = 15,
+    terminal_position = 'top',
     stop_at_home = true,
     show_command = true,
     keymaps = {
