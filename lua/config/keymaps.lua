@@ -62,23 +62,5 @@ vim.keymap.set('n', 'co', function()
   vim.cmd('startinsert!')
 end, { desc = 'Add empty comment above' })
 
--- Run Script in terminal with vim-flow
--- Create an autogroup for buffer-specific mappings
-local flow_group = vim.api.nvim_create_augroup('FlowMappings', { clear = true })
-vim.api.nvim_create_autocmd('FileType', {
-  group = flow_group,
-  pattern = { '*' },
-  callback = function()
-    -- Only set mapping for normal buffers
-    if vim.bo.buftype == '' then
-      vim.keymap.set('n', '<CR>', function()
-        vim.cmd('wa')
-        vim.cmd('call CloseAll()')
-        vim.cmd('FlowRun')
-      end, { buffer = true, silent = true })
-    end
-  end,
-})
-
 -- Fix standard Ctrl-i mapping. Not sure which of my plugins is breaking it.
 vim.keymap.set('n', '<C-i>', '<C-i>')
