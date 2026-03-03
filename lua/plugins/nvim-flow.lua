@@ -1,7 +1,7 @@
 return {
   'mikeboiko/nvim-flow',
+  -- branch = 'main',
   -- dir = '~/git/OpenSource/nvim-flow',
-  main = 'nvim-flow',
   event = { 'BufReadPost', 'BufNewFile' },
   cmd = { 'FlowRun', 'FlowDebug', 'FlowToggleLock', 'FlowPreview', 'FlowQuickfix' },
   opts = {
