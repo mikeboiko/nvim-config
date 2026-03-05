@@ -14,7 +14,6 @@ return {
       run = '<CR>',
       debug = '<leader>df',
       edit = '<leader>fe',
-      toggle_lock = '<leader>fl',
       preview = '<leader>fp',
       quickfix = '<leader>fq',
     },
