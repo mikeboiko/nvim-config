@@ -1,6 +1,6 @@
 return {
   'mikeboiko/nvim-flow',
-  dir = '~/git/OpenSource/nvim-flow',
+  dir = '~/git/nvim-flow',
   event = { 'BufReadPost', 'BufNewFile' },
   cmd = { 'FlowRun', 'FlowDebug', 'FlowEdit', 'FlowToggleLock', 'FlowPreview', 'FlowQuickfix' },
   opts = {
