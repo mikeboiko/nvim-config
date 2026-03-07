@@ -29,6 +29,7 @@ return {
         bash = { 'shfmt' },
         sh = { 'shfmt' },
         rust = { 'rustfmt' },
+        go = { 'goimports', 'gofmt' },
         sql = { 'sqlfluff' },
         cs = { 'csharpier' },
         xml = { 'csharpier' },

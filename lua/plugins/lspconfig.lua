@@ -112,6 +112,19 @@ return {
     -- rust
     vim.lsp.enable('rust_analyzer')
 
+    -- go
+    vim.lsp.config('gopls', {
+      settings = {
+        gopls = {
+          analyses = {
+            unusedparams = true,
+          },
+          staticcheck = true,
+        },
+      },
+    })
+    vim.lsp.enable('gopls')
+
     vim.lsp.config('yamlls', {
       -- TODO: Fix ERROR method workspace/symbol is not supported by any of the servers registered for the current buffer
       -- capabilities = {
