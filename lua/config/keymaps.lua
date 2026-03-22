@@ -1,3 +1,4 @@
+local folds = require('config.folds')
 local quickfix = require('config.quickfix')
 
 function _G.set_terminal_keymaps()
@@ -77,12 +78,12 @@ end, { silent = true, desc = 'Toggle quickfix list' })
 
 vim.keymap.set('n', '<C-f>', function()
   quickfix.cycle('c', 'next')
-  vim.cmd('FoldOpen')
+  folds.open_current_fold()
 end, { silent = true, desc = 'Quickfix next' })
 
 vim.keymap.set('n', '<C-d>', function()
   quickfix.cycle('c', 'prev')
-  vim.cmd('FoldOpen')
+  folds.open_current_fold()
 end, { silent = true, desc = 'Quickfix previous' })
 
 -- Fix standard Ctrl-i mapping. Not sure which of my plugins is breaking it.

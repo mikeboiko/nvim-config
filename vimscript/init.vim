@@ -429,7 +429,6 @@ command! -nargs=+ -complete=command FindLocal
 
 " Suppress errors when no fold exists
 " The catch part of the command prevents an error that would move the cursor when there are no folds in the file
-command! FoldOpen let save_cursor = getcurpos() | try | silent foldopen! | catch | call setpos('.', save_cursor) | endtry
 
 " Grep {{{2
 " Use ag to grep and put results quickfix list

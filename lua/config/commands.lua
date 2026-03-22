@@ -1,3 +1,4 @@
+local folds = require('config.folds')
 local windows = require('config.windows')
 local quickfix = require('config.quickfix')
 
@@ -6,6 +7,10 @@ quickfix.register_legacy_functions()
 
 vim.api.nvim_create_user_command('CloseAll', function()
   windows.close_all()
+end, {})
+
+vim.api.nvim_create_user_command('FoldOpen', function()
+  folds.open_current_fold()
 end, {})
 
 local function echo(message)

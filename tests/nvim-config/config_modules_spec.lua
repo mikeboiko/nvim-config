@@ -20,6 +20,7 @@ describe('nvim-config core Lua modules', function()
 
     local commands = vim.api.nvim_get_commands({})
     assert.is_truthy(commands.CloseAll)
+    assert.is_truthy(commands.FoldOpen)
     assert.is_truthy(commands.Cnext)
     assert.is_truthy(commands.Cprev)
     assert.is_truthy(commands.Lnext)
