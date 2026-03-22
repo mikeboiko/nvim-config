@@ -163,16 +163,6 @@ function! BufDo(command) " {{{2
     silent! execute 'buffer ' . currBuff
 endfunction
 
-function! CloseQuickFixWindow() " {{{2
-    " If the window is quickfix, proceed
-    if &buftype=="quickfix"
-        " If this window is last on screen quit without warning
-        if winbufnr(2) == -1
-            quit!
-        endif
-    endif
-endfunction
-
 function! CommentYank() "{{{2
   normal! mz
   let line = substitute(getline('.'), '\n$', '', '')
@@ -338,34 +328,6 @@ function! PromptAndComment(inline_comment, prompt_text, comment_prefix) " {{{2
 
 endfunction
 
-function! ToggleList(bufname, pfx) " {{{2
-    " Toggle QuickFix/Location List, don't change focus
-    let buflist = GetBufferList()
-    for bufnum in map(filter(split(buflist, '\n'), 'v:val =~ "'.a:bufname.'"'), 'str2nr(matchstr(v:val, "\\d\\+"))')
-        if bufwinnr(bufnum) != -1
-            " exec('quit')
-            exec(a:pfx.'close')
-            return
-        endif
-    endfor
-
-    " Location List
-    if a:pfx ==# 'l'
-        " Nicer error message than original
-        if len(getloclist(0)) == 0
-            echohl ErrorMsg
-            echo 'Location List is Empty.'
-            return
-        endif
-        " Open window with minimum height
-        top lopen
-        " QuickFix List
-    elseif a:pfx ==# 'c'
-        copen
-    endif
-
-endfunction
-
 function! UserInput(prompt) " {{{2
     " Get a string input from the user
     " Get input from user
@@ -478,10 +440,6 @@ command! -nargs=+ Grep execute 'silent grep! --ignore node_modules --follow <arg
 
 " QuickFix/Location List Next {{{2
 " Wrap around after hitting first/last record
-command! Cnext try | cnext | catch | cfirst | catch | endtry
-command! Cprev try | cprev | catch | clast | catch | endtry
-command! Lnext try | lnext | catch | lfirst | catch | endtry
-command! Lprev try | lprev | catch | llast | catch | endtry
 
 " Replace ^M Line endings {{{2
 
@@ -735,16 +693,6 @@ set ignorecase
 " Only search for matching capitals when they are used
 set smartcase
 
-" QuickFix/Location {{{3
-
-" Align QuickFix on ver unique string '$}{$'
-augroup CustomQuickFix
-  autocmd!
-  autocmd BufReadPost quickfix setlocal cursorline
-  " Close QuickFix/Location lists automatically when it's the last window in current tab
-  " autocmd BufEnter * call CloseQuickFixWindow()
-augroup end
-
 " Undo Files {{{3
 " Let's save undo info!
 if !isdirectory(vimHomeDir)
@@ -977,11 +925,6 @@ nnoremap <leader>od :Start -wait=never "C:\Program Files\Double Commander\double
 
 " Go to next/previous search result
 " nnoremap <leader>zf zMzvzz
-nnoremap <C-f> :Cnext<CR>:FoldOpen<CR>
-nnoremap <C-d> :Cprev<CR>:FoldOpen<CR>
-
-" nmap <silent> <leader>l :call ToggleList("Location List", 'l')<CR>
-nmap <silent> <leader>q :call ToggleList("Quickfix List", 'c')<CR>
 
 " Plugins {{{2
 

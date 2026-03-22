@@ -10,6 +10,7 @@ My neovim config files
 ## Structure
 
 - Shared Lua wiring lives in `lua/config/`.
+- Reusable migrated helpers are starting to live in focused `lua/config/*.lua` modules such as `windows.lua` and `quickfix.lua`.
 - Plugin-local bootstrap and setup live in `lua/plugins/`.
 - Filetype-local overrides live in `after/ftplugin/` and custom detection in `after/ftdetect/`.
 - Legacy Vimscript is still sourced during the migration, but low-risk startup settings are being moved into Lua as each stage is completed.

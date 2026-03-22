@@ -1,6 +1,8 @@
 local windows = require('config.windows')
+local quickfix = require('config.quickfix')
 
 windows.register_legacy_functions()
+quickfix.register_legacy_functions()
 
 vim.api.nvim_create_user_command('CloseAll', function()
   windows.close_all()
@@ -18,4 +20,20 @@ vim.api.nvim_create_user_command('CloseToggle', function()
     vim.g.term_close = ''
     echo('Term will not close')
   end
+end, {})
+
+vim.api.nvim_create_user_command('Cnext', function()
+  quickfix.cycle('c', 'next')
+end, {})
+
+vim.api.nvim_create_user_command('Cprev', function()
+  quickfix.cycle('c', 'prev')
+end, {})
+
+vim.api.nvim_create_user_command('Lnext', function()
+  quickfix.cycle('l', 'next')
+end, {})
+
+vim.api.nvim_create_user_command('Lprev', function()
+  quickfix.cycle('l', 'prev')
 end, {})

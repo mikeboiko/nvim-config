@@ -1,3 +1,5 @@
+local quickfix = require('config.quickfix')
+
 function _G.set_terminal_keymaps()
   vim.keymap.set('t', '<C-j>', '<C-W>j')
   vim.keymap.set('t', '<C-k>', '<C-W>k')
@@ -67,6 +69,21 @@ vim.keymap.set('n', 'co', function()
   vim.cmd('normal! k$')
   vim.cmd('startinsert!')
 end, { desc = 'Add empty comment above' })
+
+-- Quickfix/location list helpers
+vim.keymap.set('n', '<leader>q', function()
+  quickfix.toggle_list('c')
+end, { silent = true, desc = 'Toggle quickfix list' })
+
+vim.keymap.set('n', '<C-f>', function()
+  quickfix.cycle('c', 'next')
+  vim.cmd('FoldOpen')
+end, { silent = true, desc = 'Quickfix next' })
+
+vim.keymap.set('n', '<C-d>', function()
+  quickfix.cycle('c', 'prev')
+  vim.cmd('FoldOpen')
+end, { silent = true, desc = 'Quickfix previous' })
 
 -- Fix standard Ctrl-i mapping. Not sure which of my plugins is breaking it.
 vim.keymap.set('n', '<C-i>', '<C-i>')

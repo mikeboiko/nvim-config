@@ -39,6 +39,7 @@ vim.api.nvim_create_autocmd('CursorMoved', {
 })
 
 local terminal_group = vim.api.nvim_create_augroup('terminal-settings', { clear = true })
+local quickfix_group = vim.api.nvim_create_augroup('quickfix-settings', { clear = true })
 local gap_path = vim.fn.expand('~/git/Linux/git/gap')
 
 vim.api.nvim_create_autocmd('TermOpen', {
@@ -64,5 +65,13 @@ vim.api.nvim_create_autocmd('TermClose', {
     if name:find(gap_path, 1, true) then
       vim.cmd('stopinsert')
     end
+  end,
+})
+
+vim.api.nvim_create_autocmd('FileType', {
+  group = quickfix_group,
+  pattern = 'qf',
+  callback = function()
+    vim.opt_local.cursorline = true
   end,
 })
