@@ -92,9 +92,6 @@ endfunction
 " Just like windo, but restore the current window when done.
 "
 
-" CloseToggle {{{2
-command! CloseToggle if (g:term_close == '') | let g:term_close = '++close' | echo 'Term will close' | else | let g:term_close = '' | echo 'Term will not close' | endif
-
 " FindLocal {{{2
 " Search for string in current file and put results in Location window
 " \| try | silent call FindFunc(<q-args>, 'next') | catch | endtry | set hls
@@ -135,13 +132,6 @@ command! CloseToggle if (g:term_close == '') | let g:term_close = '++close' | ec
 
 " Plugins{{{1
 " Plugin Setup {{{2
-
-" fugitive {{{2
-
-augroup CustomFugitive
-  autocmd!
-  autocmd FileType gitcommit autocmd! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
-augroup end
 
 " vimwiki {{{2
 
@@ -196,13 +186,6 @@ let g:display_hidden = "hidden"
             " \ try |
             " \ execute "source " . vimHomeDir . "/Session.vim"
             " \ | catch | endtry
-
-" Have Vim jump to the last position when reopening a file
-augroup CustomLastPosition
-  autocmd!
-  autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
-              \| exe "normal! g'\"" | endif
-augroup end
 
 " General{{{3
 
@@ -303,12 +286,6 @@ set autoread
 
 augroup CustomOptions
   autocmd!
-  " Don't add comment automatically on new line
-  autocmd FileType * setlocal formatoptions-=cro
-  " Preview Window
-  autocmd WinEnter * if &previewwindow | setlocal foldmethod=manual | endif
-  " Enable spelling for these buffers
-  autocmd BufWinEnter,BufEnter COMMIT_EDITMSG setlocal spell
 augroup end
 
 " Spelling
@@ -365,14 +342,9 @@ set undofile
 " autocmd BufReadPost *.tsv,*.csv,*.psv execute 'Tabularize /,'
 augroup CustomFileTypes
   autocmd!
-  autocmd BufReadPost *.csv setlocal nowrap
-  autocmd BufReadPost *.psv setlocal nowrap
-  autocmd BufReadPost *.tsv setlocal nowrap
   " autocmd BufReadPost *.csv 1sp
   " autocmd BufReadPost *.psv 1sp
   " autocmd BufReadPost *.tsv 1sp
-  " HTML/js/css/etc
-  autocmd FileType html,javascript,json,vue,css,scss,yml,yaml,markdown,vim,javascriptreact,typescriptreact setlocal tabstop=2 shiftwidth=2 softtabstop=2
   " Markdown -Fix the syntax highlighting that randomly stops
   " autocmd FileType markdown set foldexpr=NestedMarkdownFolds()
 augroup end

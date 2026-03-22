@@ -1,3 +1,4 @@
+local buffers = require('config.buffers')
 local editor = require('config.editor')
 local terminal = require('config.terminal')
 
@@ -26,6 +27,14 @@ end
 vim.api.nvim_create_autocmd('BufEnter', {
   callback = function()
     update_git_repo_name()
+  end,
+})
+
+vim.api.nvim_create_autocmd('BufReadPost', {
+  group = vim.api.nvim_create_augroup('restore-last-position', { clear = true }),
+  pattern = '*',
+  callback = function()
+    buffers.restore_last_position()
   end,
 })
 
@@ -87,5 +96,58 @@ vim.api.nvim_create_autocmd('CmdwinEnter', {
   callback = function()
     vim.keymap.set('n', '<C-w>', '<cmd>q!<cr>', { buffer = true, silent = true, desc = 'Quit command window' })
     vim.keymap.set('n', 'qq', '<cmd>q!<cr>', { buffer = true, silent = true, desc = 'Quit command window' })
+  end,
+})
+
+vim.api.nvim_create_autocmd('FileType', {
+  group = editor_group,
+  pattern = '*',
+  callback = function()
+    buffers.remove_auto_comment_formatoptions()
+  end,
+})
+
+vim.api.nvim_create_autocmd('WinEnter', {
+  group = editor_group,
+  pattern = '*',
+  callback = function()
+    buffers.set_preview_window_options()
+  end,
+})
+
+vim.api.nvim_create_autocmd({ 'BufWinEnter', 'BufEnter' }, {
+  group = editor_group,
+  pattern = 'COMMIT_EDITMSG',
+  callback = function()
+    buffers.set_commit_buffer_defaults()
+  end,
+})
+
+vim.api.nvim_create_autocmd('BufReadPost', {
+  group = editor_group,
+  pattern = { '*.csv', '*.psv', '*.tsv' },
+  callback = function()
+    buffers.set_nowrap()
+  end,
+})
+
+vim.api.nvim_create_autocmd('FileType', {
+  group = editor_group,
+  pattern = {
+    'html',
+    'javascript',
+    'json',
+    'vue',
+    'css',
+    'scss',
+    'yml',
+    'yaml',
+    'markdown',
+    'vim',
+    'javascriptreact',
+    'typescriptreact',
+  },
+  callback = function()
+    buffers.set_two_space_indent()
   end,
 })
