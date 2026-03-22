@@ -58,10 +58,7 @@ end, { silent = true })
 
 -- Add empty comment above current line
 vim.keymap.set('n', 'co', function()
-  local comment_string = require('ts_context_commentstring').calculate_commentstring()
-  if comment_string == nil then
-    comment_string = vim.bo.commentstring
-  end
+  local comment_string = require('config.comments').get_commentstring()
   comment_string = comment_string:gsub('%%s', '')
   local current_line = vim.api.nvim_get_current_line()
   local indent = current_line:match('^%s+') or ''

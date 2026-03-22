@@ -18,103 +18,6 @@ endif
 
 " Functions {{{1
 
-" FoldText {{{2
-function! GetFoldStrings() " {{{3
-    " Make the status string a list of all the folds
-    " Iterate through each fold level and add fold string to list
-    let foldStringList = []
-    let i = 1
-    while i <= foldlevel(".")
-        " Append string to list
-        call add(foldStringList, FormatFoldString(GetLastFoldLineNum(i)))
-        let i += 1
-    endwhile
-
-    " Add each fold line to status string
-    let statusString = ""
-    for i in foldStringList
-        let statusString = statusString."|".i
-    endfor
-
-    return statusString."|"
-endfunction
-
-function! GetLastFoldString() " {{{3
-  " Get the text of the last fold if following conditions exist
-  if (len(filter(split(execute(':scriptname'), "\n"), 'v:val =~? "vim-coiled-snake"')) > 0
-     \ && &filetype ==# 'python')
-     \ || &filetype ==# 'markdown'
-     \ || &filetype ==# 'vim'
-    let foldStr = FormatFoldString(GetLastFoldLineNum(foldlevel("."))) . "|$}{$"
-  else
-    let foldStr = ""
-  endif
-  return foldStr
-endfunction
-
-function! GetLastFoldLineNum(foldLvl) " {{{3
-    " Search backwards for fold marker
-    " Get the line number of last Fold
-
-    " TODO-MB [191126] - Try with zN or whatever the restore fold command is
-
-    normal zR
-    normal mz
-    normal [z
-    let line = line('.')
-    normal `z
-    return line
-endfunction
-
-function! FormatFoldString(lineNum) " {{{3
-    " Format fold string so it looks neat
-    " Get the line string of the current fold and remove special chars
-    let line = getline(a:lineNum)
-    " Remove programming language specific words
-    let line = RemoveFiletypeSpecific(line)
-    " Remove special (comment related) characters and extra spaces
-    let line = RemoveSpecialCharacters(line)
-    return line
-endfunction
-
-function! RemoveSpecialCharacters(line) " {{{3
-    " Remove special (comment related) characters and extra spaces
-    " Characters: " # ; /* */ // <!-- --> g:fold_marker_string
-    " Remove fold marker
-    let text = substitute(a:line, g:fold_marker_string.'\d\=', '', 'g')
-    " Remove {
-    let text = substitute(text, '{', '', 'g')
-    " let text = substitute(a:line, g:fold_marker_string.'\d\=\|'.substitute(GetCommentString(), '%s', '', '').'\d\=\|', '', 'g')
-    let text = substitute(text, substitute(GetCommentString(), '%s', '', ''), '', 'g')
-    " let text = substitute(text, substitute('# %s', '%s', '', ''), '', 'g')
-    " Replace 2 or more spaces with a single space
-    let text = substitute(text, ' \{2,}', ' ', 'g')
-    " Remove leading and trailing spaces
-    let text = substitute(text, '^\s*\|\s*$', '', 'g')
-    " Remove text between () in functions
-    let text = substitute(text, '(\(.*\)', '()', 'g')
-    " Add nice padding
-    return " ".text." "
-endfunction
-
-function! RemoveFiletypeSpecific(line) " {{{3
-    " Remove programming language specific words
-    let text = a:line
-    if (&ft=='python')
-        let text = substitute(a:line, '\<def\>\|\<class\>', '', 'g')
-    elseif  (&ft=='cs')
-        let text = substitute(a:line, '\<static\>\|\<int\>\|\<float\>\|\<void\>\|\<string\>\|\<bool\>\|\<private\>\|\<public\>\s', '', 'g')
-    elseif  (&ft=='vim')
-        let text = substitute(a:line, '\<function\>!\s', '', 'g')
-    elseif  (&ft=='markdown')
-        let text = substitute(a:line, '#', '', 'g')
-    elseif  (&ft=='javascript')
-        let text = substitute(a:line, '=\|{\s', '', 'g')
-    elseif  (&ft=='yaml')
-        let text = substitute(a:line, ':', '', 'g')
-    endif
-    return text
-endfunction
 " FontSize() {{{2
 if has("unix")
     function! FontSizePlus ()
@@ -193,27 +96,6 @@ function! Figlet(...) " {{{2
 
 endfunction
 
-function! FindFunc(...) " {{{2
-
-    " Move cursor to next pattern match
-    if (a:2 == 'next')
-        call search(a:1)
-        FoldOpen
-    endif
-
-    " Record initial line number into "z
-    let @z = '|' . line('.') . '|'
-
-    " Clear quickfix list
-    lexpr []
-
-    " Put Results into QuickFix Window
-    silent execute 'g/'.a:1.'/laddexpr expand("%") . ":" . line(".") . ":" . GetLastFoldString() . getline(".") '
-
-    top lopen
-
-endfunction
-
 function! GetBufferList() " {{{2
     " load all current buffers into a list
     redir =>buflist
@@ -223,12 +105,7 @@ function! GetBufferList() " {{{2
 endfunction
 
 function! GetCommentString() "{{{2
-  let commentstring = luaeval("require('ts_context_commentstring').calculate_commentstring()")
-  " ts_context_commentstring only works for html/js/vue
-  if commentstring == v:null
-    let commentstring = &commentstring
-  endif
-  return commentstring
+  return luaeval("require('config.comments').get_commentstring()")
 endfunction
 
 function! GetTODOs() " {{{2
@@ -421,8 +298,6 @@ command! CloseToggle if (g:term_close == '') | let g:term_close = '++close' | ec
 
 " FindLocal {{{2
 " Search for string in current file and put results in Location window
-command! -nargs=+ -complete=command FindLocal
-            \| silent call FindFunc(<q-args>, 'next') | set hls
 " \| try | silent call FindFunc(<q-args>, 'next') | catch | endtry | set hls
 
 " FoldOpen {{{2
@@ -517,7 +392,6 @@ set laststatus=2
 let g:display_hidden = "hidden"
 
 " Change the text that is displayed while in a fold
-set foldtext=v:folddashes.FormatFoldString(v:foldstart)
 
 " Get rid of that ugly x in top right corner or tabline
 set tabline=%!MyTabLine()

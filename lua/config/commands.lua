@@ -13,6 +13,14 @@ vim.api.nvim_create_user_command('FoldOpen', function()
   folds.open_current_fold()
 end, {})
 
+vim.api.nvim_create_user_command('FindLocal', function(opts)
+  folds.find_local(opts.args)
+  vim.o.hlsearch = true
+end, {
+  nargs = '+',
+  complete = 'command',
+})
+
 local function echo(message)
   vim.api.nvim_echo({ { message } }, false, {})
 end

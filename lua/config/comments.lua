@@ -1,3 +1,20 @@
+local M = {}
+
+function M.get_commentstring()
+  local commentstring
+  local ok, ts_context_commentstring = pcall(require, 'ts_context_commentstring')
+
+  if ok then
+    commentstring = ts_context_commentstring.calculate_commentstring()
+  end
+
+  if commentstring == nil or commentstring == vim.NIL then
+    commentstring = vim.bo.commentstring
+  end
+
+  return commentstring
+end
+
 -- TODO prompt function
 
 ---@param cb function: callback function receiving the todo text
@@ -35,5 +52,8 @@ vim.api.nvim_create_user_command('TodoPrompt', function()
 end, {})
 
 -- Make the function available globally
+M.todo_prompt = todo_prompt
 vim.g.todo_prompt = todo_prompt
 vim.keymap.set('n', '<leader>ti', ':TodoPrompt<CR>', { noremap = true, silent = true, desc = 'Insert TODO at cursor' })
+
+return M

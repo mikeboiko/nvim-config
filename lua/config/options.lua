@@ -22,6 +22,7 @@ opt.foldlevelstart = 99
 opt.foldenable = true
 opt.foldmethod = 'expr'
 opt.foldexpr = 'nvim_treesitter#foldexpr()'
+opt.foldtext = "v:lua.require'config.folds'.fold_text()"
 
 -- -- Show/hide virtual lines for diagnostics
 -- local og_virt_text
