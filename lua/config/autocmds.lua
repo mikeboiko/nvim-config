@@ -1,3 +1,4 @@
+local editor = require('config.editor')
 local terminal = require('config.terminal')
 
 -- -- Append backup files with timestamp
@@ -42,6 +43,7 @@ vim.api.nvim_create_autocmd('CursorMoved', {
 
 local terminal_group = vim.api.nvim_create_augroup('terminal-settings', { clear = true })
 local quickfix_group = vim.api.nvim_create_augroup('quickfix-settings', { clear = true })
+local editor_group = vim.api.nvim_create_augroup('editor-settings', { clear = true })
 
 vim.api.nvim_create_autocmd('TermOpen', {
   group = terminal_group,
@@ -68,5 +70,22 @@ vim.api.nvim_create_autocmd('FileType', {
   pattern = 'qf',
   callback = function()
     vim.opt_local.cursorline = true
+  end,
+})
+
+vim.api.nvim_create_autocmd('BufWritePre', {
+  group = editor_group,
+  pattern = '*',
+  callback = function()
+    editor.on_save()
+  end,
+})
+
+vim.api.nvim_create_autocmd('CmdwinEnter', {
+  group = editor_group,
+  pattern = '*',
+  callback = function()
+    vim.keymap.set('n', '<C-w>', '<cmd>q!<cr>', { buffer = true, silent = true, desc = 'Quit command window' })
+    vim.keymap.set('n', 'qq', '<cmd>q!<cr>', { buffer = true, silent = true, desc = 'Quit command window' })
   end,
 })

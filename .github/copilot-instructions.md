@@ -31,7 +31,7 @@
 - `lua/config/lazy.lua` imports the `plugins` namespace, so each file under `lua/plugins/` is a Lazy spec module. `lazy-lock.json` pins the resolved plugin versions.
 - The repo currently relies on local hook-based validation rather than GitHub Actions, and it targets Neovim stable (`0.11.x` today).
 - Shared editor behavior is split across `lua/config/` modules such as `constants.lua`, `options.lua`, `autocmds.lua`, `functions.lua`, `comments.lua`, and `keymaps.lua`.
-- Reusable migrated legacy helpers are increasingly landing in focused modules under `lua/config/`, with `windows.lua`, `quickfix.lua`, `folds.lua`, `comments.lua`, `terminal.lua`, `clipboard.lua`, and `tabline.lua` as current examples.
+- Reusable migrated legacy helpers are increasingly landing in focused modules under `lua/config/`, with `windows.lua`, `quickfix.lua`, `folds.lua`, `comments.lua`, `terminal.lua`, `clipboard.lua`, `tabline.lua`, and `editor.lua` as current examples.
 - Plugin-local startup globals are being moved into plugin spec `init` blocks instead of staying in `vimscript/init.vim`; `nvim-tree`, markdown preview, and img-paste already follow this pattern.
 - The repo now has a lightweight test harness under `tests/`; `tests/minimal_init.lua` prepends the repo and Plenary to `runtimepath`, and specs under `tests/nvim-config/` intentionally cover Lua modules and repo-owned behavior without depending on a full interactive session.
 - Filetype behavior is layered:

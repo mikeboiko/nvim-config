@@ -1,5 +1,6 @@
 local clipboard = require('config.clipboard')
 local comments = require('config.comments')
+local editor = require('config.editor')
 local folds = require('config.folds')
 local quickfix = require('config.quickfix')
 
@@ -58,6 +59,25 @@ vim.keymap.set('n', 'qt', function()
   end
 end, { silent = true })
 
+vim.keymap.set('i', '<C-q>', function()
+  vim.cmd('stopinsert')
+  vim.cmd('update')
+  editor.quit()
+end, { silent = true, desc = 'Save and quit current window' })
+
+vim.keymap.set('n', '<C-q>', function()
+  vim.cmd('update')
+  editor.quit()
+end, { silent = true, desc = 'Save and quit current window' })
+
+vim.keymap.set('n', '<C-w>', function()
+  editor.quit()
+end, { silent = true, desc = 'Quit current window' })
+
+vim.keymap.set('n', 'qq', function()
+  editor.quit()
+end, { silent = true, desc = 'Quit current window' })
+
 -- Add empty comment above current line
 vim.keymap.set('n', 'co', function()
   local comment_string = comments.get_commentstring()
@@ -100,6 +120,10 @@ end, { silent = true, desc = 'Paste clipboard below current line' })
 
 vim.keymap.set('i', '<C-v>', '<C-r>+', { desc = 'Paste clipboard register' })
 vim.keymap.set('c', '<C-v>', '<C-r>+', { desc = 'Paste clipboard register' })
+
+vim.keymap.set('n', '<leader>st', function()
+  editor.toggle_spell()
+end, { silent = true, desc = 'Toggle spell check' })
 
 -- Quickfix/location list helpers
 vim.keymap.set('n', '<leader>q', function()

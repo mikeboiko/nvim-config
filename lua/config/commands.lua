@@ -1,11 +1,13 @@
 local comments = require('config.comments')
 local clipboard = require('config.clipboard')
+local editor = require('config.editor')
 local folds = require('config.folds')
 local windows = require('config.windows')
 local quickfix = require('config.quickfix')
 
 clipboard.register_legacy_functions()
 comments.register_legacy_functions()
+editor.register_legacy_functions()
 windows.register_legacy_functions()
 quickfix.register_legacy_functions()
 
@@ -53,4 +55,29 @@ end, {})
 
 vim.api.nvim_create_user_command('Lprev', function()
   quickfix.cycle('l', 'prev')
+end, {})
+
+vim.api.nvim_create_user_command('Bufdo', function(opts)
+  editor.bufdo(opts.args)
+end, {
+  nargs = '+',
+  complete = 'command',
+})
+
+vim.api.nvim_create_user_command('Windo', function(opts)
+  editor.windo(opts.args)
+end, {
+  nargs = '+',
+  complete = 'command',
+})
+
+vim.api.nvim_create_user_command('Windofast', function(opts)
+  editor.windo(opts.args, { noautocmd = true })
+end, {
+  nargs = '+',
+  complete = 'command',
+})
+
+vim.api.nvim_create_user_command('SpellToggle', function()
+  editor.toggle_spell()
 end, {})

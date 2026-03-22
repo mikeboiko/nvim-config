@@ -49,23 +49,6 @@ else
     endfunction
 endif
 
-" Quit {{{2
-
-" Close location list, preview window and quit
-function! Quit()
-    if (!&previewwindow)
-        pclose
-    endif
-    quit
-endf
-
-function! BufDo(command) " {{{2
-    " Just like bufdo, but restore the current buffer when done.
-    let currBuff=bufnr('%')
-    silent! execute 'bufdo ' . a:command
-    silent! execute 'buffer ' . currBuff
-endfunction
-
 function! EditCommonFile(filename) " {{{2
     " Open file in new teb
     let current_filename = expand('%:t')
@@ -109,17 +92,6 @@ function! GetTODOs() " {{{2
     " Un-ignore the binary files
     set wildignore-=*.jpg,*.docx,*.xlsm,*.mp4
 endfunction
-function! OnSave() " {{{2
-  wshada
-endfunction
-
-function! WinDo(command) " {{{2
-    " Just like windo, but restore the current window when done.
-    let currwin=winnr()
-    execute 'windo ' . a:command
-    execute currwin . 'wincmd w'
-endfunction
-
 " Commands {{{1
 " Figlet {{{2
 " Draw ascii art comments
@@ -129,15 +101,12 @@ command! -nargs=+ -complete=command Figlet
 " Bufdo {{{2
 
 " Just like bufdo, but restore the current buffer when done.
-com! -nargs=+ -complete=command Bufdo call BufDo(<q-args>)
+"
 
 " Windo {{{2
 
 " Just like windo, but restore the current window when done.
-com! -nargs=+ -complete=command Windo call WinDo(<q-args>)
-
-" Just like Windo, but disable all autocommands for super fast processing.
-com! -nargs=+ -complete=command Windofast noautocmd call WinDo(<q-args>)
+"
 
 " CloseToggle {{{2
 command! CloseToggle if (g:term_close == '') | let g:term_close = '++close' | echo 'Term will close' | else | let g:term_close = '' | echo 'Term will not close' | endif
@@ -178,7 +147,7 @@ command! -nargs=+ -complete=command Mani try |
           " \ exe "terminal bash -c \"mani -c ~/git/Linux/config/mani.yaml "
 
 " SpellToggle {{{2
-command! SpellToggle if (&spell == 0) | setlocal spell | echo 'Spell-check enabled' | else | setlocal nospell | echo 'Spell-check disabled' | endif
+"
 
 " StartAsyncNeoVim {{{2
 
@@ -361,8 +330,6 @@ augroup CustomOptions
   autocmd!
   " Don't add comment automatically on new line
   autocmd FileType * setlocal formatoptions-=cro
-  " Peform actions right before saving bugger
-  autocmd BufWritePre * call OnSave()
   " Preview Window
   autocmd WinEnter * if &previewwindow | setlocal foldmethod=manual | endif
   " Enable spelling for these buffers
@@ -638,10 +605,7 @@ nnoremap <leader>od :Start -wait=never "C:\Program Files\Double Commander\double
 " Quit {{{2
 
 " Close extra windows then quit
-inoremap <c-q> <esc>:up<CR>:call Quit()<CR>
-nnoremap <c-q> :up<CR>:call Quit()<CR>
-nnoremap <c-w> :call Quit()<CR>
-nnoremap qq :call Quit()<CR>
+"
 
 " Close without saving
 nnoremap Q :q!<CR>
@@ -649,12 +613,7 @@ nnoremap Q :q!<CR>
 " A hack to close the Fugitive Plugin window with <c-w>
 nmap gf gf
 
-" Exit command history window q: or q/ with <c-w>
-augroup CustomCommandHistory
-  autocmd!
-  autocmd CmdwinEnter * nnoremap <buffer> <c-w> :q!<CR> |
-              \ nnoremap <buffer> qq :q!<CR>
-augroup end
+"
 
 " Rename Word {{{2
 
@@ -704,7 +663,7 @@ nnoremap <leader>sv :w<CR>:so $HOME/.vimrc<CR>
 
 " Spell Toggle {{{2
 " Toggle the spelling on/off
-nnoremap <leader>st :SpellToggle<CR>
+"
 
 " Suspend {{{2
 
