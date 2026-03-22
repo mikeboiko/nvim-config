@@ -1,0 +1,62 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lua-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y neovim lua5.4 git make build-essential nodejs npm python3 python3-pip
+          sudo npm install -g yarn
+
+      - name: Checkout nvim-flow dependency
+        run: |
+          mkdir -p ~/git
+          git clone --depth 1 https://github.com/mikeboiko/nvim-flow ~/git/nvim-flow
+
+      - name: Fetch plenary.nvim
+        run: |
+          mkdir -p .deps
+          git clone --depth 1 https://github.com/nvim-lua/plenary.nvim .deps/plenary.nvim
+
+      - name: Stylua check
+        uses: JohnnyMorganz/stylua-action@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: latest
+          args: --check init.lua tests
+
+      - name: Lua syntax checks
+        run: |
+          printf '%s\n' init.lua > .lua-files
+          find lua after tests -name '*.lua' -print >> .lua-files
+          while IFS= read -r f; do
+            lua -e "assert(loadfile('$f'))"
+          done < .lua-files
+
+      - name: Run plenary tests
+        env:
+          PLENARY_PATH: ${{ github.workspace }}/.deps/plenary.nvim
+        run: |
+          nvim --headless -u tests/minimal_init.lua \
+            -c "PlenaryBustedDirectory tests/nvim-config { minimal_init = 'tests/minimal_init.lua' }" \
+            -c "qa"
+
+      - name: Restore lazy plugins
+        run: |
+          nvim --headless -u init.lua \
+            -c "Lazy! restore" \
+            -c "qa"
+
+      - name: Headless startup smoke
+        run: |
+          nvim --headless -u init.lua -c "qa"

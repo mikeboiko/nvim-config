@@ -1,0 +1,30 @@
+pre-commit:
+  parallel: true
+  skip:
+    - rebase
+  commands:
+    stylua-format-root:
+      glob: '*.lua'
+      run: stylua {staged_files}
+      stage_fixed: true
+
+    stylua-format-nested:
+      glob: '**/*.lua'
+      run: stylua {staged_files}
+      stage_fixed: true
+
+pre-push:
+  commands:
+    stylua-check:
+      run: stylua --check init.lua tests
+
+    plenary-tests:
+      run: |
+        export PLENARY_PATH="${PLENARY_PATH:-$HOME/.local/share/nvim/lazy/plenary.nvim}"
+        if [ ! -d "$PLENARY_PATH" ]; then
+          echo "plenary.nvim not found at $PLENARY_PATH" >&2
+          exit 1
+        fi
+        nvim --headless -u tests/minimal_init.lua \
+          -c "PlenaryBustedDirectory tests/nvim-config { minimal_init = 'tests/minimal_init.lua' }" \
+          -c "qa"

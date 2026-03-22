@@ -2,21 +2,23 @@
 
 ## Build, test, and lint commands
 
-- Lua formatting uses Stylua with the repo's `.stylua.toml`:
-  - `stylua .`
-  - `stylua --check .`
-- After changing plugin specs in `lua/plugins/*.lua` or the plugin lockfile:
-  - `nvim --headless "+Lazy! sync" +qa`
+- Stage 1 automation currently checks the migrated surface with Stylua:
+  - `stylua init.lua tests`
+  - `stylua --check init.lua tests`
+- The pre-commit hook formats any staged Lua file via Lefthook, even though CI is temporarily scoped to the Stage 1 surface while the broader Lua migration is still underway.
+- Repo tests use Plenary's busted harness:
+  - full suite: `PLENARY_PATH="$HOME/.local/share/nvim/lazy/plenary.nvim" nvim --headless -u tests/minimal_init.lua -c "PlenaryBustedDirectory tests/nvim-config { minimal_init = 'tests/minimal_init.lua' }" -c "qa"`
+  - single test file: `PLENARY_PATH="$HOME/.local/share/nvim/lazy/plenary.nvim" nvim --headless -u tests/minimal_init.lua -c "PlenaryBustedFile tests/nvim-config/config_modules_spec.lua" -c "qa"`
+- Headless startup smoke test for this checkout:
+  - `nvim --headless -u init.lua -c "qa"`
+- After changing plugin specs in `lua/plugins/*.lua` or the plugin lockfile, use a deterministic restore:
+  - `nvim --headless -u init.lua "+Lazy! restore" +qa`
 - After changing Tree-sitter parser configuration in `lua/plugins/nvim-treesitter.lua`:
-  - `nvim --headless "+TSUpdateSync" +qa`
+  - `nvim --headless -u init.lua "+TSUpdateSync" +qa`
+- CI also runs Lua syntax checks across `init.lua`, `lua/`, `after/`, and `tests/` with `lua -e "assert(loadfile(...))"`.
 - Format the current buffer from inside Neovim:
   - `<leader>fi`
   - `:ConformInfo`
-- Tests are run from inside Neovim through `neotest` (`lua/plugins/neotest.lua`):
-  - nearest test: `:lua require('neotest').run.run()`
-  - current file: `:lua require('neotest').run.run(vim.fn.expand('%'))`
-  - debug nearest test: `:lua require('neotest').run.run({ strategy = 'dap' })`
-  - open/close the summary pane: `<leader>ts`
 - C# Roslyn setup is handled through Mason:
   - `:MasonInstall roslyn`
 
@@ -26,6 +28,7 @@
 - `vimscript/init.vim` is still active, not historical. It holds a large amount of real behavior: custom functions, user commands, mappings, terminal helpers, search helpers, filetype comment settings, and older autocmds. Search it before assuming a behavior is not configured yet.
 - `lua/config/lazy.lua` imports the `plugins` namespace, so each file under `lua/plugins/` is a Lazy spec module. `lazy-lock.json` pins the resolved plugin versions.
 - Shared editor behavior is split across `lua/config/` modules such as `constants.lua`, `options.lua`, `autocmds.lua`, `functions.lua`, `comments.lua`, and `keymaps.lua`.
+- The repo now has a lightweight test harness under `tests/`; `tests/minimal_init.lua` prepends the repo and Plenary to `runtimepath`, and specs under `tests/nvim-config/` intentionally cover Lua modules and repo-owned behavior without depending on a full interactive session.
 - Filetype behavior is layered:
   - late Lua overrides in `after/ftplugin/`
   - older Vimscript overrides in `ftplugin/`
@@ -48,6 +51,7 @@
 - Follow the existing plugin-spec pattern: one plugin per file under `lua/plugins/`, with each file returning a Lazy spec table. If plugin definitions change, keep `lazy-lock.json` in sync.
 - Lua style follows `.stylua.toml`: 2-space indentation, 120-column width, Unix line endings, and single quotes when Stylua can preserve them.
 - LSP setup is explicit in `lua/plugins/lspconfig.lua`; Mason does not define the active servers for you. When changing a language workflow, also check `conform.lua`, `neotest.lua`, and `dap-ui.lua` so formatting, testing, and debugging stay aligned.
+- For repo tests, prefer the lightweight Plenary harness first; reserve `nvim --headless -u init.lua` smoke checks for cases where you need the whole config and plugin bootstrap path.
 - There are intentional C# exceptions:
   - Roslyn formatting is disabled in `lua/plugins/lspconfig.lua`
   - Tree-sitter indentation is skipped for `c_sharp` in `lua/plugins/nvim-treesitter.lua`
