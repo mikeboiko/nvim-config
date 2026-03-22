@@ -1,3 +1,5 @@
+local terminal = require('config.terminal')
+
 -- -- Append backup files with timestamp
 -- vim.api.nvim_create_autocmd('BufWritePre', {
 --   callback = function()
@@ -40,7 +42,6 @@ vim.api.nvim_create_autocmd('CursorMoved', {
 
 local terminal_group = vim.api.nvim_create_augroup('terminal-settings', { clear = true })
 local quickfix_group = vim.api.nvim_create_augroup('quickfix-settings', { clear = true })
-local gap_path = vim.fn.expand('~/git/Linux/git/gap')
 
 vim.api.nvim_create_autocmd('TermOpen', {
   group = terminal_group,
@@ -50,10 +51,7 @@ vim.api.nvim_create_autocmd('TermOpen', {
       _G.set_terminal_keymaps()
     end
 
-    local name = vim.api.nvim_buf_get_name(args.buf)
-    if name:find(gap_path, 1, true) then
-      vim.cmd('startinsert')
-    end
+    terminal.on_term_open(args.buf)
   end,
 })
 
@@ -61,10 +59,7 @@ vim.api.nvim_create_autocmd('TermClose', {
   group = terminal_group,
   pattern = 'term://*',
   callback = function(args)
-    local name = vim.api.nvim_buf_get_name(args.buf)
-    if name:find(gap_path, 1, true) then
-      vim.cmd('stopinsert')
-    end
+    terminal.on_term_close(args.buf)
   end,
 })
 
