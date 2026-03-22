@@ -56,21 +56,6 @@ function! EditCommonFile(filename) " {{{2
     silent exec openfilestring
 endfunction
 
-function! Figlet(...) " {{{2
-    " Print ascii art comment
-
-    " Read figlet output into list
-    let lines = systemlist('figlet ' . a:1)
-
-    " Add comments to each lines
-    call map(lines, {index, val -> trim(substitute(GetCommentString(), '%s', '', '') . val)})
-    " call writefile(lines, expand("/tmp/figlet.txt"))
-
-    " Dump list on screen
-    put=lines
-
-endfunction
-
 function! GetBufferList() " {{{2
     " load all current buffers into a list
     redir =>buflist
@@ -95,8 +80,7 @@ endfunction
 " Commands {{{1
 " Figlet {{{2
 " Draw ascii art comments
-command! -nargs=+ -complete=command Figlet
-            \| silent call Figlet(<q-args>)
+"
 
 " Bufdo {{{2
 
@@ -122,7 +106,7 @@ command! CloseToggle if (g:term_close == '') | let g:term_close = '++close' | ec
 
 " Grep {{{2
 " Use ag to grep and put results quickfix list
-command! -nargs=+ Grep execute 'silent grep! --ignore node_modules --follow <args>' | copen
+"
 " Optionally, add the following flags
 " Show hidden files: --hidden
 " Show git ignore files: --skip-vcs-ignores
@@ -133,30 +117,21 @@ command! -nargs=+ Grep execute 'silent grep! --ignore node_modules --follow <arg
 " Replace ^M Line endings {{{2
 
 " Useful when converting from DOS to Unix line endings
-command! ReplaceMwithBlank try | %s/\r$// | catch | endtry
+"
 
 " Useful when converting from DOS to Unix line endings
-command! ReplaceMwithNewLine try | %s/\r/\r/ | catch | endtry
+"
 
 " Mani {{{2
 
-command! -nargs=+ -complete=command Mani try |
-            \ exe "sp term://mani -c ~/git/Linux/config/mani.yaml "
-            \ . <q-args> . ""| catch | endtry
-
-          " \ exe "terminal bash -c \"mani -c ~/git/Linux/config/mani.yaml "
+"
 
 " SpellToggle {{{2
 "
 
 " StartAsyncNeoVim {{{2
 
-command! -nargs=1 StartAsyncNeoVim
-         \ call jobstart(<f-args>, {
-         \    'on_exit': { j,d,e ->
-         \       execute('echom "command finished with exit status '.d.'"', '')
-         \    }
-         \ })
+"
 
 " Plugins{{{1
 " Plugin Setup {{{2

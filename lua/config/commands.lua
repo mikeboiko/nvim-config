@@ -2,12 +2,14 @@ local comments = require('config.comments')
 local clipboard = require('config.clipboard')
 local editor = require('config.editor')
 local folds = require('config.folds')
+local shell = require('config.shell')
 local windows = require('config.windows')
 local quickfix = require('config.quickfix')
 
 clipboard.register_legacy_functions()
 comments.register_legacy_functions()
 editor.register_legacy_functions()
+shell.register_legacy_functions()
 windows.register_legacy_functions()
 quickfix.register_legacy_functions()
 
@@ -81,3 +83,37 @@ end, {
 vim.api.nvim_create_user_command('SpellToggle', function()
   editor.toggle_spell()
 end, {})
+
+vim.api.nvim_create_user_command('Figlet', function(opts)
+  shell.figlet(opts.args)
+end, {
+  nargs = '+',
+  complete = 'command',
+})
+
+vim.api.nvim_create_user_command('Grep', function(opts)
+  shell.grep(opts.args)
+end, {
+  nargs = '+',
+})
+
+vim.api.nvim_create_user_command('ReplaceMwithBlank', function()
+  shell.replace_m_with_blank()
+end, {})
+
+vim.api.nvim_create_user_command('ReplaceMwithNewLine', function()
+  shell.replace_m_with_newline()
+end, {})
+
+vim.api.nvim_create_user_command('Mani', function(opts)
+  shell.mani(opts.args)
+end, {
+  nargs = '+',
+  complete = 'command',
+})
+
+vim.api.nvim_create_user_command('StartAsyncNeoVim', function(opts)
+  shell.start_async_neovim(opts.fargs[1])
+end, {
+  nargs = 1,
+})
