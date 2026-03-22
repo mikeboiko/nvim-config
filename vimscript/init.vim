@@ -109,62 +109,8 @@ function! GetTODOs() " {{{2
     " Un-ignore the binary files
     set wildignore-=*.jpg,*.docx,*.xlsm,*.mp4
 endfunction
-function! MyTabLabel(n) " {{{2
-  " The tab label looks better as file name only - without entire path
-  let buflist = tabpagebuflist(a:n)
-  let winnr = tabpagewinnr(a:n)
-  let buf = bufname(buflist[winnr - 1])
-  return fnamemodify(buf, ':t')
-endfunction
-
-function! MyTabLine() " {{{2
-  let tabstring = ''
-
-  for i in range(tabpagenr('$'))
-    " select the highlighting
-    if i + 1 == tabpagenr()
-      let tabstring .= '%#TabLineSel#'
-    else
-      let tabstring .= '%#TabLine#'
-    endif
-    " set the tab page number (for mouse clicks)
-    let tabstring .= '%' . (i + 1) . 'T'
-    " the label is made by MyTabLabel()
-    let tabstring .= ' %{MyTabLabel(' . (i + 1) . ')} '
-  endfor
-
-  " after the last tab fill with TabLineFill and reset tab page nr
-  let tabstring .= '%#TabLineFill#%T'
-
-  " " right-align the label to close the current tab page
-  " if tabpagenr('$') > 1
-    " let tabstring .= '%=%#TabLine#%999Xclose'
-  " endif
-
-  return tabstring
-endfunction
-
 function! OnSave() " {{{2
   wshada
-endfunction
-
-function! PasteClipboard() abort " {{{2
-  " See https://github.com/ferrine/md-img-paste.vim
-  let targets = filter(
-        \ systemlist('xclip -selection clipboard -t TARGETS -o'),
-        \ 'v:val =~# ''application/x-qt-image''')
-
-  " Paste regular text if not an image
-  if empty(targets)
-    normal! o
-    normal! ==
-    normal! P
-    return
-  endif
-
-  " Paste image into markdown document
-  call mdip#MarkdownClipboardImage()
-
 endfunction
 
 function! WinDo(command) " {{{2
@@ -290,11 +236,6 @@ set laststatus=2
 
 " Display hidden char
 let g:display_hidden = "hidden"
-
-" Change the text that is displayed while in a fold
-
-" Get rid of that ugly x in top right corner or tabline
-set tabline=%!MyTabLine()
 
 " Functionality {{{2
 " Vim Start {{{3
@@ -786,11 +727,6 @@ nnoremap <silent> <Tab> :tabprevious<CR>
 " Redo
 nnoremap <c-y> <c-r>
 inoremap <c-y> <Esc><C-r>
-
-" Paste from clipboard
-nnoremap <c-v> :call PasteClipboard()<cr>
-inoremap <c-v> <c-r>+
-cmap <c-v> <c-r>+
 
 " Windows {{{2
 

@@ -1,4 +1,7 @@
 local opt = vim.opt
+local tabline = require('config.tabline')
+
+tabline.register_legacy_functions()
 
 -- Enable persistant undo
 UNDODIR = '/home/' .. USER .. '/.cache/nvim/undo//'
@@ -22,6 +25,7 @@ opt.foldlevelstart = 99
 opt.foldenable = true
 opt.foldmethod = 'expr'
 opt.foldexpr = 'nvim_treesitter#foldexpr()'
+opt.tabline = "%!v:lua.require'config.tabline'.render()"
 opt.foldtext = "v:lua.require'config.folds'.fold_text()"
 
 -- -- Show/hide virtual lines for diagnostics

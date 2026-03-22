@@ -1,3 +1,4 @@
+local clipboard = require('config.clipboard')
 local comments = require('config.comments')
 local folds = require('config.folds')
 local quickfix = require('config.quickfix')
@@ -92,6 +93,13 @@ end, { silent = true, desc = 'Insert inline fold marker 4' })
 vim.keymap.set('n', 'cy', function()
   comments.comment_yank()
 end, { silent = true, desc = 'Insert commented copy above current line' })
+
+vim.keymap.set('n', '<C-v>', function()
+  clipboard.paste_clipboard()
+end, { silent = true, desc = 'Paste clipboard below current line' })
+
+vim.keymap.set('i', '<C-v>', '<C-r>+', { desc = 'Paste clipboard register' })
+vim.keymap.set('c', '<C-v>', '<C-r>+', { desc = 'Paste clipboard register' })
 
 -- Quickfix/location list helpers
 vim.keymap.set('n', '<leader>q', function()

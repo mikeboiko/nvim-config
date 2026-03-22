@@ -1,8 +1,10 @@
 local comments = require('config.comments')
+local clipboard = require('config.clipboard')
 local folds = require('config.folds')
 local windows = require('config.windows')
 local quickfix = require('config.quickfix')
 
+clipboard.register_legacy_functions()
 comments.register_legacy_functions()
 windows.register_legacy_functions()
 quickfix.register_legacy_functions()
