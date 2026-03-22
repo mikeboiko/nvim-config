@@ -17,10 +17,16 @@ My neovim config files
 
 ## Testing
 
-Format the Lua files you are changing:
+Format the full Lua tree:
 
 ```bash
-stylua path/to/file.lua another/file.lua
+stylua init.lua lua after tests
+```
+
+Check formatting without rewriting files:
+
+```bash
+stylua --check init.lua lua after tests
 ```
 
 Run the Plenary test suite:
@@ -50,5 +56,5 @@ nvim --headless -u init.lua -c "qa"
 ## Automation
 
 - Install local git hooks with `lefthook install`.
-- `.lefthook.yml` now runs the repo checks directly in `pre-commit`: staged-Lua formatting, `stylua --check`, Lua syntax checks, the Plenary suite, and a headless startup smoke test.
+- `.lefthook.yml` now runs the repo checks directly in `pre-commit`: staged-Lua formatting, `stylua --check init.lua lua after tests`, Lua syntax checks, the Plenary suite, and a headless startup smoke test.
 - There is no GitHub Actions workflow at the moment; hook-based validation is the source of truth during the Lua migration.

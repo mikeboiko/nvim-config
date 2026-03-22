@@ -2,9 +2,9 @@
 
 ## Build, test, and lint commands
 
-- Stage 1 automation currently checks the migrated surface with Stylua:
-  - `stylua init.lua tests`
-  - `stylua --check init.lua tests`
+- Hook automation currently checks the full Lua tree with Stylua:
+  - `stylua init.lua lua after tests`
+  - `stylua --check init.lua lua after tests`
 - The pre-commit hook is the active automation entrypoint during the migration. It formats staged Lua files first, then runs Stylua checks, Lua syntax checks, the Plenary suite, and a headless startup smoke test.
 - Repo tests use Plenary's busted harness:
   - full suite: `PLENARY_PATH="$HOME/.local/share/nvim/lazy/plenary.nvim" nvim --headless -u tests/minimal_init.lua -c "PlenaryBustedDirectory tests/nvim-config { minimal_init = 'tests/minimal_init.lua' }" -c "qa"`

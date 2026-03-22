@@ -11,7 +11,7 @@ pre-commit:
         fi
       stage_fixed: true
     stylua-check:
-      run: stylua --check init.lua tests
+      run: stylua --check init.lua lua after tests
 
     lua-syntax-check:
       run: |
