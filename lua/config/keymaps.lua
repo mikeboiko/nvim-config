@@ -8,6 +8,12 @@ function _G.set_terminal_keymaps()
   -- vim.api.nvim_buf_set_keymap(0, 't', 'jk', [[<C-\><C-n>]], opts)
 end
 
+local function delete_keymap_if_present(mode, lhs)
+  if vim.fn.maparg(lhs, mode) ~= '' then
+    vim.keymap.del(mode, lhs)
+  end
+end
+
 -- General
 vim.keymap.set('n', '<leader>nh', ':lua Snacks.notifier.show_history()<CR>', { desc = 'Show Notification History' })
 
@@ -29,8 +35,8 @@ vim.keymap.set('n', '<leader>ag', function()
 end, { silent = true, desc = 'AI-generated commit message (ag)' })
 
 -- Delete keymaps
-vim.keymap.del('n', '<C-W><C-D>')
-vim.keymap.del('n', '<C-W>d')
+delete_keymap_if_present('n', '<C-W><C-D>')
+delete_keymap_if_present('n', '<C-W>d')
 
 -- Resize window using <ctrl> arrow keys
 vim.keymap.set('n', '<C-Up>', '<cmd>resize +2<cr>', { desc = 'Increase Window Height' })

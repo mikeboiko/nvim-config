@@ -3,14 +3,12 @@ pre-commit:
   skip:
     - rebase
   commands:
-    stylua-format-root:
-      glob: '*.lua'
-      run: stylua {staged_files}
-      stage_fixed: true
-
-    stylua-format-nested:
-      glob: '**/*.lua'
-      run: stylua {staged_files}
+    stylua-format:
+      run: |
+        staged_lua_files="$(git diff --name-only --cached --diff-filter=ACMR -- '*.lua')"
+        if [ -n "$staged_lua_files" ]; then
+          stylua $staged_lua_files
+        fi
       stage_fixed: true
 
 pre-push:
