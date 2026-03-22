@@ -1,5 +1,5 @@
 pre-commit:
-  parallel: true
+  parallel: false
   skip:
     - rebase
   commands:
@@ -10,11 +10,18 @@ pre-commit:
           stylua $staged_lua_files
         fi
       stage_fixed: true
-
-pre-push:
-  commands:
     stylua-check:
       run: stylua --check init.lua tests
+
+    lua-syntax-check:
+      run: |
+        tmpfile="$(mktemp)"
+        trap 'rm -f "$tmpfile"' EXIT
+        printf '%s\n' init.lua > "$tmpfile"
+        find lua after tests -name '*.lua' -print >> "$tmpfile"
+        while IFS= read -r f; do
+          lua -e "assert(loadfile('$f'))"
+        done < "$tmpfile"
 
     plenary-tests:
       run: |
@@ -26,3 +33,6 @@ pre-push:
         nvim --headless -u tests/minimal_init.lua \
           -c "PlenaryBustedDirectory tests/nvim-config { minimal_init = 'tests/minimal_init.lua' }" \
           -c "qa"
+
+    startup-smoke:
+      run: nvim --headless -u init.lua -c "qa"

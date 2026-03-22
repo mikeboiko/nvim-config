@@ -5,7 +5,7 @@ My neovim config files
 ## Requirements
 
 - This config targets modern Neovim, currently `0.11.x` stable or newer.
-- CI installs the official Neovim stable tarball instead of Ubuntu's distro package so the test environment matches the Lua runtime and `after/ftplugin/*.lua` behavior used by this repo.
+- Local hook checks assume a matching modern Neovim runtime and a local `plenary.nvim` checkout at `$HOME/.local/share/nvim/lazy/plenary.nvim` unless `PLENARY_PATH` is overridden.
 
 ## Structure
 
@@ -49,5 +49,5 @@ nvim --headless -u init.lua -c "qa"
 ## Automation
 
 - Install local git hooks with `lefthook install`.
-- `.lefthook.yml` formats staged Lua files with Stylua on pre-commit and runs Stage 1 checks on pre-push.
-- `.github/workflows/ci.yml` mirrors the local checks in CI while the Lua migration is still in progress, and it installs official Neovim stable instead of the older Ubuntu package.
+- `.lefthook.yml` now runs the repo checks directly in `pre-commit`: staged-Lua formatting, `stylua --check`, Lua syntax checks, the Plenary suite, and a headless startup smoke test.
+- There is no GitHub Actions workflow at the moment; hook-based validation is the source of truth during the Lua migration.
