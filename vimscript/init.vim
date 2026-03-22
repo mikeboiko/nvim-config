@@ -66,14 +66,6 @@ function! BufDo(command) " {{{2
     silent! execute 'buffer ' . currBuff
 endfunction
 
-function! CommentYank() "{{{2
-  normal! mz
-  let line = substitute(getline('.'), '\n$', '', '')
-  silent put!=line
-  lua require('mini.comment').toggle_lines(vim.fn.line('.'), vim.fn.line('.'))
-  normal! `z
-endfunction
-
 function! EditCommonFile(filename) " {{{2
     " Open file in new teb
     let current_filename = expand('%:t')
@@ -117,10 +109,6 @@ function! GetTODOs() " {{{2
     " Un-ignore the binary files
     set wildignore-=*.jpg,*.docx,*.xlsm,*.mp4
 endfunction
-function! InsertInlineComment(fold_marker) "{{{2
-  execute 'normal! A ' . substitute(GetCommentString(), '%s', g:fold_marker_string . a:fold_marker, '')
-endfunction
-
 function! MyTabLabel(n) " {{{2
   " The tab label looks better as file name only - without entire path
   let buflist = tabpagebuflist(a:n)
@@ -177,42 +165,6 @@ function! PasteClipboard() abort " {{{2
   " Paste image into markdown document
   call mdip#MarkdownClipboardImage()
 
-endfunction
-
-function! PromptAndComment(inline_comment, prompt_text, comment_prefix) " {{{2
-    " Add inline comment and align with other inline comments
-
-    " Prompt user for comment text
-    let prompt = UserInput(a:prompt_text)
-
-    " Abort the rest of the function if the user hit escape
-    if (prompt == '') | return | endif
-
-    " Temporarily disable auto-pairs wrapping so the comment delimiter doesn't repeat
-    let b:autopairs_enabled = 0
-
-    " Either inline comment or comment above current line
-    let insert_command = (a:inline_comment) ? 'A ' : 'O'
-
-    " Prepare execution script for adding commented line
-    let exe_string = 'normal ' . insert_command . substitute(GetCommentString(), '%s', a:comment_prefix . prompt, '')
-
-    " Add commented line to document
-    exe exe_string
-
-    " Re-enable auto-pairs
-    let b:autopairs_enabled = 1
-
-endfunction
-
-function! UserInput(prompt) " {{{2
-    " Get a string input from the user
-    " Get input from user
-    call inputsave()
-    let reply=input(a:prompt)
-    call inputrestore()
-    " Return the user's reply
-    return l:reply
 endfunction
 
 function! WinDo(command) " {{{2
@@ -639,13 +591,6 @@ nnoremap q; q:
 " Comment {{{2
 
 " Main Comment Mappings
-nnoremap cii :call PromptAndComment(1, 'Comment Text: ', '')<CR>
-
-nnoremap ci1 :call InsertInlineComment("1")<CR>
-nnoremap ci2 :call InsertInlineComment("2")<CR>
-nnoremap ci3 :call InsertInlineComment("3")<CR>
-nnoremap ci4 :call InsertInlineComment("4")<CR>
-nnoremap cy :call CommentYank()<CR>
 nnoremap cp :normal mzgcap<CR>`z
 
 " Copilot {{{2

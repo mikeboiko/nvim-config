@@ -1,7 +1,9 @@
+local comments = require('config.comments')
 local folds = require('config.folds')
 local windows = require('config.windows')
 local quickfix = require('config.quickfix')
 
+comments.register_legacy_functions()
 windows.register_legacy_functions()
 quickfix.register_legacy_functions()
 

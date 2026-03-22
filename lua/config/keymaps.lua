@@ -1,3 +1,4 @@
+local comments = require('config.comments')
 local folds = require('config.folds')
 local quickfix = require('config.quickfix')
 
@@ -58,7 +59,7 @@ end, { silent = true })
 
 -- Add empty comment above current line
 vim.keymap.set('n', 'co', function()
-  local comment_string = require('config.comments').get_commentstring()
+  local comment_string = comments.get_commentstring()
   comment_string = comment_string:gsub('%%s', '')
   local current_line = vim.api.nvim_get_current_line()
   local indent = current_line:match('^%s+') or ''
@@ -67,6 +68,30 @@ vim.keymap.set('n', 'co', function()
   vim.cmd('normal! k$')
   vim.cmd('startinsert!')
 end, { desc = 'Add empty comment above' })
+
+vim.keymap.set('n', 'cii', function()
+  comments.prompt_and_comment(true, 'Comment Text: ', '')
+end, { silent = true, desc = 'Insert inline comment from prompt' })
+
+vim.keymap.set('n', 'ci1', function()
+  comments.insert_inline_comment('1')
+end, { silent = true, desc = 'Insert inline fold marker 1' })
+
+vim.keymap.set('n', 'ci2', function()
+  comments.insert_inline_comment('2')
+end, { silent = true, desc = 'Insert inline fold marker 2' })
+
+vim.keymap.set('n', 'ci3', function()
+  comments.insert_inline_comment('3')
+end, { silent = true, desc = 'Insert inline fold marker 3' })
+
+vim.keymap.set('n', 'ci4', function()
+  comments.insert_inline_comment('4')
+end, { silent = true, desc = 'Insert inline fold marker 4' })
+
+vim.keymap.set('n', 'cy', function()
+  comments.comment_yank()
+end, { silent = true, desc = 'Insert commented copy above current line' })
 
 -- Quickfix/location list helpers
 vim.keymap.set('n', '<leader>q', function()
