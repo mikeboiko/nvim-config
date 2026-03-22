@@ -11,6 +11,7 @@
   - single test file: `PLENARY_PATH="$HOME/.local/share/nvim/lazy/plenary.nvim" nvim --headless -u tests/minimal_init.lua -c "PlenaryBustedFile tests/nvim-config/config_modules_spec.lua" -c "qa"`
 - Headless startup smoke test for this checkout:
   - `nvim --headless -u init.lua -c "qa"`
+- CI intentionally installs official Neovim stable instead of Ubuntu's `apt` package because this repo depends on modern Lua runtime behavior, including `after/ftplugin/*.lua` loading during filetype tests.
 - After changing plugin specs in `lua/plugins/*.lua` or the plugin lockfile, use a deterministic restore:
   - `nvim --headless -u init.lua "+Lazy! restore" +qa`
 - After changing Tree-sitter parser configuration in `lua/plugins/nvim-treesitter.lua`:
@@ -27,6 +28,7 @@
 - `init.lua` is the entrypoint. It optionally launches `osv` for debugging when `init_debug` is set, then sources `vimscript/init.vim`, then loads shared Lua modules from `lua/config/*`, and finally bootstraps `lazy.nvim` through `lua/config/lazy.lua`.
 - `vimscript/init.vim` is still active, not historical. It holds a large amount of real behavior: custom functions, user commands, mappings, terminal helpers, search helpers, filetype comment settings, and older autocmds. Search it before assuming a behavior is not configured yet.
 - `lua/config/lazy.lua` imports the `plugins` namespace, so each file under `lua/plugins/` is a Lazy spec module. `lazy-lock.json` pins the resolved plugin versions.
+- The repo currently targets Neovim stable (`0.11.x` today), not the older distro package that ships on Ubuntu runners.
 - Shared editor behavior is split across `lua/config/` modules such as `constants.lua`, `options.lua`, `autocmds.lua`, `functions.lua`, `comments.lua`, and `keymaps.lua`.
 - Plugin-local startup globals are being moved into plugin spec `init` blocks instead of staying in `vimscript/init.vim`; `nvim-tree`, markdown preview, and img-paste already follow this pattern.
 - The repo now has a lightweight test harness under `tests/`; `tests/minimal_init.lua` prepends the repo and Plenary to `runtimepath`, and specs under `tests/nvim-config/` intentionally cover Lua modules and repo-owned behavior without depending on a full interactive session.

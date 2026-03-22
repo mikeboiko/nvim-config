@@ -2,6 +2,11 @@
 
 My neovim config files
 
+## Requirements
+
+- This config targets modern Neovim, currently `0.11.x` stable or newer.
+- CI installs the official Neovim stable tarball instead of Ubuntu's distro package so the test environment matches the Lua runtime and `after/ftplugin/*.lua` behavior used by this repo.
+
 ## Structure
 
 - Shared Lua wiring lives in `lua/config/`.
@@ -45,4 +50,4 @@ nvim --headless -u init.lua -c "qa"
 
 - Install local git hooks with `lefthook install`.
 - `.lefthook.yml` formats staged Lua files with Stylua on pre-commit and runs Stage 1 checks on pre-push.
-- `.github/workflows/ci.yml` mirrors the local checks in CI while the Lua migration is still in progress.
+- `.github/workflows/ci.yml` mirrors the local checks in CI while the Lua migration is still in progress, and it installs official Neovim stable instead of the older Ubuntu package.

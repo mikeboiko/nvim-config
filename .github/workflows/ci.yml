@@ -15,8 +15,15 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y neovim lua5.4 git make build-essential nodejs npm python3 python3-pip
+          sudo apt-get install -y lua5.4 git make build-essential nodejs npm python3 python3-pip curl
           sudo npm install -g yarn
+
+      - name: Install Neovim stable
+        run: |
+          curl -fsSL -o nvim-linux-x86_64.tar.gz https://github.com/neovim/neovim/releases/download/stable/nvim-linux-x86_64.tar.gz
+          tar xzf nvim-linux-x86_64.tar.gz
+          echo "$GITHUB_WORKSPACE/nvim-linux-x86_64/bin" >> "$GITHUB_PATH"
+          nvim --version | head -n 1
 
       - name: Checkout nvim-flow dependency
         run: |
