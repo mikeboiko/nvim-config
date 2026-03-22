@@ -9,9 +9,6 @@ let g:fold_marker_string = '{'. '{'. '{'
 " This can be toggled
 let g:term_close = ''
 
-" Enable/disable prepending jira issue in git commit message
-let g:vira_commit_text_enable = ''
-
 " Vim home directory
 if has("unix")
     let vimHomeDir = $HOME . '/.vim'
@@ -166,30 +163,6 @@ function! BufDo(command) " {{{2
     silent! execute 'buffer ' . currBuff
 endfunction
 
-function! CloseAll() " {{{2
-    " Close all loc lists, qf, preview and terminal windows
-    lclose
-    cclose
-    pclose
-    NvimTreeClose
-    AerialClose
-    " CopilotChatClose
-
-    " Close flow-managed terminal buffers (force to handle running jobs).
-    let flow_buffers = join(filter(range(1, bufnr('$')), 'bufexists(v:val) && getbufvar(v:val, "nvim_flow_terminal", 0) == 1'), ' ')
-    if trim(flow_buffers) !=? ''
-      silent! exe 'bdelete! '. flow_buffers
-    endif
-
-    for bufname in ['^fugitive', 'git/gap', '~/git/Linux/config/mani.yaml']
-      let pattern = escape(bufname, '~.')
-      let buffers = join(filter(range(1, bufnr('$')), 'buflisted(v:val) && bufname(v:val) =~ pattern'), ' ')
-      if trim(buffers) !=? ''
-        silent! exe 'bdelete '. buffers
-      endif
-    endfor
-endf
-
 function! CloseQuickFixWindow() " {{{2
     " If the window is quickfix, proceed
     if &buftype=="quickfix"
@@ -277,56 +250,6 @@ function! GetTODOs() " {{{2
     " Un-ignore the binary files
     set wildignore-=*.jpg,*.docx,*.xlsm,*.mp4
 endfunction
-
-
-
-function! GitDeleteBranch() abort " {{{2
-    " Delete branch for active vira issue
-
-    if g:vira_active_issue ==? 'none'
-      echom 'Please select issue first'
-      return
-    endif
-    if g:vira_active_issue ==# FugitiveHead()
-      echom 'Change branch first'
-      return
-    endif
-
-    execute('Git branch -d ' . g:vira_active_issue)
-    execute('Git push origin --delete ' . g:vira_active_issue)
-
-endfunction
-
-function! GitMerge() abort " {{{2
-    " Merge active vira issue branch into dev
-
-    if g:vira_active_issue !=# FugitiveHead()
-      echom 'Issue and branch dont match'
-      return
-    endif
-
-    " Hacky method to merge into dev if it exists, otherwise merge into master
-    Git checkout master
-    Git checkout dev
-
-    " Merge message is like: 'VIRA-123: merge"
-    execute('Git merge -m "'. g:vira_active_issue . ': merge" ' . ' --no-ff ' . g:vira_active_issue)
-    Git push
-
-endfunction
-
-function! GitNewBranch() abort " {{{2
-    " Create new git branch based on active vira issue
-
-    if g:vira_active_issue ==? 'none'
-      echom 'Please select issue first'
-      return
-    endif
-    execute('Git checkout -b ' . g:vira_active_issue)
-    Git push -u
-
-endfunction
-
 function! InsertInlineComment(fold_marker) "{{{2
   execute 'normal! A ' . substitute(GetCommentString(), '%s', g:fold_marker_string . a:fold_marker, '')
 endfunction
@@ -588,28 +511,8 @@ command! -nargs=1 StartAsyncNeoVim
          \    }
          \ })
 
-" ViraEnable {{{2
-command! ViraEnable if (g:vira_commit_text_enable == '') | let g:vira_commit_text_enable = '+' | echo 'Jira issue git message prepending enabled' | else | let g:vira_commit_text_enable = '' | echo 'Jira issue git message prepending disabled' | endif
-
 " Plugins{{{1
 " Plugin Setup {{{2
-
-" For nvim-tree
-let g:loaded_netrw = 1
-let g:loaded_netrwPlugin = 1
-
-augroup CustomSetFileType
-  autocmd!
-  autocmd BufRead,BufNewFile *.sebol setfiletype sebol
-augroup end
-
-" ag - silver searcher {{{2
-if executable('ag')
-    " Use ag instead of grep (performance increase)
-    " set grepprg=ag\ --nogroup\ --nocolor
-    set grepprg=ag\ --silent\ --vimgrep\ --column\ $*
-    set grepformat=%f:%l:%c:%m
-endif
 
 " fugitive {{{2
 
@@ -618,52 +521,10 @@ augroup CustomFugitive
   autocmd FileType gitcommit autocmd! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
 augroup end
 
-" img-paste {{{2
-
-" let g:mdip_imgdir = 'img'
-let g:mdip_imgname = 'img'
-
-" indentLine {{{2
-
-let g:indentLine_char = '│'
-
-" markdownpreview {{{2
-
-let g:mkdp_auto_close = 0
-let g:mkdp_refresh_slow = 1
-
-" mini.comment {{{2
-
-augroup CustomCommentStrings
-  autocmd!
-  autocmd FileType kusto setlocal commentstring=//%s
-  autocmd FileType sebol setlocal commentstring=!%s
-  autocmd FileType vader setlocal commentstring=#%s
-  autocmd FileType autohotkey setlocal commentstring=;%s
-augroup end
-
-if has('nvim')
-  autocmd! TermOpen term://* lua set_terminal_keymaps()
-endif
-
-
-" vim-unstack {{{2
-
-let g:unstack_populate_quickfix=1
-let g:unstack_layout = "portrait"
-
 " vimwiki {{{2
 
 " let g:vimwiki_list = [{'path': '~/vimwiki/',
                       " \ 'syntax': 'markdown', 'ext': '.md'}]
-
-" vira {{{2
-
-let g:vira_config_file_projects = $HOME.'/git/Linux/config/vira_projects.yaml'
-let g:vira_config_file_servers = $HOME.'/git/Linux/config/vira_servers.yaml'
-let g:vira_issue_limit = 100
-
-" let g:vira_report_width = 100
 
 " Editor Settings {{{1
 " Display{{{2
@@ -754,7 +615,7 @@ if has('nvim')
 endif
 
 " General settings required for highlighting
-" I removed this line because it was giving me an error in vira for =bg
+" I removed this line because it was giving me an error for =bg
 " syntax on
 
 " Enable plug-ins for indentation
@@ -841,15 +702,6 @@ set spellfile=$HOME/git/Notes/Main/en.utf-8.add
 
 " Change error format for custom FindFunc() usage
 " set efm+=%f:%l:%m
-
-" nvim terminal
-if has('nvim')
-  augroup nvim_term
-    autocmd!
-    autocmd TermOpen *gap, startinsert
-    autocmd TermClose *gap stopinsert
-  augroup END
-endif
 
 " Without this ctrl+a skips 8s and 9s when incrementing
 set nrformats-=octal
@@ -1042,15 +894,6 @@ nnoremap <leader>rd :terminal git --no-pager diff<CR>
 nnoremap <leader>ms :Mani run git-status --parallel --tags-expr '$MANI_EXPR'<cr>
 nnoremap <leader>mu :Mani run git-up --parallel --tags-expr '$MANI_EXPR'<cr>
 
-" Create new git branch based on active vira issue
-nnoremap <leader>gnb :call GitNewBranch()<cr>
-
-" Delete branch for active vira issue
-nnoremap <leader>gdb :call GitDeleteBranch()<cr>
-
-" Merge active vira issue branch into the dev branch
-nnoremap <leader>gm :call GitMerge()<cr>
-
 " Go to Definition{{{2
 
 map gI mm:tabe %<CR>`mgizMzvzz
@@ -1228,54 +1071,6 @@ nnoremap <c-t> mm:tabe <c-r>%<CR>`m
 " Toggle tabs
 nnoremap <silent> <C-Tab> :tabnext<CR>
 nnoremap <silent> <Tab> :tabprevious<CR>
-
-" Vira {{{2
-
-" Basics
-nnoremap <silent> <leader>vI :ViraIssue<cr>
-nnoremap <silent> <leader>vc :ViraComment<cr>
-nnoremap <silent> <leader>vi :ViraIssues<cr>
-nnoremap <silent> <leader>vr :ViraReport<cr>
-
-" Set
-nnoremap <silent> <leader>vsS :silent! ViraServers<cr>
-nnoremap <silent> <leader>vsa :silent! ViraSetAssignee<cr>
-nnoremap <silent> <leader>vsc :silent! ViraSetComponent<cr>
-nnoremap <silent> <leader>vse :silent! ViraSetEpic<cr>
-nnoremap <silent> <leader>vsp :silent! ViraSetPriority<cr>
-nnoremap <silent> <leader>vss :silent! ViraSetStatus<cr>
-nnoremap <silent> <leader>vst :silent! ViraSetType<cr>
-nnoremap <silent> <leader>vsv :silent! ViraSetVersion<cr>
-
-" Filters
-nnoremap <silent> <leader>vfE :ViraFilterEpics<cr>
-nnoremap <silent> <leader>vfP :ViraFilterProjects<cr>
-nnoremap <silent> <leader>vfR :ViraFilterReporter<cr>
-nnoremap <silent> <leader>vfT :ViraFilterTypes<cr>
-nnoremap <silent> <leader>vfa :ViraFilterAssignees<cr>
-nnoremap <silent> <leader>vfc :ViraFilterComponents<cr>
-nnoremap <silent> <leader>vfe :ViraFilterEdit<cr>
-nnoremap <silent> <leader>vfp :ViraFilterPriorities<cr>
-nnoremap <silent> <leader>vfr :ViraFilterReset<cr>
-nnoremap <silent> <leader>vfs :ViraFilterStatuses<cr>
-nnoremap <silent> <leader>vft :ViraFilterReset<cr>:python3 Vira.api.userconfig_filter["statusCategory"] = ""<cr>:ViraFilterText<cr>
-nnoremap <silent> <leader>vfv :ViraFilterVersions<cr>
-
-" Boards
-nnoremap <silent> <leader>vbf :ViraLoadProject Model<cr>:ViraIssues<cr>
-nnoremap <silent> <leader>vbh :ViraLoadProject Home<cr>:ViraIssues<cr>
-nnoremap <silent> <leader>vbi :ViraLoadProject Inbox<cr>:ViraIssues<cr>
-nnoremap <silent> <leader>vbj :ViraLoadProject Jesse<cr>:ViraIssues<cr>
-nnoremap <silent> <leader>vbb :ViraLoadProject __default__<cr>:python3 Vira.api.userconfig_filter["statusCategory"] = ""<cr>:python3 Vira.api.userconfig_filter["status"] = "Backlog"<cr>:ViraIssues<cr>
-nnoremap <silent> <leader>vbm :ViraLoadProject __default__<cr>:ViraIssues<cr>
-nnoremap <silent> <leader>vbn :ViraLoadProject Nuance<cr>:ViraIssues<cr>
-nnoremap <silent> <leader>vbv :ViraLoadProject vira<cr>:ViraIssues<cr>
-nnoremap <silent> <leader>vbw :ViraLoadProject Work<cr>:ViraIssues<cr>
-
-" Misc
-nnoremap <silent> <leader>vsi :let g:vira_active_issue="
-nnoremap <silent> <leader>vb :ViraBrowse<cr>
-nnoremap <silent> <leader>ve :ViraEnable<cr>
 
 " Windows Style Commands {{{2
 

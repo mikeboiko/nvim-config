@@ -5,9 +5,6 @@ vim.g.fold_marker_string = '{{{'
 -- This can be toggled
 vim.g.term_close = ''
 
--- Enable/disable prepending jira issue in git commit message
-vim.g.vira_commit_text_enable = ''
-
 if vim.fn.has('mac') == 1 then
   vim.g.python3_host_prog = '/usr/bin/python3'
 else

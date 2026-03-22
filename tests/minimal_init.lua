@@ -11,3 +11,4 @@ end
 vim.g.mapleader = ' '
 vim.g.init_debug = false
 vim.opt.swapfile = false
+vim.cmd('filetype plugin on')

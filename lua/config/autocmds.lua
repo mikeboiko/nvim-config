@@ -37,3 +37,32 @@ vim.api.nvim_create_autocmd('CursorMoved', {
     end
   end,
 })
+
+local terminal_group = vim.api.nvim_create_augroup('terminal-settings', { clear = true })
+local gap_path = vim.fn.expand('~/git/Linux/git/gap')
+
+vim.api.nvim_create_autocmd('TermOpen', {
+  group = terminal_group,
+  pattern = 'term://*',
+  callback = function(args)
+    if type(_G.set_terminal_keymaps) == 'function' then
+      _G.set_terminal_keymaps()
+    end
+
+    local name = vim.api.nvim_buf_get_name(args.buf)
+    if name:find(gap_path, 1, true) then
+      vim.cmd('startinsert')
+    end
+  end,
+})
+
+vim.api.nvim_create_autocmd('TermClose', {
+  group = terminal_group,
+  pattern = 'term://*',
+  callback = function(args)
+    local name = vim.api.nvim_buf_get_name(args.buf)
+    if name:find(gap_path, 1, true) then
+      vim.cmd('stopinsert')
+    end
+  end,
+})

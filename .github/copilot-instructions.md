@@ -28,6 +28,7 @@
 - `vimscript/init.vim` is still active, not historical. It holds a large amount of real behavior: custom functions, user commands, mappings, terminal helpers, search helpers, filetype comment settings, and older autocmds. Search it before assuming a behavior is not configured yet.
 - `lua/config/lazy.lua` imports the `plugins` namespace, so each file under `lua/plugins/` is a Lazy spec module. `lazy-lock.json` pins the resolved plugin versions.
 - Shared editor behavior is split across `lua/config/` modules such as `constants.lua`, `options.lua`, `autocmds.lua`, `functions.lua`, `comments.lua`, and `keymaps.lua`.
+- Plugin-local startup globals are being moved into plugin spec `init` blocks instead of staying in `vimscript/init.vim`; `nvim-tree`, markdown preview, and img-paste already follow this pattern.
 - The repo now has a lightweight test harness under `tests/`; `tests/minimal_init.lua` prepends the repo and Plenary to `runtimepath`, and specs under `tests/nvim-config/` intentionally cover Lua modules and repo-owned behavior without depending on a full interactive session.
 - Filetype behavior is layered:
   - late Lua overrides in `after/ftplugin/`
@@ -49,6 +50,7 @@
 
 - Keep the hybrid split intact. Shared editor behavior belongs in `lua/config/*`, plugin wiring belongs in `lua/plugins/*`, and filetype-specific behavior belongs in `after/ftplugin/` or `ftplugin/`. Avoid hiding buffer-local tweaks inside unrelated plugin specs.
 - Follow the existing plugin-spec pattern: one plugin per file under `lua/plugins/`, with each file returning a Lazy spec table. If plugin definitions change, keep `lazy-lock.json` in sync.
+- If a setting only bootstraps one plugin before it loads, put it in that plugin spec's `init` block instead of the legacy Vimscript entrypoint.
 - Lua style follows `.stylua.toml`: 2-space indentation, 120-column width, Unix line endings, and single quotes when Stylua can preserve them.
 - LSP setup is explicit in `lua/plugins/lspconfig.lua`; Mason does not define the active servers for you. When changing a language workflow, also check `conform.lua`, `neotest.lua`, and `dap-ui.lua` so formatting, testing, and debugging stay aligned.
 - For repo tests, prefer the lightweight Plenary harness first; reserve `nvim --headless -u init.lua` smoke checks for cases where you need the whole config and plugin bootstrap path.
@@ -57,6 +59,7 @@
   - Tree-sitter indentation is skipped for `c_sharp` in `lua/plugins/nvim-treesitter.lua`
   - `after/ftplugin/cs.lua` forces `cindent`
 - Custom filetypes use a multi-file pattern. `sebol` is the example: detection in `after/ftdetect/sebol.lua`, syntax in `syntax/sebol.vim`, and comment/filetype glue still present in `vimscript/init.vim`.
+- New filetype-local defaults should land in `after/ftplugin/*.lua`; for example, custom commentstrings now live there for `kusto`, `sebol`, `autohotkey`, and `vader`.
 - Copilot is split across multiple modules:
   - `copilot-lua.lua` enables the service but disables Copilot's own suggestion UI
   - `blink-cmp-copilot.lua` feeds Copilot into `blink.cmp`
