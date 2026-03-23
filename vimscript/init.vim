@@ -382,12 +382,6 @@ endif
 
 " Go to Definition{{{2
 
-map gI mm:tabe %<CR>`mgizMzvzz
-map gT mm:tabe %<CR>`mgDzMzvzz
-map gt mm:tabe %<CR>`mgdzMzvzz
-map gs mm:sp %<CR>`mgdzMzvzz
-map gv mm:vs %<CR>`mgdzMzvzz
-
 " Grep with ag {{{2
 
 " Search code
@@ -504,11 +498,8 @@ noremap <c-z> <nop>
 " Tabs {{{2
 
 " Open current file in new tab
-nnoremap <c-t> mm:tabe <c-r>%<CR>`m
 
 " Toggle tabs
-nnoremap <silent> <C-Tab> :tabnext<CR>
-nnoremap <silent> <Tab> :tabprevious<CR>
 
 " Windows Style Commands {{{2
 
