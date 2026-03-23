@@ -218,7 +218,7 @@ return {
     -- end, { noremap = true, desc = 'dap: launch neovim lua server' })
     vim.keymap.set('n', '<leader>df', function()
       vim.cmd('wa')
-      vim.cmd('call CloseAll()')
+      require('config.windows').close_all()
       -- require('config.dap.functions').load_launch_json_for_repo()
       dap.continue()
     end, { silent = true })
