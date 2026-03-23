@@ -6,12 +6,14 @@ local function delete_keymap_if_present(mode, lhs)
   end
 end
 
-function M.set_terminal_keymaps(_buffer)
-  vim.keymap.set('t', '<C-g>', '<C-W>:tabp<CR>')
-  vim.keymap.set('t', '<C-j>', '<C-W>j')
-  vim.keymap.set('t', '<C-k>', '<C-W>k')
-  vim.keymap.set('t', '<C-h>', '<C-W>h')
-  vim.keymap.set('t', '<C-l>', '<C-W>l')
+function M.set_terminal_keymaps(buffer)
+  local opts = { buffer = buffer or 0 }
+
+  vim.keymap.set('t', '<C-g>', '<C-W>:tabp<CR>', opts)
+  vim.keymap.set('t', '<C-j>', '<C-W>j', opts)
+  vim.keymap.set('t', '<C-k>', '<C-W>k', opts)
+  vim.keymap.set('t', '<C-h>', '<C-W>h', opts)
+  vim.keymap.set('t', '<C-l>', '<C-W>l', opts)
 end
 
 function M.register()
@@ -38,7 +40,7 @@ function M.register()
   vim.keymap.set('n', '<C-h>', '<C-W>h', { desc = 'Move to left window' })
   vim.keymap.set('n', '<C-l>', '<C-W>l', { desc = 'Move to right window' })
 
-  vim.keymap.set({ 'n', 'x', 'o' }, 'gI', 'mm:tabe %<CR>`mgizMzvzz', {
+  vim.keymap.set({ 'n', 'x', 'o' }, 'gI', 'mm:tabe %<CR>`m`^zMzvzz', {
     remap = true,
     desc = 'Open current file in a tab and jump to the last insert position',
   })

@@ -14,7 +14,7 @@ My neovim config files
 - Keymap registration is split by concern under `lua/config/keymaps/*.lua`, with `lua/config/keymaps.lua` exposing the shared helper functions used by tests and autocmds.
 - Core editing behaviors such as fileformat conversion, blank-line insertion, spell toggles, yanking helpers, and GUI font resizing live in `lua/config/editor.lua`, with the keymap modules owning the user-facing bindings.
 - Search, quickfix, Git, Copilot, and external workflow bindings are routed through Lua helpers instead of ad hoc command strings where practical.
-- `lua/config/autocmds.lua` calls `require('config.keymaps').set_terminal_keymaps(...)` on `TermOpen` so terminal navigation maps are configured from the same keymap facade.
+- `lua/config/autocmds.lua` calls `require('config.keymaps').set_terminal_keymaps(...)` on `TermOpen` so terminal navigation maps stay buffer-local while using the same keymap facade.
 - Help-lookup mappings for `help` and `vim` buffers now live in `after/ftplugin/help.lua` and `after/ftplugin/vim.lua`, so buffer-local editor behavior is fully configured from Lua.
 - Startup globals, options, clipboard provider settings, and GUI enter behavior all live in Lua under `lua/config/{constants,options,autocmds,gui,editor}.lua`.
 - Filetype-local Markdown/sebol behavior and the AutoHotkey syntax setup live in Lua through `lua/config/filetypes.lua` plus `after/ftplugin/*.lua`.
