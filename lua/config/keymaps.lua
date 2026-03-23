@@ -11,10 +11,6 @@ function M.call_global(name, ...)
   return true
 end
 
-function M.copilot_quick_chat(mode)
-  return M.call_global('CopilotQuickChat', mode)
-end
-
 function M.prompt_rename(visual)
   if visual then
     return M.call_global('FancyPromptRename', 'RenameWord', 'New Word', 1)
@@ -30,7 +26,6 @@ function M.set_terminal_keymaps(buffer)
 end
 
 local modules = {
-  require('config.keymaps.copilot'),
   require('config.keymaps.editing'),
   navigation,
   require('config.keymaps.search'),

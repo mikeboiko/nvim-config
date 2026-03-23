@@ -12,6 +12,7 @@ My neovim config files
 - Shared Lua wiring lives in `lua/config/`.
 - Reusable helper modules live in focused `lua/config/*.lua` files such as `git.lua`, `windows.lua`, `quickfix.lua`, `folds.lua`, `comments.lua`, `terminal.lua`, `clipboard.lua`, `tabline.lua`, `editor.lua`, `shell.lua`, `buffers.lua`, and `workspace.lua`.
 - Keymap registration is split by concern under `lua/config/keymaps/*.lua`, with `lua/config/keymaps.lua` exposing the shared helper functions used by tests and autocmds.
+- Plugin-exclusive mappings live with their owning plugin specs under `lua/plugins/*.lua`; shared editor and personal workflow mappings stay under `lua/config/keymaps/*.lua`.
 - Core editing behaviors such as fileformat conversion, blank-line insertion, spell toggles, yanking helpers, and GUI font resizing live in `lua/config/editor.lua`, with the keymap modules owning the user-facing bindings.
 - Search, quickfix, Git, Copilot, and external workflow bindings are routed through Lua helpers instead of ad hoc command strings where practical.
 - `lua/config/autocmds.lua` calls `require('config.keymaps').set_terminal_keymaps(...)` on `TermOpen` so terminal navigation maps stay buffer-local while using the same keymap facade.

@@ -4,8 +4,6 @@ local shell = require('config.shell')
 local M = {}
 
 function M.register(api)
-  vim.keymap.set('n', '<leader>nh', ':lua Snacks.notifier.show_history()<CR>', { desc = 'Show Notification History' })
-
   vim.keymap.set('n', '<leader>gap', function()
     vim.cmd('wa')
     require('config.functions').git_add_commit_push()
@@ -26,17 +24,9 @@ function M.register(api)
     shell.open_git_diff_in_terminal()
   end, { silent = true, desc = 'Open git diff in a terminal split' })
 
-  vim.keymap.set('n', '<leader>gd', ':Gvdiffsplit! ', { desc = 'Open Fugitive vertical diff split prompt' })
-  vim.keymap.set('n', '<leader>gdt', ':Git difftool -y --diff-filter=ACMRTUXB ', { desc = 'Open git difftool prompt' })
-  vim.keymap.set('n', '<leader>gs', ':Git<CR>', { silent = true, desc = 'Open Fugitive status' })
-
   vim.keymap.set('n', '<leader>oe', function()
     shell.open_explorer()
   end, { silent = true, desc = 'Open current directory in Explorer' })
-
-  vim.keymap.set('n', '<leader>ob', function()
-    shell.open_markdown_preview()
-  end, { silent = true, desc = 'Open markdown preview' })
 
   vim.keymap.set('n', '<leader>tp', function()
     shell.open_tables_report()

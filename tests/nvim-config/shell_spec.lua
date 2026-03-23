@@ -226,7 +226,6 @@ describe('nvim-config shell helpers', function()
 
     shell.open_git_diff_in_terminal()
     shell.open_explorer()
-    shell.open_markdown_preview()
     shell.open_tables_report()
     shell.open_weather_report()
 
@@ -234,7 +233,6 @@ describe('nvim-config shell helpers', function()
       'terminal git --no-pager diff',
       'silent !explorer.exe .',
       'redraw!',
-      'MarkdownPreview',
       'tabe term://' .. shell.tables_report_command,
       '$',
       'tabe term://curl ' .. shell.weather_report_url,

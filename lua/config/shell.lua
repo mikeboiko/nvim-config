@@ -124,10 +124,6 @@ function M.open_explorer()
   M.run_ex('redraw!')
 end
 
-function M.open_markdown_preview()
-  M.run_ex('MarkdownPreview')
-end
-
 function M.open_tables_report()
   M.run_ex('tabe term://' .. M.tables_report_command)
   M.run_ex('$')

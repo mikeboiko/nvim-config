@@ -33,6 +33,7 @@
 - Shared editor behavior is split across `lua/config/` modules such as `constants.lua`, `options.lua`, `autocmds.lua`, `functions.lua`, `comments.lua`, and `keymaps.lua`.
 - Reusable helper modules live in focused files under `lua/config/`, with `git.lua`, `windows.lua`, `quickfix.lua`, `folds.lua`, `comments.lua`, `terminal.lua`, `clipboard.lua`, `tabline.lua`, `editor.lua`, `shell.lua`, `buffers.lua`, and `workspace.lua` as current examples.
 - Keymap registration is split by concern under `lua/config/keymaps/*.lua`, with `lua/config/keymaps.lua` exposing shared helpers like `call_global()`, `prompt_rename()`, and `set_terminal_keymaps()`.
+- Plugin-exclusive mappings should live with their owning plugin specs under `lua/plugins/*.lua`; keep `lua/config/keymaps/*.lua` for shared editor behavior and cross-plugin/personal workflows.
 - `lua/config/autocmds.lua` calls `require('config.keymaps').set_terminal_keymaps(...)` directly on `TermOpen`, and those terminal maps are intentionally buffer-local.
 - Core editing behavior such as fileformat reloads, blank-line insertion, whole-buffer yanks, spell toggles, and GUI font resizing is routed through `lua/config/editor.lua`.
 - Search, quickfix, Git, Copilot, and external workflow bindings live in the keymap modules and defer to helpers like `shell.lua`, `quickfix.lua`, and `folds.lua` where appropriate.

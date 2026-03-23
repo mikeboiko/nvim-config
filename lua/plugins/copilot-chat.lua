@@ -1,10 +1,30 @@
+local function quick_chat(mode)
+  return function()
+    require('config.keymaps').call_global('CopilotQuickChat', mode)
+  end
+end
+
 return {
   -- CopilotChat.nvim
   'CopilotC-Nvim/CopilotChat.nvim',
+  lazy = false,
   dependencies = {
     { 'nvim-lua/plenary.nvim', branch = 'master' }, -- for curl, log and async functions
   },
   build = 'make tiktoken', -- Only on MacOS or Linux
+  keys = {
+    { '<leader>ac', ':CopilotChatToggle<CR>', silent = true, desc = 'Toggle Copilot chat' },
+    { '<leader>af', ':CopilotChatFixDiagnostic<CR>', silent = true, desc = 'Fix diagnostics with Copilot' },
+    { '<leader>aq', quick_chat('Buffer'), silent = true, desc = 'Ask Copilot about the current buffer' },
+    { '<leader>at', ':CopilotChatTests<CR>', silent = true, desc = 'Generate tests with Copilot' },
+    { '<leader>ac', ':<C-u>CopilotChatToggle<CR>', mode = 'v', silent = true, desc = 'Toggle Copilot chat' },
+    { '<leader>ad', ':CopilotChatDocs<CR>', mode = 'v', silent = true, desc = 'Document selection with Copilot' },
+    { '<leader>ae', ':CopilotChatExplainBrief<CR>', mode = 'v', silent = true, desc = 'Explain selection briefly' },
+    { '<leader>af', ':CopilotChatFix<CR>', mode = 'v', silent = true, desc = 'Fix selection with Copilot' },
+    { '<leader>ao', ':CopilotChatOptimize<CR>', mode = 'v', silent = true, desc = 'Optimize selection with Copilot' },
+    { '<leader>aq', quick_chat('Visual'), mode = 'v', silent = true, desc = 'Ask Copilot about the selection' },
+    { '<leader>ar', ':CopilotChatReview<CR>', mode = 'v', silent = true, desc = 'Review selection with Copilot' },
+  },
   opts = {
     -- See Configuration section for options
   },
