@@ -62,7 +62,7 @@ function M.register(api)
   end, { silent = true, desc = 'Copy current file directory to clipboard' })
 
   vim.keymap.set('n', '<leader>ct', ':CloseToggle<CR>', { silent = true, desc = 'Toggle terminal auto-close' })
-  vim.keymap.set('n', '<leader>ca', ':call CloseAll()<CR>', { silent = true, desc = 'Close helper windows and lists' })
+  vim.keymap.set('n', '<leader>ca', '<cmd>CloseAll<CR>', { silent = true, desc = 'Close helper windows and lists' })
   vim.keymap.set('n', 'qr', '@:', { desc = 'Rerun last command-line command' })
   vim.keymap.set('n', 'q;', 'q:', { desc = 'Open command-line window' })
   vim.keymap.set('n', 'cp', 'mzgcap`z', { remap = true, desc = 'Comment paragraph and restore cursor' })
