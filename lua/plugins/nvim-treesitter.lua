@@ -1,7 +1,7 @@
 return {
   -- nvim-treesitter
-  'nvim-treesitter/nvim-treesitter',
-  branch = 'main',
+  'mikeboiko/nvim-treesitter',
+  branch = 'my-patches',
   build = ':TSUpdate', -- Ensures parsers are installed/updated
   lazy = false,
   config = function()
