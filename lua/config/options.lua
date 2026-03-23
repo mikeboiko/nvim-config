@@ -3,6 +3,69 @@ local tabline = require('config.tabline')
 
 tabline.register_legacy_functions()
 
+opt.number = true
+opt.scrolloff = 8
+opt.wildmenu = true
+opt.showcmd = true
+opt.showmode = false
+opt.lazyredraw = true
+opt.linebreak = true
+opt.laststatus = 2
+
+vim.cmd([[set shada=!,'2000,<50,s10,h]])
+vim.cmd([[set shada^=rterm://,rfugitive,rman:,rhealth:,r/mnt/]])
+
+opt.timeoutlen = 500
+opt.ttimeoutlen = 0
+opt.backspace = 'indent,eol,start'
+opt.updatetime = 500
+opt.virtualedit = 'all'
+opt.wildignore:append({ '*.swp', 'package.json', 'package-lock.json', 'node_modules' })
+opt.swapfile = false
+
+if vim.fn.has('mac') == 1 or vim.fn.has('win32') == 1 then
+  opt.clipboard = 'unnamed,unnamedplus'
+elseif vim.fn.has('unix') == 1 then
+  opt.clipboard = 'unnamedplus'
+end
+
+vim.g.clipboard = {
+  name = 'xsel clipboard',
+  copy = {
+    ['+'] = { 'clipsy', 'copy' },
+    ['*'] = { 'clipsy', 'copy' },
+  },
+  paste = {
+    ['+'] = { 'clipsy', 'paste' },
+    ['*'] = { 'clipsy', 'paste' },
+  },
+  cache_enabled = 1,
+}
+
+opt.splitright = true
+opt.autochdir = true
+opt.mouse = ''
+opt.modeline = true
+opt.modelines = 5
+opt.autoread = true
+opt.spellfile = vim.fn.expand('~/git/Notes/Main/en.utf-8.add')
+opt.nrformats:remove({ 'octal' })
+
+vim.cmd([[let &t_SI = "\e[6 q"]])
+vim.cmd([[let &t_EI = "\e[2 q"]])
+
+opt.autoindent = true
+opt.tabstop = 4
+opt.softtabstop = 4
+opt.shiftwidth = 0
+opt.expandtab = true
+opt.smarttab = true
+
+opt.incsearch = true
+opt.hlsearch = true
+opt.ignorecase = true
+opt.smartcase = true
+
 -- Enable persistant undo
 UNDODIR = '/home/' .. USER .. '/.cache/nvim/undo//'
 if vim.fn.isdirectory(UNDODIR) == 0 then

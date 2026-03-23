@@ -1,5 +1,6 @@
 local buffers = require('config.buffers')
 local editor = require('config.editor')
+local gui = require('config.gui')
 local terminal = require('config.terminal')
 
 -- -- Append backup files with timestamp
@@ -53,6 +54,19 @@ vim.api.nvim_create_autocmd('CursorMoved', {
 local terminal_group = vim.api.nvim_create_augroup('terminal-settings', { clear = true })
 local quickfix_group = vim.api.nvim_create_augroup('quickfix-settings', { clear = true })
 local editor_group = vim.api.nvim_create_augroup('editor-settings', { clear = true })
+local gui_group = vim.api.nvim_create_augroup('gui-settings', { clear = true })
+
+if gui.is_available() then
+  gui.apply_options()
+
+  vim.api.nvim_create_autocmd('GUIEnter', {
+    group = gui_group,
+    pattern = '*',
+    callback = function()
+      gui.on_gui_enter()
+    end,
+  })
+end
 
 vim.api.nvim_create_autocmd('TermOpen', {
   group = terminal_group,

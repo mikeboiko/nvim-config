@@ -43,13 +43,14 @@
 - Search/sort and compatibility maps such as `<leader>/`, `<leader>so`, `<C-z>`, and `<C-y>` now live in `lua/config/keymaps.lua` too; the smoke spec asserts their normalized RHS values so literal command-line/search behavior stays stable during migration, and `<leader>sv` has been intentionally removed.
 - The last general `vimscript/init.vim` mappings (`gf` plus the GUI-only font hotkeys) now route through Lua-backed helpers in `lua/config/keymaps.lua` / `lua/config/editor.lua`, and the legacy `FontSizePlus()` / `FontSizeMinus()` entrypoints are preserved through Lua wrappers.
 - Help lookup for `help`/`vim` buffers now lives in `after/ftplugin/help.lua` and `after/ftplugin/vim.lua`; there are currently no active `:map` commands left in repo `.vim` files.
+- `init.lua` no longer sources `vimscript/init.vim`; the remaining active startup globals, options, clipboard provider settings, and GUI enter behavior now live in `lua/config/{constants,options,autocmds,gui,editor}.lua`, and the legacy bootstrap file has been deleted.
 - Plugin-local startup globals are being moved into plugin spec `init` blocks instead of staying in `vimscript/init.vim`; `nvim-tree`, markdown preview, and img-paste already follow this pattern.
 - The repo now has a lightweight test harness under `tests/`; `tests/minimal_init.lua` prepends the repo and Plenary to `runtimepath`, and specs under `tests/nvim-config/` intentionally cover Lua modules and repo-owned behavior without depending on a full interactive session.
 - Filetype behavior is layered:
   - late Lua overrides in `after/ftplugin/`
-  - older Vimscript overrides in `ftplugin/`
+  - older Vimscript overrides in `ftplugin/` (current remaining `.vim` files: `autohotkey.vim`, `go.vim`, `markdown.vim`, `sql.vim`)
   - custom filetype detection in `after/ftdetect/`
-  - custom syntax definitions in `syntax/`
+  - custom syntax definitions in `syntax/` (currently `sebol.vim`)
   - snippet definitions registered from `snippets/package.json`
 - Language tooling is spread across a few focused files:
   - `lua/plugins/lspconfig.lua` enables and configures LSP servers with `vim.lsp.config(...)` / `vim.lsp.enable(...)`

@@ -22,9 +22,10 @@ My neovim config files
 - Search/sort and compatibility maps such as `<leader>/`, `<leader>so`, `<C-z>`, and `<C-y>` are now also owned by `lua/config/keymaps.lua`; the old `<leader>sv` self-reload shortcut has been removed.
 - The last general `vimscript/init.vim` mappings, including the `gf` workaround and GUI font hotkeys, now route through Lua-backed helpers in `lua/config/keymaps.lua` and `lua/config/editor.lua`.
 - Help-lookup mappings for `help` and `vim` buffers now live in `after/ftplugin/help.lua` and `after/ftplugin/vim.lua`, so there are no active `:map` definitions left in repo `.vim` files.
+- `init.lua` no longer sources a legacy Vimscript bootstrap file; the remaining active startup globals, options, clipboard provider settings, and GUI enter behavior now live in Lua under `lua/config/{constants,options,autocmds,gui,editor}.lua`, and `vimscript/init.vim` has been deleted.
 - Plugin-local bootstrap and setup live in `lua/plugins/`.
 - Filetype-local overrides live in `after/ftplugin/` and custom detection in `after/ftdetect/`.
-- Legacy Vimscript is still sourced during the migration, but low-risk startup settings are being moved into Lua as each stage is completed.
+- The remaining Vimscript is now limited to a small set of non-empty `ftplugin/*.vim` / `syntax/*.vim` files that still need migration.
 
 ## Testing
 
