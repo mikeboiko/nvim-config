@@ -126,6 +126,48 @@ vim.keymap.set('n', '<leader>st', function()
   editor.toggle_spell()
 end, { silent = true, desc = 'Toggle spell check' })
 
+vim.keymap.set('n', '<leader>ctd', function()
+  editor.reload_with_fileformat('dos')
+end, { silent = true, desc = 'Reload buffer as DOS fileformat' })
+
+vim.keymap.set('n', '<leader>ctm', function()
+  editor.reload_with_fileformat('mac')
+end, { silent = true, desc = 'Reload buffer as Mac fileformat' })
+
+vim.keymap.set('n', '<leader>ctu', function()
+  editor.reload_with_fileformat('unix')
+end, { silent = true, desc = 'Reload buffer as Unix fileformat' })
+
+vim.keymap.set({ 'n', 'v' }, 'H', '^', { silent = true, desc = 'Move to line start' })
+vim.keymap.set({ 'n', 'v' }, 'L', '$', { silent = true, desc = 'Move to line end' })
+vim.keymap.set('o', 'H', '^', { desc = 'Move to line start' })
+vim.keymap.set('o', 'L', '$', { desc = 'Move to line end' })
+
+vim.keymap.set('n', 'zx', 'zMzvzz', { desc = 'Close other folds and center current section' })
+vim.keymap.set('n', "'", '`', { desc = 'Jump to exact mark column' })
+
+vim.keymap.set('n', 'j', function()
+  return vim.v.count > 0 and 'j' or 'gj'
+end, { expr = true, desc = 'Move down by screen line unless count is given' })
+
+vim.keymap.set('n', 'k', function()
+  return vim.v.count > 0 and 'k' or 'gk'
+end, { expr = true, desc = 'Move up by screen line unless count is given' })
+
+vim.keymap.set('n', '<BS>', '<C-^>', { desc = 'Switch to alternate buffer' })
+
+vim.keymap.set('n', '<leader>aj', function()
+  editor.insert_blank_line_below()
+end, { silent = true, desc = 'Insert blank line below current line' })
+
+vim.keymap.set('n', '<leader>ak', function()
+  editor.insert_blank_line_above()
+end, { silent = true, desc = 'Insert blank line above current line' })
+
+vim.keymap.set('n', '<leader>al', function()
+  editor.insert_blank_line_around()
+end, { silent = true, desc = 'Insert blank lines around current line' })
+
 vim.keymap.set('n', '<leader>ms', function()
   shell.mani_git_status()
 end, { silent = true, desc = 'Mani git status' })
@@ -162,6 +204,14 @@ end, { silent = true, desc = 'Grep current word in current file' })
 vim.keymap.set('n', '<leader>q', function()
   quickfix.toggle_list('c')
 end, { silent = true, desc = 'Toggle quickfix list' })
+
+vim.keymap.set('n', 'Q', ':q!<CR>', { silent = true, desc = 'Force quit current window' })
+vim.keymap.set('n', 'qw', ':w<CR>', { silent = true, desc = 'Write buffer' })
+vim.keymap.set('n', '<C-s>', ':w<CR>', { silent = true, desc = 'Write buffer' })
+vim.keymap.set('i', '<C-s>', '<Esc>:w<CR>', { silent = true, desc = 'Write buffer' })
+
+vim.keymap.set({ 'n', 'v' }, 'K', '5k', { desc = 'Move up 5 lines' })
+vim.keymap.set({ 'n', 'v' }, 'J', '5j', { desc = 'Move down 5 lines' })
 
 vim.keymap.set('n', '<C-f>', function()
   quickfix.cycle('c', 'next')

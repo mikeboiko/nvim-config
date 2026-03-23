@@ -70,6 +70,79 @@ describe('nvim-config editor helpers', function()
     wipe_if_valid(buffer)
   end)
 
+  it('reloads the buffer with a requested fileformat and preserves the cursor', function()
+    local original_run_ex = editor.run_ex
+    local original_replace_m_with_blank = editor.replace_m_with_blank
+    local calls = {}
+    local replace_calls = 0
+
+    vim.cmd('enew')
+    local buffer = vim.api.nvim_get_current_buf()
+    vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'alpha', 'beta' })
+    vim.api.nvim_win_set_cursor(0, { 2, 2 })
+
+    editor.run_ex = function(command)
+      table.insert(calls, command)
+    end
+
+    editor.replace_m_with_blank = function()
+      replace_calls = replace_calls + 1
+    end
+
+    editor.reload_with_fileformat('dos')
+    editor.reload_with_fileformat('unix')
+
+    assert.are.same({ 'edit ++ff=dos', 'edit ++ff=unix' }, calls)
+    assert.are.equal(1, replace_calls)
+    assert.are.same({ 2, 2 }, vim.api.nvim_win_get_cursor(0))
+
+    editor.run_ex = original_run_ex
+    editor.replace_m_with_blank = original_replace_m_with_blank
+    wipe_if_valid(buffer)
+  end)
+
+  it('inserts a blank line below the current line and keeps the cursor on the original text', function()
+    vim.cmd('enew')
+    local buffer = vim.api.nvim_get_current_buf()
+    vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'alpha', 'beta' })
+    vim.api.nvim_win_set_cursor(0, { 1, 2 })
+
+    editor.insert_blank_line_below()
+
+    assert.are.same({ 'alpha', '', 'beta' }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
+    assert.are.same({ 1, 2 }, vim.api.nvim_win_get_cursor(0))
+
+    wipe_if_valid(buffer)
+  end)
+
+  it('inserts a blank line above the current line and keeps the cursor on the original text', function()
+    vim.cmd('enew')
+    local buffer = vim.api.nvim_get_current_buf()
+    vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'alpha', 'beta' })
+    vim.api.nvim_win_set_cursor(0, { 2, 1 })
+
+    editor.insert_blank_line_above()
+
+    assert.are.same({ 'alpha', '', 'beta' }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
+    assert.are.same({ 3, 1 }, vim.api.nvim_win_get_cursor(0))
+
+    wipe_if_valid(buffer)
+  end)
+
+  it('inserts blank lines around the current line and keeps the cursor on the original text', function()
+    vim.cmd('enew')
+    local buffer = vim.api.nvim_get_current_buf()
+    vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'alpha', 'beta' })
+    vim.api.nvim_win_set_cursor(0, { 2, 1 })
+
+    editor.insert_blank_line_around()
+
+    assert.are.same({ 'alpha', '', 'beta', '' }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
+    assert.are.same({ 3, 1 }, vim.api.nvim_win_get_cursor(0))
+
+    wipe_if_valid(buffer)
+  end)
+
   it('sets command-window quit maps on CmdwinEnter', function()
     package.loaded['config.autocmds'] = nil
 

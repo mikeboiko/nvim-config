@@ -379,26 +379,16 @@ nmap <leader>redo <Plug>(RepeatRedo)
 " Convert Line Endings {{{2
 
 " Convert to Dos
-nnoremap <leader>ctd mz:e ++ff=dos<CR>`z
 
 " Convert to Mac
-nnoremap <leader>ctm mz:e ++ff=mac<CR>`z
 
 " Convert to Unix
-nnoremap <leader>ctu mz:e ++ff=unix<CR>:ReplaceMwithBlank<CR>`z
 
 " End/Beginning of Line {{{2
-nnoremap <silent> H ^
-nnoremap <silent> L $
-vnoremap <silent> H ^
-vnoremap <silent> L $
-omap H ^
-omap L $
 
 " Folding {{{2
 
 " Fold Everything except for the current section
-nnoremap zx zMzvzz
 
 " Font Size Bigger/Smaller {{{2
 
@@ -445,7 +435,6 @@ map gv mm:vs %<CR>`mgdzMzvzz
 
 " Marks {{{2
 " Jump to proper column when using marks
-nnoremap ' `
 
 " Mouse {{{2
 
@@ -458,24 +447,18 @@ set mouse-=a
 
 " Navigation {{{2
 " Do not automatically adjust for line wrapping
-nnoremap <expr> j v:count ? 'j' : 'gj'
-nnoremap <expr> k v:count ? 'k' : 'gk'
 
 " Go back to the last file
-nnoremap <BS> <C-^>
 
 " NeoVim {{{2
 
 " New line {{{2
 
 " Add blank line after current line
-nnoremap <leader>aj :<CR>mzo<Esc>`z:<CR>
 
 " Add blank line before current line
-nnoremap <leader>ak :<CR>mzO<Esc>`z:<CR>
 
 " Add blank line before and after current line
-nnoremap <leader>al :<CR>mzO<Esc>jo<Esc>`z:<CR>
 
 " Restore Enter key functionality for command history window
 " autocmd CmdwinEnter * nnoremap <buffer> <CR> <CR>
@@ -506,7 +489,6 @@ nnoremap <leader>od :Start -wait=never "C:\Program Files\Double Commander\double
 "
 
 " Close without saving
-nnoremap Q :q!<CR>
 
 " A hack to close the Fugitive Plugin window with <c-w>
 nmap gf gf
@@ -529,19 +511,12 @@ endif
 
 " Save Buffer {{{2
 
-nnoremap qw :w<CR>
-nnoremap <c-s> :w<CR>
-inoremap <c-s> <esc>:w<CR>
 
 " Scrolling{{{2
 
 " Scroll Up
-nnoremap K 5k
-vnoremap K 5k
 
 " Scroll Down
-nnoremap J 5j
-vnoremap J 5j
 
 " Search {{{2
 " Search for multiple terms

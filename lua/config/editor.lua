@@ -1,7 +1,27 @@
+local shell = require('config.shell')
+
 local M = {}
+
+function M.run_ex(command)
+  vim.cmd(command)
+end
+
+function M.replace_m_with_blank()
+  shell.replace_m_with_blank()
+end
 
 local function echo(message)
   vim.api.nvim_echo({ { message } }, false, {})
+end
+
+local function clamp_cursor(cursor)
+  local row = math.max(1, math.min(cursor[1], vim.api.nvim_buf_line_count(0)))
+  local line = vim.api.nvim_buf_get_lines(0, row - 1, row, false)[1] or ''
+  return { row, math.min(cursor[2], #line) }
+end
+
+local function restore_cursor(cursor)
+  vim.api.nvim_win_set_cursor(0, clamp_cursor(cursor))
 end
 
 local function has_preview_window()
@@ -57,6 +77,41 @@ end
 
 function M.on_save()
   vim.cmd('wshada')
+end
+
+function M.reload_with_fileformat(fileformat)
+  local cursor = vim.api.nvim_win_get_cursor(0)
+  local ok, result = xpcall(function()
+    M.run_ex('edit ++ff=' .. fileformat)
+    if fileformat == 'unix' then
+      M.replace_m_with_blank()
+    end
+  end, debug.traceback)
+
+  restore_cursor(cursor)
+
+  if not ok then
+    error(result)
+  end
+end
+
+function M.insert_blank_line_below()
+  local cursor = vim.api.nvim_win_get_cursor(0)
+  vim.api.nvim_buf_set_lines(0, cursor[1], cursor[1], false, { '' })
+  restore_cursor(cursor)
+end
+
+function M.insert_blank_line_above()
+  local cursor = vim.api.nvim_win_get_cursor(0)
+  vim.api.nvim_buf_set_lines(0, cursor[1] - 1, cursor[1] - 1, false, { '' })
+  restore_cursor({ cursor[1] + 1, cursor[2] })
+end
+
+function M.insert_blank_line_around()
+  local cursor = vim.api.nvim_win_get_cursor(0)
+  vim.api.nvim_buf_set_lines(0, cursor[1] - 1, cursor[1] - 1, false, { '' })
+  vim.api.nvim_buf_set_lines(0, cursor[1] + 1, cursor[1] + 1, false, { '' })
+  restore_cursor({ cursor[1] + 1, cursor[2] })
 end
 
 function M.toggle_spell()
