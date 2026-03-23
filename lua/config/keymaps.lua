@@ -335,6 +335,12 @@ end, { silent = true, desc = 'Prefill grep for current file' })
 vim.keymap.set('n', '<leader>fw', function()
   shell.grep_current_word_in_current_file()
 end, { silent = true, desc = 'Grep current word in current file' })
+vim.keymap.set('n', '<leader>/', [[/\v<C-r>/\|]], { desc = 'Start a multi-term very-magic search' })
+vim.keymap.set('n', '<leader>so', 'vip:sort<CR>', { desc = 'Sort the current paragraph' })
+vim.keymap.set('n', '<leader>sv', ':w<CR>:so $HOME/.vimrc<CR>', { desc = 'Write and source the legacy vimrc' })
+vim.keymap.set({ 'n', 'x', 's', 'o' }, '<C-z>', '<Nop>', { desc = 'Disable suspend' })
+vim.keymap.set('n', '<C-y>', '<C-r>', { desc = 'Redo' })
+vim.keymap.set('i', '<C-y>', '<Esc><C-r>', { desc = 'Redo from insert mode' })
 
 -- Quickfix/location list helpers
 vim.keymap.set('n', '<leader>q', function()

@@ -470,7 +470,6 @@ nmap gf gf
 
 " Search {{{2
 " Search for multiple terms
-nnoremap <leader>/ /\v<c-r>/\|
 
 " Decided to disable this so it's not confusing when I use other applications with vi mode such as tmux
 " Search forward and backwards consistently
@@ -479,10 +478,8 @@ nnoremap <leader>/ /\v<c-r>/\|
 
 " Sorting {{{2
 " Sort paragraph
-nnoremap <leader>so vip:sort<CR>
 
 " Source {{{2
-nnoremap <leader>sv :w<CR>:so $HOME/.vimrc<CR>
 
 " Spell Toggle {{{2
 " Toggle the spelling on/off
@@ -491,7 +488,6 @@ nnoremap <leader>sv :w<CR>:so $HOME/.vimrc<CR>
 " Suspend {{{2
 
 " Don't suspend!
-noremap <c-z> <nop>
 " noremap <c-z>c :Start! ~/clipboard.sh --write<CR>
 " noremap <c-z>v :Start! ~/clipboard.sh --read<CR>
 
@@ -504,8 +500,6 @@ noremap <c-z> <nop>
 " Windows Style Commands {{{2
 
 " Redo
-nnoremap <c-y> <c-r>
-inoremap <c-y> <Esc><C-r>
 
 " Windows {{{2
 

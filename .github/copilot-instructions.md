@@ -40,6 +40,7 @@
 - Fugitive/Git prompt maps and the prompt-based rename workflow now live in `lua/config/keymaps.lua` as well; `keymaps.prompt_rename()` uses the same tested global-callback bridge used for other prompt-driven workflows.
 - Small utility maps such as append-at-EOL helpers, path-copy shortcuts, close helpers, rerun-command/command-history entry, and paragraph commenting now live in Lua too, and the old `<leader>redo` compatibility mapping has been removed.
 - Tab/window navigation helpers such as `gI`, `gT`, `gt`, `gs`, `gv`, `<C-t>`, `<C-Tab>`, and `<Tab>` now live in `lua/config/keymaps.lua` too; the smoke spec covers their registered RHS values because they intentionally preserve odd legacy key-sequence behavior for parity.
+- Search/sort/reload and compatibility maps such as `<leader>/`, `<leader>so`, `<leader>sv`, `<C-z>`, and `<C-y>` now live in `lua/config/keymaps.lua` too; the smoke spec asserts their normalized RHS values so literal command-line/search behavior stays stable during migration.
 - Plugin-local startup globals are being moved into plugin spec `init` blocks instead of staying in `vimscript/init.vim`; `nvim-tree`, markdown preview, and img-paste already follow this pattern.
 - The repo now has a lightweight test harness under `tests/`; `tests/minimal_init.lua` prepends the repo and Plenary to `runtimepath`, and specs under `tests/nvim-config/` intentionally cover Lua modules and repo-owned behavior without depending on a full interactive session.
 - Filetype behavior is layered:
