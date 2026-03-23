@@ -5,7 +5,7 @@
 - Hook automation currently checks the full Lua tree with Stylua:
   - `stylua init.lua lua after tests`
   - `stylua --check init.lua lua after tests`
-- The pre-commit hook is the active automation entrypoint during the migration. It formats staged Lua files first, then runs Stylua checks, Lua syntax checks, the Plenary suite, and a headless startup smoke test.
+- The pre-commit hook is the active automation entrypoint. It formats staged Lua files first, then runs Stylua checks, Lua syntax checks, the Plenary suite, and a headless startup smoke test.
 - Repo tests use Plenary's busted harness:
   - full suite: `PLENARY_PATH="$HOME/.local/share/nvim/lazy/plenary.nvim" nvim --headless -u tests/minimal_init.lua -c "PlenaryBustedDirectory tests/nvim-config { minimal_init = 'tests/minimal_init.lua' }" -c "qa"`
   - single test file: `PLENARY_PATH="$HOME/.local/share/nvim/lazy/plenary.nvim" nvim --headless -u tests/minimal_init.lua -c "PlenaryBustedFile tests/nvim-config/config_modules_spec.lua" -c "qa"`
@@ -31,21 +31,15 @@
 - `lua/config/lazy.lua` imports the `plugins` namespace, so each file under `lua/plugins/` is a Lazy spec module. `lazy-lock.json` pins the resolved plugin versions.
 - The repo currently relies on local hook-based validation rather than GitHub Actions, and it targets Neovim stable (`0.11.x` today).
 - Shared editor behavior is split across `lua/config/` modules such as `constants.lua`, `options.lua`, `autocmds.lua`, `functions.lua`, `comments.lua`, and `keymaps.lua`.
-- Reusable migrated legacy helpers are increasingly landing in focused modules under `lua/config/`, with `git.lua`, `windows.lua`, `quickfix.lua`, `folds.lua`, `comments.lua`, `terminal.lua`, `clipboard.lua`, `tabline.lua`, `editor.lua`, `shell.lua`, `buffers.lua`, and `workspace.lua` as current examples.
-- Search- and workflow-oriented user mappings are being migrated into `lua/config/keymaps.lua` on top of helper modules such as `shell.lua`, rather than staying as standalone Vimscript remaps.
-- Core editing maps are also moving into `lua/config/keymaps.lua`, with stateful behavior such as fileformat reloads and blank-line insertion routed through tested helpers in `lua/config/editor.lua`.
-- Terminal navigation maps are no longer wired through a `v:lua` global shim; `lua/config/autocmds.lua` now calls `require('config.keymaps').set_terminal_keymaps(...)` directly on `TermOpen`.
-- Copilot workflow mappings now live in `lua/config/keymaps.lua` too, and the module includes a tested helper for safely invoking plugin-provided globals like `CopilotQuickChat` / `CopilotCommitMsg`.
-- External launcher/report maps now use tested helpers in `lua/config/shell.lua` for things like git diff terminals, markdown preview, Explorer launchers, and report tabs.
-- Fugitive/Git prompt maps and the prompt-based rename workflow now live in `lua/config/keymaps.lua` as well; `keymaps.prompt_rename()` uses the same tested global-callback bridge used for other prompt-driven workflows.
-- Small utility maps such as append-at-EOL helpers, path-copy shortcuts, close helpers, rerun-command/command-history entry, and paragraph commenting now live in Lua too, and the old `<leader>redo` compatibility mapping has been removed.
-- Tab/window navigation helpers such as `gI`, `gT`, `gt`, `gs`, `gv`, `<C-t>`, `<C-Tab>`, and `<Tab>` now live in `lua/config/keymaps.lua` too; the smoke spec covers their registered RHS values because they intentionally preserve odd legacy key-sequence behavior for parity.
-- Search/sort and compatibility maps such as `<leader>/`, `<leader>so`, `<C-z>`, and `<C-y>` now live in `lua/config/keymaps.lua` too; the smoke spec asserts their normalized RHS values so literal command-line/search behavior stays stable during migration, and `<leader>sv` has been intentionally removed.
-- The last general compatibility mappings (`gf` plus the GUI-only font hotkeys) now route through Lua-backed helpers in `lua/config/keymaps.lua` / `lua/config/editor.lua`, and the legacy `FontSizePlus()` / `FontSizeMinus()` entrypoints are preserved through Lua wrappers.
+- Reusable helper modules live in focused files under `lua/config/`, with `git.lua`, `windows.lua`, `quickfix.lua`, `folds.lua`, `comments.lua`, `terminal.lua`, `clipboard.lua`, `tabline.lua`, `editor.lua`, `shell.lua`, `buffers.lua`, and `workspace.lua` as current examples.
+- Keymap registration is split by concern under `lua/config/keymaps/*.lua`, with `lua/config/keymaps.lua` exposing shared helpers like `call_global()`, `prompt_rename()`, and `set_terminal_keymaps()`.
+- `lua/config/autocmds.lua` calls `require('config.keymaps').set_terminal_keymaps(...)` directly on `TermOpen`.
+- Core editing behavior such as fileformat reloads, blank-line insertion, whole-buffer yanks, spell toggles, and GUI font resizing is routed through `lua/config/editor.lua`.
+- Search, quickfix, Git, Copilot, and external workflow bindings live in the keymap modules and defer to helpers like `shell.lua`, `quickfix.lua`, and `folds.lua` where appropriate.
 - Help lookup for `help`/`vim` buffers now lives in `after/ftplugin/help.lua` and `after/ftplugin/vim.lua`; buffer-local editor behavior is configured from Lua.
 - Startup globals, options, clipboard provider settings, and GUI enter behavior now live in `lua/config/{constants,options,autocmds,gui,editor}.lua`.
-- Markdown/sebol filetype behavior and the AutoHotkey syntax setup now also live in Lua through `lua/config/filetypes.lua` plus `after/ftplugin/*.lua`; the active config no longer depends on repo-owned or runtime-sourced legacy config.
-- Plugin-local startup globals are being moved into plugin spec `init` blocks instead of staying in ad hoc bootstrap code; `nvim-tree`, markdown preview, and img-paste already follow this pattern.
+- Markdown/sebol filetype behavior and the AutoHotkey syntax setup live in Lua through `lua/config/filetypes.lua` plus `after/ftplugin/*.lua`.
+- Plugin-local startup globals should live in plugin spec `init` blocks instead of unrelated startup code; `nvim-tree`, markdown preview, and img-paste already follow this pattern.
 - The repo now has a lightweight test harness under `tests/`; `tests/minimal_init.lua` prepends the repo and Plenary to `runtimepath`, and specs under `tests/nvim-config/` intentionally cover Lua modules and repo-owned behavior without depending on a full interactive session.
 - Filetype behavior is layered:
   - late Lua overrides in `after/ftplugin/`
@@ -65,7 +59,7 @@
 
 - Keep the Lua-first split intact. Shared editor behavior belongs in `lua/config/*`, plugin wiring belongs in `lua/plugins/*`, and filetype-specific behavior belongs in `after/ftplugin/` or `after/ftdetect/`. Avoid hiding buffer-local tweaks inside unrelated plugin specs.
 - Follow the existing plugin-spec pattern: one plugin per file under `lua/plugins/`, with each file returning a Lazy spec table. If plugin definitions change, keep `lazy-lock.json` in sync.
-- If a setting only bootstraps one plugin before it loads, put it in that plugin spec's `init` block instead of the legacy Vimscript entrypoint.
+- If a setting only bootstraps one plugin before it loads, put it in that plugin spec's `init` block instead of unrelated startup code.
 - Lua style follows `.stylua.toml`: 2-space indentation, 120-column width, Unix line endings, and single quotes when Stylua can preserve them.
 - LSP setup is explicit in `lua/plugins/lspconfig.lua`; Mason does not define the active servers for you. When changing a language workflow, also check `conform.lua`, `neotest.lua`, and `dap-ui.lua` so formatting, testing, and debugging stay aligned.
 - For repo tests, prefer the lightweight Plenary harness first; reserve `nvim --headless -u init.lua` smoke checks for cases where you need the whole config and plugin bootstrap path.

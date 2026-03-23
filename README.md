@@ -10,23 +10,17 @@ My neovim config files
 ## Structure
 
 - Shared Lua wiring lives in `lua/config/`.
-- Reusable migrated helpers now live in focused `lua/config/*.lua` modules such as `git.lua`, `windows.lua`, `quickfix.lua`, `folds.lua`, `comments.lua`, `terminal.lua`, `clipboard.lua`, `tabline.lua`, `editor.lua`, `shell.lua`, `buffers.lua`, and `workspace.lua`.
-- The ongoing keymap migration is moving repo-owned search and workflow maps into `lua/config/keymaps.lua` on top of those helper modules, instead of leaving behavior split across Vimscript remaps and Lua commands.
-- Core editing behaviors such as fileformat conversion and blank-line insertion are also moving behind tested helpers in `lua/config/editor.lua`, with `lua/config/keymaps.lua` owning the user-facing maps.
-- Terminal navigation maps now route through a Lua helper as well: `lua/config/autocmds.lua` calls `lua/config/keymaps.lua` on `TermOpen` instead of relying on a legacy global function.
-- Copilot workflow maps are now also owned by `lua/config/keymaps.lua`, with a small tested helper for invoking plugin-provided global callbacks without crashing when a callback is missing.
-- External workflow maps like git-diff terminals, markdown preview, Explorer launchers, and report tabs are now routed through tested helpers in `lua/config/shell.lua` instead of being hard-coded as Vimscript remaps.
-- Fugitive/Git prompt maps and the prompt-based rename shortcut are now also managed from `lua/config/keymaps.lua`, with the rename path covered through the same tested global-callback bridge used by other workflow maps.
-- Small utility maps such as append-at-EOL helpers, path-copy shortcuts, close helpers, rerun-command/command-history entry, and paragraph commenting are now also managed from Lua, and the old `<leader>redo` compatibility map has been removed.
-- Tab/window navigation helpers such as `gI`, `gT`, `gt`, `gs`, `gv`, `<C-t>`, `<C-Tab>`, and `<Tab>` are now also owned by `lua/config/keymaps.lua`, with the matching legacy Vimscript maps removed.
-- Search/sort and compatibility maps such as `<leader>/`, `<leader>so`, `<C-z>`, and `<C-y>` are now also owned by `lua/config/keymaps.lua`; the old `<leader>sv` self-reload shortcut has been removed.
-- The last general compatibility mappings, including the `gf` workaround and GUI font hotkeys, now route through Lua-backed helpers in `lua/config/keymaps.lua` and `lua/config/editor.lua`.
+- Reusable helper modules live in focused `lua/config/*.lua` files such as `git.lua`, `windows.lua`, `quickfix.lua`, `folds.lua`, `comments.lua`, `terminal.lua`, `clipboard.lua`, `tabline.lua`, `editor.lua`, `shell.lua`, `buffers.lua`, and `workspace.lua`.
+- Keymap registration is split by concern under `lua/config/keymaps/*.lua`, with `lua/config/keymaps.lua` exposing the shared helper functions used by tests and autocmds.
+- Core editing behaviors such as fileformat conversion, blank-line insertion, spell toggles, yanking helpers, and GUI font resizing live in `lua/config/editor.lua`, with the keymap modules owning the user-facing bindings.
+- Search, quickfix, Git, Copilot, and external workflow bindings are routed through Lua helpers instead of ad hoc command strings where practical.
+- `lua/config/autocmds.lua` calls `require('config.keymaps').set_terminal_keymaps(...)` on `TermOpen` so terminal navigation maps are configured from the same keymap facade.
 - Help-lookup mappings for `help` and `vim` buffers now live in `after/ftplugin/help.lua` and `after/ftplugin/vim.lua`, so buffer-local editor behavior is fully configured from Lua.
 - Startup globals, options, clipboard provider settings, and GUI enter behavior all live in Lua under `lua/config/{constants,options,autocmds,gui,editor}.lua`.
-- The remaining filetype-local Markdown/sebol behavior and the AutoHotkey syntax setup now also live in Lua through `lua/config/filetypes.lua` plus `after/ftplugin/*.lua`, with no repo-owned or runtime-sourced legacy config left in the active setup.
+- Filetype-local Markdown/sebol behavior and the AutoHotkey syntax setup live in Lua through `lua/config/filetypes.lua` plus `after/ftplugin/*.lua`.
 - Plugin-local bootstrap and setup live in `lua/plugins/`.
 - Filetype-local overrides live in `after/ftplugin/` and custom detection in `after/ftdetect/`.
-- The remaining cleanup work is now refactoring-oriented rather than migration-oriented; the repo no longer needs a Vimscript compatibility layer.
+- The active config is Lua-native and does not rely on a repo-owned Vimscript compatibility layer.
 
 ## Testing
 
@@ -70,4 +64,4 @@ nvim --headless -u init.lua -c "qa"
 
 - Install local git hooks with `lefthook install`.
 - `.lefthook.yml` now runs the repo checks directly in `pre-commit`: staged-Lua formatting, `stylua --check init.lua lua after tests`, Lua syntax checks, the Plenary suite, and a headless startup smoke test.
-- There is no GitHub Actions workflow at the moment; hook-based validation is the source of truth during the Lua migration.
+- There is no GitHub Actions workflow at the moment; hook-based validation is the source of truth.
