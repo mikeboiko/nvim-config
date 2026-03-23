@@ -49,4 +49,40 @@ describe('nvim-config custom filetypes', function()
     assert.are.equal('#%s', vim.bo.commentstring)
     vim.cmd('bwipe!')
   end)
+
+  it('applies migrated help lookup maps for help and vim buffers', function()
+    vim.cmd('help help')
+    local help_buffer = vim.api.nvim_get_current_buf()
+    local help_map = vim.fn.maparg('<Space>h', 'n', false, true)
+
+    assert.are.equal('help', vim.bo.filetype)
+    assert.are.equal('<Space>h', help_map.lhs)
+    assert.are.equal(1, help_map.expr)
+    assert.are.equal(1, help_map.buffer)
+
+    vim.cmd('helpclose')
+    if vim.api.nvim_buf_is_valid(help_buffer) then
+      vim.api.nvim_buf_delete(help_buffer, { force = true })
+    end
+
+    local file = vim.fn.tempname() .. '.vim'
+    write_file(file, 'set number\n')
+
+    vim.cmd('edit ' .. vim.fn.fnameescape(file))
+    local vim_buffer = vim.api.nvim_get_current_buf()
+    local vim_map = vim.fn.maparg('<Space>h', 'n', false, true)
+
+    assert.are.equal('vim', vim.bo.filetype)
+    assert.are.equal('marker', vim.wo.foldmethod)
+    assert.are.equal('<Space>h', vim_map.lhs)
+    assert.are.equal(1, vim_map.expr)
+    assert.are.equal(1, vim_map.buffer)
+
+    vim.cmd('bwipe!')
+    vim.fn.delete(file)
+
+    if vim.api.nvim_buf_is_valid(vim_buffer) then
+      vim.api.nvim_buf_delete(vim_buffer, { force = true })
+    end
+  end)
 end)

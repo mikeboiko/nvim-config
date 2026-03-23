@@ -337,10 +337,19 @@ vim.keymap.set('n', '<leader>fw', function()
 end, { silent = true, desc = 'Grep current word in current file' })
 vim.keymap.set('n', '<leader>/', [[/\v<C-r>/\|]], { desc = 'Start a multi-term very-magic search' })
 vim.keymap.set('n', '<leader>so', 'vip:sort<CR>', { desc = 'Sort the current paragraph' })
-vim.keymap.set('n', '<leader>sv', ':w<CR>:so $HOME/.vimrc<CR>', { desc = 'Write and source the legacy vimrc' })
 vim.keymap.set({ 'n', 'x', 's', 'o' }, '<C-z>', '<Nop>', { desc = 'Disable suspend' })
 vim.keymap.set('n', '<C-y>', '<C-r>', { desc = 'Redo' })
 vim.keymap.set('i', '<C-y>', '<Esc><C-r>', { desc = 'Redo from insert mode' })
+vim.keymap.set('n', 'gf', 'gf', { remap = true, desc = 'Restore built-in gf behavior' })
+
+if vim.fn.has('gui_running') == 1 then
+  vim.keymap.set('n', '<F6>', function()
+    editor.font_size_plus()
+  end, { silent = true, desc = 'Increase GUI font size' })
+  vim.keymap.set('n', '<S-F6>', function()
+    editor.font_size_minus()
+  end, { silent = true, desc = 'Decrease GUI font size' })
+end
 
 -- Quickfix/location list helpers
 vim.keymap.set('n', '<leader>q', function()

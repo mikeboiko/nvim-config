@@ -157,6 +157,40 @@ describe('nvim-config editor helpers', function()
     wipe_if_valid(buffer)
   end)
 
+  it('adjusts unix-style guifont sizes while preserving the font family', function()
+    assert.are.equal('JetBrainsMono Nerd Font 14', editor.adjust_guifont_size('JetBrainsMono Nerd Font 13', 1, true))
+    assert.are.equal('JetBrainsMono Nerd Font 12', editor.adjust_guifont_size('JetBrainsMono Nerd Font 13', -1, true))
+  end)
+
+  it('adjusts windows-style guifont sizes while preserving the font family', function()
+    assert.are.equal('Consolas:h15', editor.adjust_guifont_size('Consolas:h14', 1, false))
+    assert.are.equal('Consolas:h13', editor.adjust_guifont_size('Consolas:h14', -1, false))
+  end)
+
+  it('keeps the legacy FontSizePlus()/FontSizeMinus() entrypoints working', function()
+    require('config.commands')
+
+    local original_plus = editor.font_size_plus
+    local original_minus = editor.font_size_minus
+    local calls = {}
+
+    editor.font_size_plus = function()
+      table.insert(calls, 'plus')
+    end
+
+    editor.font_size_minus = function()
+      table.insert(calls, 'minus')
+    end
+
+    vim.cmd('call FontSizePlus()')
+    vim.cmd('call FontSizeMinus()')
+
+    assert.are.same({ 'plus', 'minus' }, calls)
+
+    editor.font_size_plus = original_plus
+    editor.font_size_minus = original_minus
+  end)
+
   it('yanks the whole buffer and restores the current view', function()
     vim.cmd('enew')
     local buffer = vim.api.nvim_get_current_buf()

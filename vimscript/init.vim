@@ -18,37 +18,6 @@ endif
 
 " Functions {{{1
 
-" FontSize() {{{2
-if has("unix")
-    function! FontSizePlus ()
-        let l:gf_size_whole = matchstr(&guifont, '\( \)\@<=\d\+$')
-        let l:gf_size_whole = l:gf_size_whole + 1
-        let l:new_font_size = ' '.l:gf_size_whole
-        let &guifont = substitute(&guifont, ' \d\+$', l:new_font_size, '')
-    endfunction
-
-    function! FontSizeMinus ()
-        let l:gf_size_whole = matchstr(&guifont, '\( \)\@<=\d\+$')
-        let l:gf_size_whole = l:gf_size_whole - 1
-        let l:new_font_size = ' '.l:gf_size_whole
-        let &guifont = substitute(&guifont, ' \d\+$', l:new_font_size, '')
-    endfunction
-else
-    function! FontSizePlus ()
-        let l:gf_size_whole = matchstr(&guifont, '\(:h\)\@<=\d\+$')
-        let l:gf_size_whole = l:gf_size_whole + 1
-        let l:new_font_size = ':h'.l:gf_size_whole
-        let &guifont = substitute(&guifont, ':h\d\+$', l:new_font_size, '')
-    endfunction
-
-    function! FontSizeMinus ()
-        let l:gf_size_whole = matchstr(&guifont, '\(:h\)\@<=\d\+$')
-        let l:gf_size_whole = l:gf_size_whole - 1
-        let l:new_font_size = ':h'.l:gf_size_whole
-        let &guifont = substitute(&guifont, ':h\d\+$', l:new_font_size, '')
-    endfunction
-endif
-
 " Commands {{{1
 " Figlet {{{2
 " Draw ascii art comments
@@ -366,12 +335,6 @@ let mapleader="\<space>"
 
 " Font Size Bigger/Smaller {{{2
 
-" Font Hotkeys
-if has("gui_running")
-    nmap <S-F6> :call FontSizeMinus()<CR>
-    nmap <F6> :call FontSizePlus()<CR>
-endif
-
 " Git {{{2
 
 " Fugitive remappings
@@ -450,7 +413,6 @@ set mouse-=a
 " Close without saving
 
 " A hack to close the Fugitive Plugin window with <c-w>
-nmap gf gf
 
 "
 

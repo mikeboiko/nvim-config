@@ -121,6 +121,41 @@ function M.append_to_current_line(suffix)
   restore_cursor(cursor)
 end
 
+function M.adjust_guifont_size(guifont, delta, is_unix)
+  local pattern = is_unix and '^(.* )(%d+)$' or '^(.*:h)(%d+)$'
+  local prefix, size = guifont:match(pattern)
+  if not prefix or not size then
+    return nil
+  end
+
+  return prefix .. tostring(tonumber(size) + delta)
+end
+
+function M.change_guifont_size(delta, opts)
+  opts = opts or {}
+  local is_unix = opts.is_unix
+  if is_unix == nil then
+    is_unix = vim.fn.has('unix') == 1
+  end
+
+  local updated = M.adjust_guifont_size(vim.o.guifont, delta, is_unix)
+  if not updated then
+    vim.notify('Unable to adjust guifont size: unsupported guifont format', vim.log.levels.WARN)
+    return false
+  end
+
+  vim.o.guifont = updated
+  return true
+end
+
+function M.font_size_plus(opts)
+  return M.change_guifont_size(1, opts)
+end
+
+function M.font_size_minus(opts)
+  return M.change_guifont_size(-1, opts)
+end
+
 function M.yank_all()
   local view = vim.fn.winsaveview()
   local ok, result = xpcall(function()
@@ -158,6 +193,14 @@ function M.register_legacy_functions()
     M.on_save()
   end
 
+  _G.nvim_config_editor_font_size_plus_legacy = function()
+    return M.font_size_plus()
+  end
+
+  _G.nvim_config_editor_font_size_minus_legacy = function()
+    return M.font_size_minus()
+  end
+
   vim.cmd([[
 function! Quit() abort
   call v:lua.nvim_config_editor_quit_legacy()
@@ -173,6 +216,14 @@ endfunction
 
 function! OnSave() abort
   call v:lua.nvim_config_editor_on_save_legacy()
+endfunction
+
+function! FontSizePlus() abort
+  call v:lua.nvim_config_editor_font_size_plus_legacy()
+endfunction
+
+function! FontSizeMinus() abort
+  call v:lua.nvim_config_editor_font_size_minus_legacy()
 endfunction
 ]])
 end
