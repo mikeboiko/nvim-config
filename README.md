@@ -17,6 +17,7 @@ A Lua-only Neovim configuration focused on fast navigation, solid language tooli
 - Plugin management: `lazy.nvim`
 - Navigation and UI: `fzf-lua`, `nvim-tree.lua`, `aerial.nvim`, `treesitter-context.nvim`, `lualine.nvim`, `snacks.nvim`
 - Completion and editing: `blink.cmp`, `copilot.lua`, `blink-cmp-copilot`, `nvim-autopairs`, `nvim-surround`, `substitute.nvim`
+- Markdown workflow: `selimacerbas/markdown-preview.nvim`, `img-paste.vim`
 - Language tooling: `nvim-lspconfig`, `mason.nvim`, `conform.nvim`, `nvim-treesitter`
 - Testing and debugging: `neotest`, `neotest-dotnet`, `neotest-python`, `nvim-dap`, `nvim-dap-ui`
 - Git and diffing: `vim-fugitive`, `vim-rhubarb`, `gv.vim`
@@ -47,7 +48,7 @@ This config is set up for everyday work across:
 - Neovim `0.11.x` stable or newer
 - `git`
 - `make` for building `CopilotChat.nvim`
-- `yarn` for `markdown-preview.nvim`
+- `mmdr` (`cargo install mermaid-rs-renderer`) for Rust-backed Mermaid rendering in `markdown-preview.nvim`
 - Language servers / formatters installed through Mason or system packages, depending on the tool
 
 For local test runs, the suite expects `plenary.nvim` at:
