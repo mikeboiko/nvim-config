@@ -1,8 +1,10 @@
 describe('nvim-config buffer helpers', function()
   local buffers
+  local git
 
   before_each(function()
     buffers = require('config.buffers')
+    git = require('config.git')
   end)
 
   local function write_file(path, contents)
@@ -104,5 +106,24 @@ describe('nvim-config buffer helpers', function()
 
     vim.cmd('bwipe!')
     vim.fn.delete(delimited_file)
+  end)
+
+  it('updates the buffer git repo name through the shared helper on BufEnter', function()
+    local original_get_repo_name = git.get_repo_name
+
+    package.loaded['config.autocmds'] = nil
+    require('config.autocmds')
+
+    git.get_repo_name = function()
+      return 'nvim-config'
+    end
+
+    vim.cmd('enew')
+    vim.api.nvim_exec_autocmds('BufEnter', { buffer = 0, modeline = false })
+
+    assert.are.equal('nvim-config', vim.b.git_repo_name)
+
+    git.get_repo_name = original_get_repo_name
+    wipe_current_buffer()
   end)
 end)

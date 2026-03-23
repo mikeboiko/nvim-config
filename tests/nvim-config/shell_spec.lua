@@ -1,7 +1,9 @@
 describe('nvim-config shell helpers', function()
+  local git
   local shell
 
   before_each(function()
+    git = require('config.git')
     shell = require('config.shell')
   end)
 
@@ -108,6 +110,27 @@ describe('nvim-config shell helpers', function()
 
     shell.notify = original_notify
     shell.get_git_root = original_get_git_root
+  end)
+
+  it('looks up the current git root through the shared helper', function()
+    local original_systemlist = git.systemlist
+    local original_notify = shell.notify
+    local messages = {}
+
+    git.systemlist = function(command)
+      assert.are.equal('git rev-parse --show-toplevel', command)
+      return { '/tmp/example-repo' }
+    end
+
+    shell.notify = function(message, level)
+      table.insert(messages, { message = message, level = level })
+    end
+
+    assert.are.equal('/tmp/example-repo', shell.get_git_root())
+    assert.are.same({}, messages)
+
+    git.systemlist = original_systemlist
+    shell.notify = original_notify
   end)
 
   it('swallows replace-M command errors while preserving the exact ex commands', function()

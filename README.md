@@ -10,7 +10,7 @@ My neovim config files
 ## Structure
 
 - Shared Lua wiring lives in `lua/config/`.
-- Reusable migrated helpers are starting to live in focused `lua/config/*.lua` modules such as `windows.lua`, `quickfix.lua`, `folds.lua`, `comments.lua`, `terminal.lua`, `clipboard.lua`, `tabline.lua`, `editor.lua`, `shell.lua`, `buffers.lua`, and `workspace.lua`.
+- Reusable migrated helpers now live in focused `lua/config/*.lua` modules such as `git.lua`, `windows.lua`, `quickfix.lua`, `folds.lua`, `comments.lua`, `terminal.lua`, `clipboard.lua`, `tabline.lua`, `editor.lua`, `shell.lua`, `buffers.lua`, and `workspace.lua`.
 - The ongoing keymap migration is moving repo-owned search and workflow maps into `lua/config/keymaps.lua` on top of those helper modules, instead of leaving behavior split across Vimscript remaps and Lua commands.
 - Core editing behaviors such as fileformat conversion and blank-line insertion are also moving behind tested helpers in `lua/config/editor.lua`, with `lua/config/keymaps.lua` owning the user-facing maps.
 - Terminal navigation maps now route through a Lua helper as well: `lua/config/autocmds.lua` calls `lua/config/keymaps.lua` on `TermOpen` instead of relying on a legacy global function.
@@ -23,9 +23,10 @@ My neovim config files
 - The last general `vimscript/init.vim` mappings, including the `gf` workaround and GUI font hotkeys, now route through Lua-backed helpers in `lua/config/keymaps.lua` and `lua/config/editor.lua`.
 - Help-lookup mappings for `help` and `vim` buffers now live in `after/ftplugin/help.lua` and `after/ftplugin/vim.lua`, so there are no active `:map` definitions left in repo `.vim` files.
 - `init.lua` no longer sources a legacy Vimscript bootstrap file; the remaining active startup globals, options, clipboard provider settings, and GUI enter behavior now live in Lua under `lua/config/{constants,options,autocmds,gui,editor}.lua`, and `vimscript/init.vim` has been deleted.
+- The remaining filetype-local Markdown/sebol behavior and the AutoHotkey syntax hookup now also live in Lua through `lua/config/filetypes.lua` plus `after/ftplugin/*.lua`, and there are no committed `.vim` files left in this repository.
 - Plugin-local bootstrap and setup live in `lua/plugins/`.
 - Filetype-local overrides live in `after/ftplugin/` and custom detection in `after/ftdetect/`.
-- The remaining Vimscript is now limited to a small set of non-empty `ftplugin/*.vim` / `syntax/*.vim` files that still need migration.
+- The remaining cleanup work is now refactoring-oriented rather than migration-oriented; the repo no longer needs a Vimscript compatibility layer.
 
 ## Testing
 

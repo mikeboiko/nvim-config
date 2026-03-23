@@ -26,12 +26,12 @@
 
 ## High-level architecture
 
-- `init.lua` is the entrypoint. It optionally launches `osv` for debugging when `init_debug` is set, then sources `vimscript/init.vim`, then loads shared Lua modules from `lua/config/*`, and finally bootstraps `lazy.nvim` through `lua/config/lazy.lua`.
-- `vimscript/init.vim` is still active, not historical. It holds a large amount of real behavior: custom functions, user commands, mappings, terminal helpers, search helpers, filetype comment settings, and older autocmds. Search it before assuming a behavior is not configured yet.
+- `init.lua` is the entrypoint. It optionally launches `osv` for debugging when `init_debug` is set, then loads shared Lua modules from `lua/config/*`, and finally bootstraps `lazy.nvim` through `lua/config/lazy.lua`.
+- The old `vimscript/init.vim` bootstrap is gone. Look in `lua/config/*`, `after/ftplugin/*.lua`, `after/ftdetect/*.lua`, and `lua/plugins/*.lua` before assuming a behavior is not configured yet.
 - `lua/config/lazy.lua` imports the `plugins` namespace, so each file under `lua/plugins/` is a Lazy spec module. `lazy-lock.json` pins the resolved plugin versions.
 - The repo currently relies on local hook-based validation rather than GitHub Actions, and it targets Neovim stable (`0.11.x` today).
 - Shared editor behavior is split across `lua/config/` modules such as `constants.lua`, `options.lua`, `autocmds.lua`, `functions.lua`, `comments.lua`, and `keymaps.lua`.
-- Reusable migrated legacy helpers are increasingly landing in focused modules under `lua/config/`, with `windows.lua`, `quickfix.lua`, `folds.lua`, `comments.lua`, `terminal.lua`, `clipboard.lua`, `tabline.lua`, `editor.lua`, `shell.lua`, `buffers.lua`, and `workspace.lua` as current examples.
+- Reusable migrated legacy helpers are increasingly landing in focused modules under `lua/config/`, with `git.lua`, `windows.lua`, `quickfix.lua`, `folds.lua`, `comments.lua`, `terminal.lua`, `clipboard.lua`, `tabline.lua`, `editor.lua`, `shell.lua`, `buffers.lua`, and `workspace.lua` as current examples.
 - Search- and workflow-oriented user mappings are being migrated into `lua/config/keymaps.lua` on top of helper modules such as `shell.lua`, rather than staying as standalone Vimscript remaps.
 - Core editing maps are also moving into `lua/config/keymaps.lua`, with stateful behavior such as fileformat reloads and blank-line insertion routed through tested helpers in `lua/config/editor.lua`.
 - Terminal navigation maps are no longer wired through a `v:lua` global shim; `lua/config/autocmds.lua` now calls `require('config.keymaps').set_terminal_keymaps(...)` directly on `TermOpen`.
@@ -44,13 +44,12 @@
 - The last general `vimscript/init.vim` mappings (`gf` plus the GUI-only font hotkeys) now route through Lua-backed helpers in `lua/config/keymaps.lua` / `lua/config/editor.lua`, and the legacy `FontSizePlus()` / `FontSizeMinus()` entrypoints are preserved through Lua wrappers.
 - Help lookup for `help`/`vim` buffers now lives in `after/ftplugin/help.lua` and `after/ftplugin/vim.lua`; there are currently no active `:map` commands left in repo `.vim` files.
 - `init.lua` no longer sources `vimscript/init.vim`; the remaining active startup globals, options, clipboard provider settings, and GUI enter behavior now live in `lua/config/{constants,options,autocmds,gui,editor}.lua`, and the legacy bootstrap file has been deleted.
-- Plugin-local startup globals are being moved into plugin spec `init` blocks instead of staying in `vimscript/init.vim`; `nvim-tree`, markdown preview, and img-paste already follow this pattern.
+- Markdown/sebol filetype behavior and the AutoHotkey syntax hookup now also live in Lua through `lua/config/filetypes.lua` plus `after/ftplugin/*.lua`, and there are no committed `.vim` files left in this repository.
+- Plugin-local startup globals are being moved into plugin spec `init` blocks instead of staying in ad hoc bootstrap code; `nvim-tree`, markdown preview, and img-paste already follow this pattern.
 - The repo now has a lightweight test harness under `tests/`; `tests/minimal_init.lua` prepends the repo and Plenary to `runtimepath`, and specs under `tests/nvim-config/` intentionally cover Lua modules and repo-owned behavior without depending on a full interactive session.
 - Filetype behavior is layered:
   - late Lua overrides in `after/ftplugin/`
-  - older Vimscript overrides in `ftplugin/` (current remaining `.vim` files: `autohotkey.vim`, `go.vim`, `markdown.vim`, `sql.vim`)
   - custom filetype detection in `after/ftdetect/`
-  - custom syntax definitions in `syntax/` (currently `sebol.vim`)
   - snippet definitions registered from `snippets/package.json`
 - Language tooling is spread across a few focused files:
   - `lua/plugins/lspconfig.lua` enables and configures LSP servers with `vim.lsp.config(...)` / `vim.lsp.enable(...)`
@@ -64,7 +63,7 @@
 
 ## Key conventions
 
-- Keep the hybrid split intact. Shared editor behavior belongs in `lua/config/*`, plugin wiring belongs in `lua/plugins/*`, and filetype-specific behavior belongs in `after/ftplugin/` or `ftplugin/`. Avoid hiding buffer-local tweaks inside unrelated plugin specs.
+- Keep the Lua-first split intact. Shared editor behavior belongs in `lua/config/*`, plugin wiring belongs in `lua/plugins/*`, and filetype-specific behavior belongs in `after/ftplugin/` or `after/ftdetect/`. Avoid hiding buffer-local tweaks inside unrelated plugin specs.
 - Follow the existing plugin-spec pattern: one plugin per file under `lua/plugins/`, with each file returning a Lazy spec table. If plugin definitions change, keep `lazy-lock.json` in sync.
 - If a setting only bootstraps one plugin before it loads, put it in that plugin spec's `init` block instead of the legacy Vimscript entrypoint.
 - Lua style follows `.stylua.toml`: 2-space indentation, 120-column width, Unix line endings, and single quotes when Stylua can preserve them.
@@ -74,7 +73,7 @@
   - Roslyn formatting is disabled in `lua/plugins/lspconfig.lua`
   - Tree-sitter indentation is skipped for `c_sharp` in `lua/plugins/nvim-treesitter.lua`
   - `after/ftplugin/cs.lua` forces `cindent`
-- Custom filetypes use a multi-file pattern. `sebol` is the example: detection in `after/ftdetect/sebol.lua`, syntax in `syntax/sebol.vim`, and comment/filetype glue still present in `vimscript/init.vim`.
+- Custom filetypes can use a multi-file Lua pattern. `sebol` is the example now: detection in `after/ftdetect/sebol.lua`, filetype-local defaults in `after/ftplugin/sebol.lua`, and custom syntax loaded from `lua/config/filetypes.lua`.
 - New filetype-local defaults should land in `after/ftplugin/*.lua`; for example, custom commentstrings now live there for `kusto`, `sebol`, `autohotkey`, and `vader`.
 - Copilot is split across multiple modules:
   - `copilot-lua.lua` enables the service but disables Copilot's own suggestion UI

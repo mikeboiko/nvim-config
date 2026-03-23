@@ -1,4 +1,5 @@
 local comments = require('config.comments')
+local git = require('config.git')
 
 local M = {}
 
@@ -35,8 +36,8 @@ function M.get_current_word()
 end
 
 function M.get_git_root()
-  local git_dir = vim.fn.systemlist('git rev-parse --show-toplevel')[1]
-  if vim.v.shell_error ~= 0 or not git_dir or git_dir == '' then
+  local git_dir = git.get_root()
+  if not git_dir then
     M.notify('Not in a git repository', vim.log.levels.ERROR)
     return nil
   end
