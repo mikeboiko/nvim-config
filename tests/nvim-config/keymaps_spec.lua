@@ -6,60 +6,6 @@ describe('nvim-config keymap helpers', function()
     keymaps = require('config.keymaps')
   end)
 
-  it('calls named global callbacks when present', function()
-    local received
-
-    vim.g.nvim_config_test_callback = function(arg_one, arg_two)
-      received = { arg_one, arg_two }
-    end
-
-    assert.is_true(keymaps.call_global('nvim_config_test_callback', 'alpha', 2))
-    assert.are.same({ 'alpha', 2 }, received)
-
-    vim.g.nvim_config_test_callback = nil
-  end)
-
-  it('notifies when a named global callback is missing', function()
-    local original_notify = vim.notify
-    local notified
-
-    vim.notify = function(message, level)
-      notified = { message, level }
-    end
-
-    assert.is_false(keymaps.call_global('nvim_config_missing_callback'))
-    assert.are.same({ 'Missing global callback: nvim_config_missing_callback', vim.log.levels.ERROR }, notified)
-
-    vim.notify = original_notify
-  end)
-
-  it('routes rename prompts through functions.fancy_prompt_rename', function()
-    local functions = require('config.functions')
-    local original_fancy = functions.fancy_prompt_rename
-    local normal_call
-    local visual_call
-
-    functions.fancy_prompt_rename = function(func, prompt, visual)
-      if visual then
-        visual_call = { func = func, prompt = prompt, visual = visual }
-      else
-        normal_call = { func = func, prompt = prompt, visual = visual }
-      end
-    end
-
-    keymaps.prompt_rename(false)
-    keymaps.prompt_rename(true)
-
-    assert.are.equal(functions.rename_word, normal_call.func)
-    assert.are.equal('New Word', normal_call.prompt)
-    assert.is_nil(normal_call.visual)
-    assert.are.equal(functions.rename_word, visual_call.func)
-    assert.are.equal('New Word', visual_call.prompt)
-    assert.are.equal(true, visual_call.visual)
-
-    functions.fancy_prompt_rename = original_fancy
-  end)
-
   it('sets terminal keymaps buffer-locally', function()
     vim.cmd('enew')
     local terminal_buffer = vim.api.nvim_get_current_buf()

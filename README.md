@@ -40,7 +40,7 @@ This config is set up for everyday work across:
 - `lua/config/` contains shared editor behavior, helpers, commands, autocmds, and keymap facades.
 - `lua/plugins/` contains one Lazy spec per plugin or plugin group.
 - `after/ftplugin/` and `after/ftdetect/` contain filetype-local behavior.
-- `tests/` contains the Plenary test harness and repo-level behavior tests.
+- `tests/` contains the Plenary test harness and a focused set of repo-level behavior tests.
 
 ## Requirements
 
@@ -57,6 +57,8 @@ $HOME/.local/share/nvim/lazy/plenary.nvim
 ```
 
 Override with `PLENARY_PATH` if needed.
+
+The suite is intentionally biased toward startup, module-loading, commands, and stateful editor behaviors instead of exhaustive snapshots of every option or keymap.
 
 ## Installation
 
@@ -98,7 +100,7 @@ Check formatting without rewriting files:
 stylua --check init.lua lua after tests
 ```
 
-Run the full Plenary suite:
+Run the focused Plenary suite:
 
 ```bash
 PLENARY_PATH="$HOME/.local/share/nvim/lazy/plenary.nvim" \
@@ -132,5 +134,5 @@ The `pre-commit` hook runs:
 - staged Lua formatting
 - `stylua --check`
 - Lua syntax checks
-- the Plenary suite
+- the focused Plenary suite
 - a headless startup smoke test

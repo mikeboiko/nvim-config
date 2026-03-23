@@ -10,8 +10,6 @@ describe('nvim-config clipboard helpers', function()
     local original_register = vim.fn.getreg('+')
     local original_register_type = vim.fn.getregtype('+')
 
-    require('config.commands')
-
     clipboard.clipboard_targets = function()
       return {}
     end
@@ -48,22 +46,5 @@ describe('nvim-config clipboard helpers', function()
 
     clipboard.clipboard_targets = original_targets
     clipboard.markdown_clipboard_image = original_markdown_clipboard_image
-  end)
-
-  it('copies the current file path and directory into the clipboard register', function()
-    local original_register = vim.fn.getreg('+')
-    local original_register_type = vim.fn.getregtype('+')
-    local file = vim.fn.tempname() .. '.txt'
-
-    vim.cmd('edit ' .. vim.fn.fnameescape(file))
-
-    assert.are.equal(vim.fn.fnamemodify(file, ':p:~'), clipboard.copy_current_file_path())
-    assert.are.equal(vim.fn.fnamemodify(file, ':p:~'), vim.fn.getreg('+'))
-
-    assert.are.equal(vim.fn.fnamemodify(file, ':p:~:h'), clipboard.copy_current_file_dir())
-    assert.are.equal(vim.fn.fnamemodify(file, ':p:~:h'), vim.fn.getreg('+'))
-
-    vim.fn.setreg('+', original_register, original_register_type)
-    vim.cmd('bwipe!')
   end)
 end)

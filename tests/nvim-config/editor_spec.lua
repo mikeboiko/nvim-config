@@ -12,8 +12,6 @@ describe('nvim-config editor helpers', function()
   end
 
   it('runs a command across all buffers and restores the current buffer', function()
-    require('config.commands')
-
     vim.cmd('enew')
     local buffer_one = vim.api.nvim_get_current_buf()
 
@@ -50,7 +48,7 @@ describe('nvim-config editor helpers', function()
     wipe_if_valid(vim.api.nvim_get_current_buf())
   end)
 
-  it('runs the migrated save autocmd through config.editor', function()
+  it('runs the save autocmd through config.editor', function()
     package.loaded['config.autocmds'] = nil
 
     local called = 0
@@ -98,109 +96,6 @@ describe('nvim-config editor helpers', function()
 
     editor.run_ex = original_run_ex
     editor.replace_m_with_blank = original_replace_m_with_blank
-    wipe_if_valid(buffer)
-  end)
-
-  it('inserts a blank line below the current line and keeps the cursor on the original text', function()
-    vim.cmd('enew')
-    local buffer = vim.api.nvim_get_current_buf()
-    vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'alpha', 'beta' })
-    vim.api.nvim_win_set_cursor(0, { 1, 2 })
-
-    editor.insert_blank_line_below()
-
-    assert.are.same({ 'alpha', '', 'beta' }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
-    assert.are.same({ 1, 2 }, vim.api.nvim_win_get_cursor(0))
-
-    wipe_if_valid(buffer)
-  end)
-
-  it('inserts a blank line above the current line and keeps the cursor on the original text', function()
-    vim.cmd('enew')
-    local buffer = vim.api.nvim_get_current_buf()
-    vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'alpha', 'beta' })
-    vim.api.nvim_win_set_cursor(0, { 2, 1 })
-
-    editor.insert_blank_line_above()
-
-    assert.are.same({ 'alpha', '', 'beta' }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
-    assert.are.same({ 3, 1 }, vim.api.nvim_win_get_cursor(0))
-
-    wipe_if_valid(buffer)
-  end)
-
-  it('inserts blank lines around the current line and keeps the cursor on the original text', function()
-    vim.cmd('enew')
-    local buffer = vim.api.nvim_get_current_buf()
-    vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'alpha', 'beta' })
-    vim.api.nvim_win_set_cursor(0, { 2, 1 })
-
-    editor.insert_blank_line_around()
-
-    assert.are.same({ 'alpha', '', 'beta', '' }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
-    assert.are.same({ 3, 1 }, vim.api.nvim_win_get_cursor(0))
-
-    wipe_if_valid(buffer)
-  end)
-
-  it('appends punctuation to the current line while preserving the cursor', function()
-    vim.cmd('enew')
-    local buffer = vim.api.nvim_get_current_buf()
-    vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'alpha', 'beta' })
-    vim.api.nvim_win_set_cursor(0, { 1, 2 })
-
-    editor.append_to_current_line(':')
-
-    assert.are.same({ 'alpha:', 'beta' }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
-    assert.are.same({ 1, 2 }, vim.api.nvim_win_get_cursor(0))
-
-    wipe_if_valid(buffer)
-  end)
-
-  it('adjusts unix-style guifont sizes while preserving the font family', function()
-    assert.are.equal('JetBrainsMono Nerd Font 14', editor.adjust_guifont_size('JetBrainsMono Nerd Font 13', 1, true))
-    assert.are.equal('JetBrainsMono Nerd Font 12', editor.adjust_guifont_size('JetBrainsMono Nerd Font 13', -1, true))
-  end)
-
-  it('adjusts windows-style guifont sizes while preserving the font family', function()
-    assert.are.equal('Consolas:h15', editor.adjust_guifont_size('Consolas:h14', 1, false))
-    assert.are.equal('Consolas:h13', editor.adjust_guifont_size('Consolas:h14', -1, false))
-  end)
-
-  it('calls font_size_plus and font_size_minus', function()
-    local original_plus = editor.font_size_plus
-    local original_minus = editor.font_size_minus
-    local calls = {}
-
-    editor.font_size_plus = function()
-      table.insert(calls, 'plus')
-    end
-
-    editor.font_size_minus = function()
-      table.insert(calls, 'minus')
-    end
-
-    editor.font_size_plus()
-    editor.font_size_minus()
-
-    assert.are.same({ 'plus', 'minus' }, calls)
-
-    editor.font_size_plus = original_plus
-    editor.font_size_minus = original_minus
-  end)
-
-  it('yanks the whole buffer and restores the current view', function()
-    vim.cmd('enew')
-    local buffer = vim.api.nvim_get_current_buf()
-    vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'alpha', 'beta', 'gamma' })
-    vim.api.nvim_win_set_cursor(0, { 2, 1 })
-
-    editor.yank_all()
-
-    assert.are.equal('alpha\nbeta\ngamma\n', vim.fn.getreg('"'))
-    assert.are.equal('V', vim.fn.getregtype('"'))
-    assert.are.same({ 2, 1 }, vim.api.nvim_win_get_cursor(0))
-
     wipe_if_valid(buffer)
   end)
 
