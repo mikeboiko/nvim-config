@@ -1,32 +1,92 @@
 # nvim-config
 
-My neovim config files
+A Lua-only Neovim configuration focused on fast navigation, solid language tooling, AI-assisted workflows, and practical test/debug support.
+
+## Highlights
+
+- Lua-first structure with shared config in `lua/config/`, plugin specs in `lua/plugins/`, and filetype overrides in `after/`.
+- Strong code-navigation workflow built around `fzf-lua`, `nvim-tree`, `aerial.nvim`, Tree-sitter, and a custom always-visible tabline.
+- Completion and AI tooling with `blink.cmp`, `copilot.lua`, `blink-cmp-copilot`, and `CopilotChat.nvim`.
+- Language tooling powered by `nvim-lspconfig`, `mason.nvim`, `conform.nvim`, and `nvim-treesitter`.
+- Testing and debugging workflows via `neotest`, `nvim-dap`, and `nvim-dap-ui`.
+- Git and review workflow with `vim-fugitive`, `vim-rhubarb`, `gv.vim`, quickfix helpers, and repo-aware shell helpers.
+- Local automation with `lefthook` and a Plenary-based headless test suite.
+
+## Selected plugins
+
+- Plugin management: `lazy.nvim`
+- Navigation and UI: `fzf-lua`, `nvim-tree.lua`, `aerial.nvim`, `treesitter-context.nvim`, `lualine.nvim`, `snacks.nvim`
+- Completion and editing: `blink.cmp`, `copilot.lua`, `blink-cmp-copilot`, `nvim-autopairs`, `nvim-surround`, `substitute.nvim`
+- Language tooling: `nvim-lspconfig`, `mason.nvim`, `conform.nvim`, `nvim-treesitter`
+- Testing and debugging: `neotest`, `neotest-dotnet`, `neotest-python`, `nvim-dap`, `nvim-dap-ui`
+- Git and diffing: `vim-fugitive`, `vim-rhubarb`, `gv.vim`
+
+## Language support
+
+This config is set up for everyday work across:
+
+- Lua
+- Python
+- TypeScript / JavaScript / Vue
+- C#
+- Go
+- SQL
+- Markdown
+- YAML / JSON / TOML / Bash
+
+## Repository layout
+
+- `init.lua` bootstraps the config and loads `lazy.nvim`.
+- `lua/config/` contains shared editor behavior, helpers, commands, autocmds, and keymap facades.
+- `lua/plugins/` contains one Lazy spec per plugin or plugin group.
+- `after/ftplugin/` and `after/ftdetect/` contain filetype-local behavior.
+- `tests/` contains the Plenary test harness and repo-level behavior tests.
 
 ## Requirements
 
-- This config targets modern Neovim, currently `0.11.x` stable or newer.
-- Local hook checks assume a matching modern Neovim runtime and a local `plenary.nvim` checkout at `$HOME/.local/share/nvim/lazy/plenary.nvim` unless `PLENARY_PATH` is overridden.
+- Neovim `0.11.x` stable or newer
+- `git`
+- `make` for building `CopilotChat.nvim`
+- `yarn` for `markdown-preview.nvim`
+- Language servers / formatters installed through Mason or system packages, depending on the tool
 
-## Structure
+For local test runs, the suite expects `plenary.nvim` at:
 
-- Shared Lua wiring lives in `lua/config/`.
-- Reusable helper modules live in focused `lua/config/*.lua` files such as `git.lua`, `windows.lua`, `quickfix.lua`, `folds.lua`, `comments.lua`, `terminal.lua`, `clipboard.lua`, `tabline.lua`, `editor.lua`, `shell.lua`, `buffers.lua`, and `workspace.lua`.
-- Keymap registration is split by concern under `lua/config/keymaps/*.lua`, with `lua/config/keymaps.lua` exposing the shared helper functions used by tests and autocmds.
-- Plugin-exclusive mappings live with their owning plugin specs under `lua/plugins/*.lua`; shared editor and personal workflow mappings stay under `lua/config/keymaps/*.lua`.
-- Core editing behaviors such as fileformat conversion, blank-line insertion, spell toggles, yanking helpers, and GUI font resizing live in `lua/config/editor.lua`, with the keymap modules owning the user-facing bindings.
-- Search, quickfix, Git, Copilot, and external workflow bindings are routed through Lua helpers instead of ad hoc command strings where practical.
-- `lua/config/autocmds.lua` calls `require('config.keymaps').set_terminal_keymaps(...)` on `TermOpen` so terminal navigation maps stay buffer-local while using the same keymap facade.
-- The custom tabline renderer in `lua/config/tabline.lua` is always shown via `showtabline=2`, even when only one tab is open.
-- Help-lookup mappings for `help` and `vim` buffers now live in `after/ftplugin/help.lua` and `after/ftplugin/vim.lua`, so buffer-local editor behavior is fully configured from Lua.
-- Startup globals, options, clipboard provider settings, and GUI enter behavior all live in Lua under `lua/config/{constants,options,autocmds,gui,editor}.lua`.
-- Filetype-local Markdown/sebol behavior and the AutoHotkey syntax setup live in Lua through `lua/config/filetypes.lua` plus `after/ftplugin/*.lua`.
-- Plugin-local bootstrap and setup live in `lua/plugins/`.
-- Filetype-local overrides live in `after/ftplugin/` and custom detection in `after/ftdetect/`.
-- The active config is Lua-native and does not rely on a repo-owned Vimscript compatibility layer.
+```bash
+$HOME/.local/share/nvim/lazy/plenary.nvim
+```
 
-## Testing
+Override with `PLENARY_PATH` if needed.
 
-Format the full Lua tree:
+## Installation
+
+Place the repository at `~/.config/nvim`. For example:
+
+```bash
+git clone <repo-url> ~/.config/nvim
+# or
+ln -s /path/to/this/repo ~/.config/nvim
+```
+
+Then start Neovim to let `lazy.nvim` bootstrap itself and install plugins.
+
+Useful follow-up commands:
+
+```vim
+:Lazy sync
+:Mason
+:TSUpdateSync
+```
+
+To restore plugin versions exactly from `lazy-lock.json`:
+
+```bash
+nvim --headless -u init.lua "+Lazy! restore" +qa
+```
+
+## Validation
+
+Format the Lua tree:
 
 ```bash
 stylua init.lua lua after tests
@@ -38,7 +98,7 @@ Check formatting without rewriting files:
 stylua --check init.lua lua after tests
 ```
 
-Run the Plenary test suite:
+Run the full Plenary suite:
 
 ```bash
 PLENARY_PATH="$HOME/.local/share/nvim/lazy/plenary.nvim" \
@@ -56,7 +116,7 @@ PLENARY_PATH="$HOME/.local/share/nvim/lazy/plenary.nvim" \
   -c "qa"
 ```
 
-Run a headless startup smoke test against this checkout:
+Run a headless startup smoke test:
 
 ```bash
 nvim --headless -u init.lua -c "qa"
@@ -64,6 +124,13 @@ nvim --headless -u init.lua -c "qa"
 
 ## Automation
 
-- Install local git hooks with `lefthook install`.
-- `.lefthook.yml` now runs the repo checks directly in `pre-commit`: staged-Lua formatting, `stylua --check init.lua lua after tests`, Lua syntax checks, the Plenary suite, and a headless startup smoke test.
-- There is no GitHub Actions workflow at the moment; hook-based validation is the source of truth.
+- Install hooks with `lefthook install`
+- Run the local automation stack with `lefthook run pre-commit`
+
+The `pre-commit` hook runs:
+
+- staged Lua formatting
+- `stylua --check`
+- Lua syntax checks
+- the Plenary suite
+- a headless startup smoke test
