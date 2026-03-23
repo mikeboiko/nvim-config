@@ -1,5 +1,47 @@
 local M = {}
 
+function M.is_valid(buf)
+  return vim.api.nvim_buf_is_valid(buf)
+end
+
+function M.get_name(buf)
+  if not M.is_valid(buf) then
+    return ''
+  end
+
+  return vim.api.nvim_buf_get_name(buf)
+end
+
+function M.get_var(buf, name, default)
+  local ok, value = pcall(vim.api.nvim_buf_get_var, buf, name)
+  if ok then
+    return value
+  end
+
+  return default
+end
+
+function M.collect(predicate)
+  local matched = {}
+
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if M.is_valid(buf) and predicate(buf) then
+      table.insert(matched, buf)
+    end
+  end
+
+  return matched
+end
+
+function M.delete(buf, opts)
+  if not M.is_valid(buf) then
+    return false
+  end
+
+  opts = opts or {}
+  return pcall(vim.api.nvim_buf_delete, buf, { force = opts.force or false })
+end
+
 function M.restore_last_position()
   local mark = vim.api.nvim_buf_get_mark(0, '"')
   local line = mark[1]

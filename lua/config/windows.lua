@@ -1,4 +1,5 @@
 local M = {}
+local buffers = require('config.buffers')
 local terminal = require('config.terminal')
 
 local function run(command)
@@ -9,34 +10,11 @@ local function command_exists(name)
   return vim.fn.exists(':' .. name) > 0
 end
 
-local function get_buffer_var(buf, name)
-  local ok, value = pcall(vim.api.nvim_buf_get_var, buf, name)
-  if ok then
-    return value
-  end
-
-  return nil
-end
-
-local function collect_buffers(predicate)
-  local matched = {}
-
-  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-    if vim.api.nvim_buf_is_valid(buf) and predicate(buf) then
-      table.insert(matched, buf)
-    end
-  end
-
-  return matched
-end
-
-local function delete_buffers(buffers, force)
-  local command = force and 'bdelete!' or 'bdelete'
-
-  for _, buf in ipairs(buffers) do
+local function delete_buffers(bufs, force)
+  for _, buf in ipairs(bufs) do
     -- Preserve running terminals so CloseAll matches the old interactive behavior.
     if not terminal.is_running(buf) then
-      run(command .. ' ' .. buf)
+      buffers.delete(buf, { force = force })
     end
   end
 end
@@ -54,9 +32,7 @@ function M.close_all()
     run('AerialClose')
   end
 
-  local flow_buffers = collect_buffers(function(buf)
-    return get_buffer_var(buf, 'nvim_flow_terminal') == 1
-  end)
+  local flow_buffers = buffers.collect(terminal.is_flow_terminal)
   delete_buffers(flow_buffers, true)
 
   local buffer_needles = {
@@ -65,12 +41,12 @@ function M.close_all()
     'git/Linux/config/mani.yaml',
   }
 
-  local named_buffers = collect_buffers(function(buf)
+  local named_buffers = buffers.collect(function(buf)
     if vim.fn.buflisted(buf) == 0 then
       return false
     end
 
-    local name = vim.api.nvim_buf_get_name(buf)
+    local name = buffers.get_name(buf)
     for _, needle in ipairs(buffer_needles) do
       if name:find(needle, 1, true) then
         return true

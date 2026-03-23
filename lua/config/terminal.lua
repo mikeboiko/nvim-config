@@ -1,34 +1,18 @@
 local M = {}
+local buffers = require('config.buffers')
 
 local gap_path = vim.fn.expand('~/git/Linux/git/gap')
 
-local function get_buffer_name(buf)
-  if not vim.api.nvim_buf_is_valid(buf) then
-    return ''
-  end
-
-  return vim.api.nvim_buf_get_name(buf)
-end
-
-local function get_buffer_var(buf, name)
-  local ok, value = pcall(vim.api.nvim_buf_get_var, buf, name)
-  if ok then
-    return value
-  end
-
-  return nil
-end
-
 function M.is_terminal(buf)
-  return vim.api.nvim_buf_is_valid(buf) and vim.bo[buf].buftype == 'terminal'
+  return buffers.is_valid(buf) and vim.bo[buf].buftype == 'terminal'
 end
 
 function M.is_gap_terminal(buf)
-  return get_buffer_name(buf):find(gap_path, 1, true) ~= nil
+  return buffers.get_name(buf):find(gap_path, 1, true) ~= nil
 end
 
 function M.is_flow_terminal(buf)
-  return get_buffer_var(buf, 'nvim_flow_terminal') == 1 or get_buffer_name(buf):find('/tmp/flow', 1, true) ~= nil
+  return buffers.get_var(buf, 'nvim_flow_terminal', 0) == 1 or buffers.get_name(buf):find('/tmp/flow', 1, true) ~= nil
 end
 
 function M.is_running(buf)
@@ -36,7 +20,7 @@ function M.is_running(buf)
     return false
   end
 
-  local job_id = get_buffer_var(buf, 'terminal_job_id')
+  local job_id = buffers.get_var(buf, 'terminal_job_id')
   if job_id == nil then
     return false
   end
@@ -61,17 +45,16 @@ function M.get_exit_status(buf)
     end
   end
 
-  error('Could not determine exit status for buffer, ' .. get_buffer_name(buf))
+  error('Could not determine exit status for buffer, ' .. buffers.get_name(buf))
 end
 
 function M.delete_buffer_if_exit_status_matches(buf, expected_code)
-  if not vim.api.nvim_buf_is_valid(buf) then
+  if not buffers.is_valid(buf) then
     return false
   end
 
   if M.get_exit_status(buf) == expected_code then
-    vim.api.nvim_buf_delete(buf, { force = true })
-    return true
+    return buffers.delete(buf, { force = true })
   end
 
   return false
