@@ -32,4 +32,29 @@ describe('nvim-config keymap helpers', function()
 
     vim.notify = original_notify
   end)
+
+  it('routes rename prompts through FancyPromptRename with the expected arguments', function()
+    local normal_call
+    local visual_call
+
+    vim.g.FancyPromptRename = function(func, prompt, visual)
+      if visual == 1 then
+        visual_call = { func = func, prompt = prompt, visual = visual }
+      else
+        normal_call = { func = func, prompt = prompt, visual = visual }
+      end
+    end
+
+    assert.is_true(keymaps.prompt_rename(false))
+    assert.is_true(keymaps.prompt_rename(true))
+
+    assert.are.equal('RenameWord', normal_call.func)
+    assert.are.equal('New Word', normal_call.prompt)
+    assert.is_nil(normal_call.visual)
+    assert.are.equal('RenameWord', visual_call.func)
+    assert.are.equal('New Word', visual_call.prompt)
+    assert.are.equal(1, visual_call.visual)
+
+    vim.g.FancyPromptRename = nil
+  end)
 end)

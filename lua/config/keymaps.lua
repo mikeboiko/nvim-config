@@ -30,6 +30,14 @@ function M.copilot_quick_chat(mode)
   return M.call_global('CopilotQuickChat', mode)
 end
 
+function M.prompt_rename(visual)
+  if visual then
+    return M.call_global('FancyPromptRename', 'RenameWord', 'New Word', 1)
+  end
+
+  return M.call_global('FancyPromptRename', 'RenameWord', 'New Word')
+end
+
 local function delete_keymap_if_present(mode, lhs)
   if vim.fn.maparg(lhs, mode) ~= '' then
     vim.keymap.del(mode, lhs)
@@ -59,6 +67,8 @@ end, { silent = true, desc = 'AI-generated commit message (ag)' })
 -- Delete keymaps
 delete_keymap_if_present('n', '<C-W><C-D>')
 delete_keymap_if_present('n', '<C-W>d')
+
+vim.keymap.set('n', '<leader>redo', '<Plug>(RepeatRedo)', { remap = true, desc = 'Redo with repeat.vim' })
 
 -- Resize window using <ctrl> arrow keys
 vim.keymap.set('n', '<C-Up>', '<cmd>resize +2<cr>', { desc = 'Increase Window Height' })
@@ -220,6 +230,10 @@ vim.keymap.set('n', '<leader>rd', function()
   shell.open_git_diff_in_terminal()
 end, { silent = true, desc = 'Open git diff in a terminal split' })
 
+vim.keymap.set('n', '<leader>gd', ':Gvdiffsplit! ', { desc = 'Open Fugitive vertical diff split prompt' })
+vim.keymap.set('n', '<leader>gdt', ':Git difftool -y --diff-filter=ACMRTUXB ', { desc = 'Open git difftool prompt' })
+vim.keymap.set('n', '<leader>gs', ':Git<CR>', { silent = true, desc = 'Open Fugitive status' })
+
 vim.keymap.set('n', '<leader>oe', function()
   shell.open_explorer()
 end, { silent = true, desc = 'Open current directory in Explorer' })
@@ -277,6 +291,12 @@ vim.keymap.set('n', 'Q', ':q!<CR>', { silent = true, desc = 'Force quit current 
 vim.keymap.set('n', 'qw', ':w<CR>', { silent = true, desc = 'Write buffer' })
 vim.keymap.set('n', '<C-s>', ':w<CR>', { silent = true, desc = 'Write buffer' })
 vim.keymap.set('i', '<C-s>', '<Esc>:w<CR>', { silent = true, desc = 'Write buffer' })
+vim.keymap.set('n', '<leader>rw', function()
+  M.prompt_rename(false)
+end, { silent = true, desc = 'Prompt to rename word under cursor' })
+vim.keymap.set('v', '<leader>rw', function()
+  M.prompt_rename(true)
+end, { silent = true, desc = 'Prompt to rename current selection' })
 vim.keymap.set('n', 'Y', 'y$', { desc = 'Yank to end of line' })
 vim.keymap.set('n', '<leader>ya', function()
   editor.yank_all()

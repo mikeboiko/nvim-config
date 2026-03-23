@@ -362,7 +362,6 @@ nnoremap cp :normal mzgcap<CR>`z
 " Conflicts {{{2
 
 " This is to fix a <C-r> conflict
-nmap <leader>redo <Plug>(RepeatRedo)
 
 " Convert Line Endings {{{2
 
@@ -389,9 +388,6 @@ endif
 " Git {{{2
 
 " Fugitive remappings
-nnoremap <leader>gd :Gvdiffsplit!<Space>
-nnoremap <leader>gdt :Git difftool -y --diff-filter=ACMRTUXB<Space>
-nnoremap <leader>gs :Git<CR>
 
 " Display git diff in terminal
 
@@ -478,9 +474,6 @@ nmap gf gf
 "
 
 " Rename Word {{{2
-
-nnoremap <silent> <leader>rw :silent lua vim.g.FancyPromptRename("RenameWord", "New Word")<CR>
-vnoremap <silent> <leader>rw :<C-u>silent lua vim.g.FancyPromptRename("RenameWord", "New Word", 1)<CR>
 
 " Reports {{{2
 

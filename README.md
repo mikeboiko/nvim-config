@@ -16,6 +16,7 @@ My neovim config files
 - Terminal navigation maps now route through a Lua helper as well: `lua/config/autocmds.lua` calls `lua/config/keymaps.lua` on `TermOpen` instead of relying on a legacy global function.
 - Copilot workflow maps are now also owned by `lua/config/keymaps.lua`, with a small tested helper for invoking plugin-provided global callbacks without crashing when a callback is missing.
 - External workflow maps like git-diff terminals, markdown preview, Explorer launchers, and report tabs are now routed through tested helpers in `lua/config/shell.lua` instead of being hard-coded as Vimscript remaps.
+- Fugitive/Git prompt maps and the prompt-based rename shortcut are now also managed from `lua/config/keymaps.lua`, with the rename path covered through the same tested global-callback bridge used by other workflow maps.
 - Plugin-local bootstrap and setup live in `lua/plugins/`.
 - Filetype-local overrides live in `after/ftplugin/` and custom detection in `after/ftdetect/`.
 - Legacy Vimscript is still sourced during the migration, but low-risk startup settings are being moved into Lua as each stage is completed.
