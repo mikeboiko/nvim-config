@@ -54,6 +54,62 @@ describe('nvim-config shell helpers', function()
     shell.run_ex = original_run_ex
   end)
 
+  it('prefills grep prompts for filetype, notes, repo, and current file searches', function()
+    local original_prefill_grep = shell.prefill_grep
+    local original_get_git_root = shell.get_git_root
+    local calls = {}
+
+    shell.prefill_grep = function(args, cursor_keys)
+      table.insert(calls, { args = args, cursor_keys = cursor_keys })
+    end
+
+    shell.get_git_root = function()
+      return '/tmp/repo'
+    end
+
+    vim.bo.filetype = 'lua'
+
+    shell.prefill_grep_for_filetype()
+    shell.prefill_grep_for_notes()
+    shell.prefill_grep_for_git_repo()
+    shell.prefill_grep_for_current_file()
+
+    assert.are.same({
+      { args = '--lua ~/git', cursor_keys = '<S-Left><Space><Left>' },
+      { args = '--md ~/git', cursor_keys = '<S-Left><Space><Left>' },
+      { args = '"/tmp/repo"', cursor_keys = '<Home><S-Right><Space>' },
+      { args = '%', cursor_keys = '<Home><S-Right><Space>' },
+    }, calls)
+
+    shell.prefill_grep = original_prefill_grep
+    shell.get_git_root = original_get_git_root
+  end)
+
+  it('notifies when repo-scoped grep helpers are used outside a git repository', function()
+    local original_notify = shell.notify
+    local original_get_git_root = shell.get_git_root
+    local messages = {}
+
+    shell.notify = function(message, level)
+      table.insert(messages, { message = message, level = level })
+    end
+
+    shell.get_git_root = function()
+      shell.notify('Not in a git repository', vim.log.levels.ERROR)
+      return nil
+    end
+
+    assert.is_false(shell.prefill_grep_for_git_repo())
+    assert.is_false(shell.grep_current_word_in_git_repo())
+    assert.are.same({
+      { message = 'Not in a git repository', level = vim.log.levels.ERROR },
+      { message = 'Not in a git repository', level = vim.log.levels.ERROR },
+    }, messages)
+
+    shell.notify = original_notify
+    shell.get_git_root = original_get_git_root
+  end)
+
   it('swallows replace-M command errors while preserving the exact ex commands', function()
     local original_run_ex = shell.run_ex
     local calls = {}
@@ -91,6 +147,50 @@ describe('nvim-config shell helpers', function()
     }, calls)
 
     shell.run_ex = original_run_ex
+  end)
+
+  it('wraps the current-word grep and mani shortcut helpers', function()
+    local original_get_git_root = shell.get_git_root
+    local original_get_current_word = shell.get_current_word
+    local original_grep = shell.grep
+    local original_mani = shell.mani
+    local grep_calls = {}
+    local mani_calls = {}
+
+    shell.get_git_root = function()
+      return '/tmp/repo'
+    end
+
+    shell.get_current_word = function()
+      return 'needle'
+    end
+
+    shell.grep = function(args)
+      table.insert(grep_calls, args)
+    end
+
+    shell.mani = function(args)
+      table.insert(mani_calls, args)
+    end
+
+    assert.is_true(shell.grep_current_word_in_git_repo())
+    shell.grep_current_word_in_current_file()
+    shell.mani_git_status()
+    shell.mani_git_up()
+
+    assert.are.same({
+      'needle "/tmp/repo"',
+      'needle %',
+    }, grep_calls)
+    assert.are.same({
+      [[run git-status --parallel --tags-expr '$MANI_EXPR']],
+      [[run git-up --parallel --tags-expr '$MANI_EXPR']],
+    }, mani_calls)
+
+    shell.get_git_root = original_get_git_root
+    shell.get_current_word = original_get_current_word
+    shell.grep = original_grep
+    shell.mani = original_mani
   end)
 
   it('starts an async job and reports its exit code', function()

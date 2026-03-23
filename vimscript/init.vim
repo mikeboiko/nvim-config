@@ -419,8 +419,6 @@ nnoremap <leader>gs :Git<CR>
 nnoremap <leader>rd :terminal git --no-pager diff<CR>
 
 " Mani commands
-nnoremap <leader>ms :Mani run git-status --parallel --tags-expr '$MANI_EXPR'<cr>
-nnoremap <leader>mu :Mani run git-up --parallel --tags-expr '$MANI_EXPR'<cr>
 
 " Go to Definition{{{2
 
@@ -433,23 +431,17 @@ map gv mm:vs %<CR>`mgdzMzvzz
 " Grep with ag {{{2
 
 " Search code
-nnoremap <leader>fc :Grep --<c-r>=&filetype<CR> ~/git<s-left><space><left>
 
 " Search notes
-nnoremap <leader>fn :Grep --md ~/git<s-left><space><left>
 
 " Search git repo
-nnoremap <leader>fg :let @q = system('git rev-parse --show-toplevel')[:-2]<CR>:Grep "<c-r>q"<home><s-right><space>
 
 " Search for word under cursor in git repo
-map <leader>gw "xyiw:let @q = system('git rev-parse --show-toplevel')[:-2]<CR>:Grep <c-r>x "<c-r>q"<cr>
 
 " Find string in current file
 " nnoremap <leader>fl :FindLocal<space>
-nnoremap <leader>fl :Grep %<home><s-right><space>
 
 " Find word under cursor in current file
-map <leader>fw "xyiw:Grep <c-r>x %<cr>
 
 " Marks {{{2
 " Jump to proper column when using marks

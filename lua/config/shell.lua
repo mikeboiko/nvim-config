@@ -16,8 +16,34 @@ function M.echo(message)
   vim.api.nvim_echo({ { message } }, true, {})
 end
 
+function M.notify(message, level)
+  vim.notify(message, level or vim.log.levels.INFO)
+end
+
 function M.figlet_lines(text)
   return vim.fn.systemlist('figlet ' .. text)
+end
+
+function M.feedkeys(keys, mode)
+  vim.api.nvim_feedkeys(vim.keycode(keys), mode or 'n', false)
+end
+
+function M.get_current_word()
+  return vim.fn.expand('<cword>')
+end
+
+function M.get_git_root()
+  local git_dir = vim.fn.systemlist('git rev-parse --show-toplevel')[1]
+  if vim.v.shell_error ~= 0 or not git_dir or git_dir == '' then
+    M.notify('Not in a git repository', vim.log.levels.ERROR)
+    return nil
+  end
+
+  return git_dir
+end
+
+function M.quote_argument(value)
+  return '"' .. value:gsub('"', [[\"]]) .. '"'
 end
 
 local function put_lines_below_cursor(lines)
@@ -42,6 +68,50 @@ function M.grep(args)
   M.run_ex('copen')
 end
 
+function M.prefill_commandline(command, cursor_keys)
+  M.feedkeys(':' .. command .. (cursor_keys or ''))
+end
+
+function M.prefill_grep(args, cursor_keys)
+  M.prefill_commandline('Grep ' .. args, cursor_keys)
+end
+
+function M.prefill_grep_for_filetype()
+  M.prefill_grep('--' .. vim.bo.filetype .. ' ~/git', '<S-Left><Space><Left>')
+end
+
+function M.prefill_grep_for_notes()
+  M.prefill_grep('--md ~/git', '<S-Left><Space><Left>')
+end
+
+function M.prefill_grep_for_git_repo()
+  local git_root = M.get_git_root()
+  if not git_root then
+    return false
+  end
+
+  M.prefill_grep(M.quote_argument(git_root), '<Home><S-Right><Space>')
+  return true
+end
+
+function M.prefill_grep_for_current_file()
+  M.prefill_grep('%', '<Home><S-Right><Space>')
+end
+
+function M.grep_current_word_in_git_repo()
+  local git_root = M.get_git_root()
+  if not git_root then
+    return false
+  end
+
+  M.grep(M.get_current_word() .. ' ' .. M.quote_argument(git_root))
+  return true
+end
+
+function M.grep_current_word_in_current_file()
+  M.grep(M.get_current_word() .. ' %')
+end
+
 function M.replace_m_with_blank()
   pcall(M.run_ex, [[%s/\r$//]])
 end
@@ -52,6 +122,14 @@ end
 
 function M.mani(args)
   pcall(M.run_ex, 'sp term://mani -c ' .. M.mani_config .. ' ' .. args)
+end
+
+function M.mani_git_status()
+  M.mani([[run git-status --parallel --tags-expr '$MANI_EXPR']])
+end
+
+function M.mani_git_up()
+  M.mani([[run git-up --parallel --tags-expr '$MANI_EXPR']])
 end
 
 function M.start_async_neovim(command)

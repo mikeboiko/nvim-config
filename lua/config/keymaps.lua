@@ -3,6 +3,7 @@ local comments = require('config.comments')
 local editor = require('config.editor')
 local folds = require('config.folds')
 local quickfix = require('config.quickfix')
+local shell = require('config.shell')
 
 function _G.set_terminal_keymaps()
   vim.keymap.set('t', '<C-j>', '<C-W>j')
@@ -124,6 +125,38 @@ vim.keymap.set('c', '<C-v>', '<C-r>+', { desc = 'Paste clipboard register' })
 vim.keymap.set('n', '<leader>st', function()
   editor.toggle_spell()
 end, { silent = true, desc = 'Toggle spell check' })
+
+vim.keymap.set('n', '<leader>ms', function()
+  shell.mani_git_status()
+end, { silent = true, desc = 'Mani git status' })
+
+vim.keymap.set('n', '<leader>mu', function()
+  shell.mani_git_up()
+end, { silent = true, desc = 'Mani git up' })
+
+vim.keymap.set('n', '<leader>fc', function()
+  shell.prefill_grep_for_filetype()
+end, { silent = true, desc = 'Prefill grep for current filetype in ~/git' })
+
+vim.keymap.set('n', '<leader>fn', function()
+  shell.prefill_grep_for_notes()
+end, { silent = true, desc = 'Prefill grep for notes in ~/git' })
+
+vim.keymap.set('n', '<leader>fg', function()
+  shell.prefill_grep_for_git_repo()
+end, { silent = true, desc = 'Prefill grep for current git repo' })
+
+vim.keymap.set('n', '<leader>gw', function()
+  shell.grep_current_word_in_git_repo()
+end, { silent = true, desc = 'Grep current word in current git repo' })
+
+vim.keymap.set('n', '<leader>fl', function()
+  shell.prefill_grep_for_current_file()
+end, { silent = true, desc = 'Prefill grep for current file' })
+
+vim.keymap.set('n', '<leader>fw', function()
+  shell.grep_current_word_in_current_file()
+end, { silent = true, desc = 'Grep current word in current file' })
 
 -- Quickfix/location list helpers
 vim.keymap.set('n', '<leader>q', function()

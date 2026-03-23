@@ -32,6 +32,7 @@
 - The repo currently relies on local hook-based validation rather than GitHub Actions, and it targets Neovim stable (`0.11.x` today).
 - Shared editor behavior is split across `lua/config/` modules such as `constants.lua`, `options.lua`, `autocmds.lua`, `functions.lua`, `comments.lua`, and `keymaps.lua`.
 - Reusable migrated legacy helpers are increasingly landing in focused modules under `lua/config/`, with `windows.lua`, `quickfix.lua`, `folds.lua`, `comments.lua`, `terminal.lua`, `clipboard.lua`, `tabline.lua`, `editor.lua`, `shell.lua`, `buffers.lua`, and `workspace.lua` as current examples.
+- Search- and workflow-oriented user mappings are being migrated into `lua/config/keymaps.lua` on top of helper modules such as `shell.lua`, rather than staying as standalone Vimscript remaps.
 - Plugin-local startup globals are being moved into plugin spec `init` blocks instead of staying in `vimscript/init.vim`; `nvim-tree`, markdown preview, and img-paste already follow this pattern.
 - The repo now has a lightweight test harness under `tests/`; `tests/minimal_init.lua` prepends the repo and Plenary to `runtimepath`, and specs under `tests/nvim-config/` intentionally cover Lua modules and repo-owned behavior without depending on a full interactive session.
 - Filetype behavior is layered:
