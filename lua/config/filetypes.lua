@@ -9,18 +9,41 @@ local function get_current_syntax()
   return nil
 end
 
-function M.load_runtime_syntax(name)
-  if get_current_syntax() == name then
+local function set_current_syntax(name)
+  vim.api.nvim_buf_set_var(0, 'current_syntax', name)
+end
+
+function M.apply_autohotkey_syntax()
+  if get_current_syntax() == 'autohotkey' then
     return false
   end
 
-  local syntax_files = vim.api.nvim_get_runtime_file('syntax/' .. name .. '.vim', false)
-  if #syntax_files == 0 then
-    error('Runtime syntax file not found: ' .. name)
-  end
+  vim.cmd([=[
+  syntax case ignore
+  syntax keyword autohotkeyConditional if else
+  syntax keyword autohotkeyRepeat loop while for break continue until
+  syntax keyword autohotkeyCommand return send run gosub msgbox
+  syntax keyword autohotkeyBoolean true false
+  syntax keyword autohotkeyTodo contained TODO FIXME XXX NOTE
+  syntax match autohotkeyComment ";.*$" contains=autohotkeyTodo
+  syntax match autohotkeyDirective "^\s*#\w\+"
+  syntax match autohotkeyVariable "%\w\+%"
+  syntax match autohotkeyHotkey "^\s*[^;[:space:]].*::"
+  syntax region autohotkeyString start=+"+ skip=+\\\\\|\\"+ end=+"+
+  syntax region autohotkeyString start=+'+ skip=+\\\\\|\\'+ end=+'+
+  hi def link autohotkeyBoolean Boolean
+  hi def link autohotkeyComment Comment
+  hi def link autohotkeyCommand Statement
+  hi def link autohotkeyConditional Conditional
+  hi def link autohotkeyDirective PreProc
+  hi def link autohotkeyHotkey Identifier
+  hi def link autohotkeyRepeat Repeat
+  hi def link autohotkeyString String
+  hi def link autohotkeyTodo Todo
+  hi def link autohotkeyVariable Identifier
+  ]=])
 
-  pcall(vim.api.nvim_buf_del_var, 0, 'current_syntax')
-  vim.cmd('source ' .. vim.fn.fnameescape(syntax_files[1]))
+  set_current_syntax('autohotkey')
   return true
 end
 
@@ -42,10 +65,10 @@ hi def link sebolBlockCmd Statement
 hi def link sebolHip Type
 hi def link sebolString Constant
 hi def link sebolDesc PreProc
-hi def link sebolNumber Constant
-]])
+  hi def link sebolNumber Constant
+  ]])
 
-  vim.api.nvim_buf_set_var(0, 'current_syntax', 'sebol')
+  set_current_syntax('sebol')
   return true
 end
 

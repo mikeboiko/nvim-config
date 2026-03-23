@@ -27,7 +27,7 @@
 ## High-level architecture
 
 - `init.lua` is the entrypoint. It optionally launches `osv` for debugging when `init_debug` is set, then loads shared Lua modules from `lua/config/*`, and finally bootstraps `lazy.nvim` through `lua/config/lazy.lua`.
-- The old `vimscript/init.vim` bootstrap is gone. Look in `lua/config/*`, `after/ftplugin/*.lua`, `after/ftdetect/*.lua`, and `lua/plugins/*.lua` before assuming a behavior is not configured yet.
+- Look in `lua/config/*`, `after/ftplugin/*.lua`, `after/ftdetect/*.lua`, and `lua/plugins/*.lua` before assuming a behavior is not configured yet.
 - `lua/config/lazy.lua` imports the `plugins` namespace, so each file under `lua/plugins/` is a Lazy spec module. `lazy-lock.json` pins the resolved plugin versions.
 - The repo currently relies on local hook-based validation rather than GitHub Actions, and it targets Neovim stable (`0.11.x` today).
 - Shared editor behavior is split across `lua/config/` modules such as `constants.lua`, `options.lua`, `autocmds.lua`, `functions.lua`, `comments.lua`, and `keymaps.lua`.
@@ -41,10 +41,10 @@
 - Small utility maps such as append-at-EOL helpers, path-copy shortcuts, close helpers, rerun-command/command-history entry, and paragraph commenting now live in Lua too, and the old `<leader>redo` compatibility mapping has been removed.
 - Tab/window navigation helpers such as `gI`, `gT`, `gt`, `gs`, `gv`, `<C-t>`, `<C-Tab>`, and `<Tab>` now live in `lua/config/keymaps.lua` too; the smoke spec covers their registered RHS values because they intentionally preserve odd legacy key-sequence behavior for parity.
 - Search/sort and compatibility maps such as `<leader>/`, `<leader>so`, `<C-z>`, and `<C-y>` now live in `lua/config/keymaps.lua` too; the smoke spec asserts their normalized RHS values so literal command-line/search behavior stays stable during migration, and `<leader>sv` has been intentionally removed.
-- The last general `vimscript/init.vim` mappings (`gf` plus the GUI-only font hotkeys) now route through Lua-backed helpers in `lua/config/keymaps.lua` / `lua/config/editor.lua`, and the legacy `FontSizePlus()` / `FontSizeMinus()` entrypoints are preserved through Lua wrappers.
-- Help lookup for `help`/`vim` buffers now lives in `after/ftplugin/help.lua` and `after/ftplugin/vim.lua`; there are currently no active `:map` commands left in repo `.vim` files.
-- `init.lua` no longer sources `vimscript/init.vim`; the remaining active startup globals, options, clipboard provider settings, and GUI enter behavior now live in `lua/config/{constants,options,autocmds,gui,editor}.lua`, and the legacy bootstrap file has been deleted.
-- Markdown/sebol filetype behavior and the AutoHotkey syntax hookup now also live in Lua through `lua/config/filetypes.lua` plus `after/ftplugin/*.lua`, and there are no committed `.vim` files left in this repository.
+- The last general compatibility mappings (`gf` plus the GUI-only font hotkeys) now route through Lua-backed helpers in `lua/config/keymaps.lua` / `lua/config/editor.lua`, and the legacy `FontSizePlus()` / `FontSizeMinus()` entrypoints are preserved through Lua wrappers.
+- Help lookup for `help`/`vim` buffers now lives in `after/ftplugin/help.lua` and `after/ftplugin/vim.lua`; buffer-local editor behavior is configured from Lua.
+- Startup globals, options, clipboard provider settings, and GUI enter behavior now live in `lua/config/{constants,options,autocmds,gui,editor}.lua`.
+- Markdown/sebol filetype behavior and the AutoHotkey syntax setup now also live in Lua through `lua/config/filetypes.lua` plus `after/ftplugin/*.lua`; the active config no longer depends on repo-owned or runtime-sourced legacy config.
 - Plugin-local startup globals are being moved into plugin spec `init` blocks instead of staying in ad hoc bootstrap code; `nvim-tree`, markdown preview, and img-paste already follow this pattern.
 - The repo now has a lightweight test harness under `tests/`; `tests/minimal_init.lua` prepends the repo and Plenary to `runtimepath`, and specs under `tests/nvim-config/` intentionally cover Lua modules and repo-owned behavior without depending on a full interactive session.
 - Filetype behavior is layered:

@@ -20,10 +20,10 @@ My neovim config files
 - Small utility maps such as append-at-EOL helpers, path-copy shortcuts, close helpers, rerun-command/command-history entry, and paragraph commenting are now also managed from Lua, and the old `<leader>redo` compatibility map has been removed.
 - Tab/window navigation helpers such as `gI`, `gT`, `gt`, `gs`, `gv`, `<C-t>`, `<C-Tab>`, and `<Tab>` are now also owned by `lua/config/keymaps.lua`, with the matching legacy Vimscript maps removed.
 - Search/sort and compatibility maps such as `<leader>/`, `<leader>so`, `<C-z>`, and `<C-y>` are now also owned by `lua/config/keymaps.lua`; the old `<leader>sv` self-reload shortcut has been removed.
-- The last general `vimscript/init.vim` mappings, including the `gf` workaround and GUI font hotkeys, now route through Lua-backed helpers in `lua/config/keymaps.lua` and `lua/config/editor.lua`.
-- Help-lookup mappings for `help` and `vim` buffers now live in `after/ftplugin/help.lua` and `after/ftplugin/vim.lua`, so there are no active `:map` definitions left in repo `.vim` files.
-- `init.lua` no longer sources a legacy Vimscript bootstrap file; the remaining active startup globals, options, clipboard provider settings, and GUI enter behavior now live in Lua under `lua/config/{constants,options,autocmds,gui,editor}.lua`, and `vimscript/init.vim` has been deleted.
-- The remaining filetype-local Markdown/sebol behavior and the AutoHotkey syntax hookup now also live in Lua through `lua/config/filetypes.lua` plus `after/ftplugin/*.lua`, and there are no committed `.vim` files left in this repository.
+- The last general compatibility mappings, including the `gf` workaround and GUI font hotkeys, now route through Lua-backed helpers in `lua/config/keymaps.lua` and `lua/config/editor.lua`.
+- Help-lookup mappings for `help` and `vim` buffers now live in `after/ftplugin/help.lua` and `after/ftplugin/vim.lua`, so buffer-local editor behavior is fully configured from Lua.
+- Startup globals, options, clipboard provider settings, and GUI enter behavior all live in Lua under `lua/config/{constants,options,autocmds,gui,editor}.lua`.
+- The remaining filetype-local Markdown/sebol behavior and the AutoHotkey syntax setup now also live in Lua through `lua/config/filetypes.lua` plus `after/ftplugin/*.lua`, with no repo-owned or runtime-sourced legacy config left in the active setup.
 - Plugin-local bootstrap and setup live in `lua/plugins/`.
 - Filetype-local overrides live in `after/ftplugin/` and custom detection in `after/ftdetect/`.
 - The remaining cleanup work is now refactoring-oriented rather than migration-oriented; the repo no longer needs a Vimscript compatibility layer.

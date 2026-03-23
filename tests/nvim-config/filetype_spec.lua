@@ -45,6 +45,7 @@ describe('nvim-config custom filetypes', function()
     vim.cmd('setfiletype autohotkey')
     assert.are.equal(';%s', vim.bo.commentstring)
     assert.are.equal('autohotkey', vim.b.current_syntax)
+    assert.are.equal(1, vim.fn.hlexists('autohotkeyComment'))
     vim.cmd('bwipe!')
 
     vim.cmd('enew')
