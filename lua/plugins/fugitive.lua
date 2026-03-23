@@ -10,7 +10,7 @@ return {
   lazy = false,
   keys = {
     { '<leader>gd', prefill_command('Gvdiffsplit! '), desc = 'Open Fugitive vertical diff split prompt' },
-    { '<leader>gdt', prefill_command('Git difftool -y --diff-filter=ACMRTUXB '), desc = 'Open git difftool prompt' },
+    { '<leader>gt', prefill_command('Git difftool -y --diff-filter=ACMRTUXB '), desc = 'Open git difftool prompt' },
     { '<leader>gs', ':Git<CR>', silent = true, desc = 'Open Fugitive status' },
   },
 }

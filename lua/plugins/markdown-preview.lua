@@ -20,8 +20,18 @@ return {
   end,
   ft = { 'markdown' },
   config = function()
-    require('markdown_preview').setup({
+    local mp = require('markdown_preview')
+    mp.setup({
       mermaid_renderer = 'rust',
+    })
+
+    vim.api.nvim_create_autocmd('BufDelete', {
+      group = vim.api.nvim_create_augroup('markdown-preview-auto-stop', { clear = true }),
+      callback = function(args)
+        if mp._active_bufnr == args.buf and (mp._server_instance or mp._takeover_port) then
+          mp.stop()
+        end
+      end,
     })
   end,
 }
