@@ -13,6 +13,3 @@ if vim.fn.has('mac') == 1 then
 else
   vim.g.python3_host_prog = '/usr/bin/python'
 end
-
--- Global lua vars
-USER = os.getenv('USER')

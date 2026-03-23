@@ -178,6 +178,8 @@ function M.register(api)
       editor.font_size_minus()
     end, { silent = true, desc = 'Decrease GUI font size' })
   end
+
+  vim.keymap.set('n', '<leader>ti', ':TodoPrompt<CR>', { silent = true, desc = 'Insert TODO at cursor' })
 end
 
 return M

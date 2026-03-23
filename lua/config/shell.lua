@@ -161,16 +161,4 @@ function M.start_async_neovim(command)
   })
 end
 
-function M.register_legacy_functions()
-  _G.nvim_config_figlet_legacy = function(text)
-    M.figlet(text)
-  end
-
-  vim.cmd([[
-function! Figlet(...) abort
-  call v:lua.nvim_config_figlet_legacy(a:1)
-endfunction
-]])
-end
-
 return M

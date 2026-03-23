@@ -78,12 +78,4 @@ function M.close_all()
   delete_buffers(named_buffers, false)
 end
 
-function M.register_legacy_functions()
-  vim.cmd([[
-function! CloseAll() abort
-  lua require('config.windows').close_all()
-endfunction
-]])
-end
-
 return M

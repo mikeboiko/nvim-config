@@ -13,10 +13,10 @@ return {
   },
   build = 'make tiktoken', -- Only on MacOS or Linux
   keys = {
-    { '<leader>ac', ':CopilotChatToggle<CR>', silent = true, desc = 'Toggle Copilot chat' },
-    { '<leader>af', ':CopilotChatFixDiagnostic<CR>', silent = true, desc = 'Fix diagnostics with Copilot' },
-    { '<leader>aq', quick_chat('Buffer'), silent = true, desc = 'Ask Copilot about the current buffer' },
-    { '<leader>at', ':CopilotChatTests<CR>', silent = true, desc = 'Generate tests with Copilot' },
+    { '<leader>ac', ':CopilotChatToggle<CR>', mode = 'n', silent = true, desc = 'Toggle Copilot chat' },
+    { '<leader>af', ':CopilotChatFixDiagnostic<CR>', mode = 'n', silent = true, desc = 'Fix diagnostics with Copilot' },
+    { '<leader>aq', quick_chat('Buffer'), mode = 'n', silent = true, desc = 'Ask Copilot about the current buffer' },
+    { '<leader>at', ':CopilotChatTests<CR>', mode = 'n', silent = true, desc = 'Generate tests with Copilot' },
     { '<leader>ac', ':<C-u>CopilotChatToggle<CR>', mode = 'v', silent = true, desc = 'Toggle Copilot chat' },
     { '<leader>ad', ':CopilotChatDocs<CR>', mode = 'v', silent = true, desc = 'Document selection with Copilot' },
     { '<leader>ae', ':CopilotChatExplainBrief<CR>', mode = 'v', silent = true, desc = 'Explain selection briefly' },

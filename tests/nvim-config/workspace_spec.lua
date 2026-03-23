@@ -15,14 +15,12 @@ describe('nvim-config workspace helpers', function()
     file:close()
   end
 
-  it('keeps the legacy EditCommonFile() entrypoint working', function()
-    require('config.commands')
-
+  it('opens a file in a new tab', function()
     local file = vim.fn.tempname() .. '.txt'
     write_file(file, 'hello\n')
     local initial_tab_count = vim.fn.tabpagenr('$')
 
-    vim.fn['EditCommonFile'](file)
+    workspace.edit_common_file(file)
 
     assert.are.equal(initial_tab_count + 1, vim.fn.tabpagenr('$'))
     assert.are.equal(file, vim.api.nvim_buf_get_name(0))
@@ -30,9 +28,7 @@ describe('nvim-config workspace helpers', function()
     vim.fn.delete(file)
   end)
 
-  it('keeps the legacy GetBufferList() entrypoint working', function()
-    require('config.commands')
-
+  it('returns a string listing all open buffers', function()
     local file_one = vim.fn.tempname() .. '-one.txt'
     local file_two = vim.fn.tempname() .. '-two.txt'
     write_file(file_one, 'one\n')
@@ -41,7 +37,7 @@ describe('nvim-config workspace helpers', function()
     vim.cmd('edit ' .. vim.fn.fnameescape(file_one))
     vim.cmd('tabnew ' .. vim.fn.fnameescape(file_two))
 
-    local buffer_list = vim.fn['GetBufferList']()
+    local buffer_list = workspace.get_buffer_list()
     assert.is_true(buffer_list:find(file_one, 1, true) ~= nil)
     assert.is_true(buffer_list:find(file_two, 1, true) ~= nil)
 
@@ -49,9 +45,7 @@ describe('nvim-config workspace helpers', function()
     vim.fn.delete(file_two)
   end)
 
-  it('keeps the legacy GetTODOs() entrypoint working and restores wildignore', function()
-    require('config.commands')
-
+  it('searches for TODOs and restores wildignore', function()
     local original_run_ex = workspace.run_ex
     local original_wildignore = vim.opt.wildignore:get()
     local calls = {}
@@ -61,7 +55,7 @@ describe('nvim-config workspace helpers', function()
     end
 
     vim.opt.wildignore = { '*.tmp' }
-    vim.cmd('call GetTODOs()')
+    workspace.get_todos()
 
     assert.are.same({ [[vimgrep /TODO-MB \[\d\{6}]/ **/* **/.* | cw 5]] }, calls)
     assert.are.same({ '*.tmp' }, vim.opt.wildignore:get())

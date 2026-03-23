@@ -9,11 +9,11 @@ end
 function M.set_terminal_keymaps(buffer)
   local opts = { buffer = buffer or 0 }
 
-  vim.keymap.set('t', '<C-g>', '<C-W>:tabp<CR>', opts)
-  vim.keymap.set('t', '<C-j>', '<C-W>j', opts)
-  vim.keymap.set('t', '<C-k>', '<C-W>k', opts)
-  vim.keymap.set('t', '<C-h>', '<C-W>h', opts)
-  vim.keymap.set('t', '<C-l>', '<C-W>l', opts)
+  vim.keymap.set('t', '<C-g>', '<C-W>:tabp<CR>', vim.tbl_extend('force', opts, { desc = 'Previous tab (terminal)' }))
+  vim.keymap.set('t', '<C-j>', '<C-W>j', vim.tbl_extend('force', opts, { desc = 'Move to window below (terminal)' }))
+  vim.keymap.set('t', '<C-k>', '<C-W>k', vim.tbl_extend('force', opts, { desc = 'Move to window above (terminal)' }))
+  vim.keymap.set('t', '<C-h>', '<C-W>h', vim.tbl_extend('force', opts, { desc = 'Move to left window (terminal)' }))
+  vim.keymap.set('t', '<C-l>', '<C-W>l', vim.tbl_extend('force', opts, { desc = 'Move to right window (terminal)' }))
 end
 
 function M.register()
@@ -27,11 +27,11 @@ function M.register()
 
   vim.keymap.set('n', 'qt', function()
     if vim.fn.tabpagenr('$') == 1 then
-      vim.cmd('quit')
+      vim.cmd.quit()
     else
-      vim.cmd('tabclose')
+      vim.cmd.tabclose()
     end
-  end, { silent = true })
+  end, { silent = true, desc = 'Close tab or quit' })
 
   vim.keymap.set('n', 'qj', '<C-W>j', { desc = 'Move to window below' })
   vim.keymap.set('n', 'qk', '<C-W>k', { desc = 'Move to window above' })
@@ -67,8 +67,7 @@ function M.register()
   vim.keymap.set('n', '<C-Tab>', ':tabnext<CR>', { silent = true, desc = 'Go to the next tab' })
   vim.keymap.set('n', '<Tab>', ':tabprevious<CR>', { silent = true, desc = 'Go to the previous tab' })
 
-  -- Fix standard Ctrl-i mapping. Not sure which plugin is breaking it.
-  vim.keymap.set('n', '<C-i>', '<C-i>')
+  vim.keymap.set('n', '<C-i>', '<C-i>', { desc = 'Restore built-in Ctrl-i' })
 end
 
 return M

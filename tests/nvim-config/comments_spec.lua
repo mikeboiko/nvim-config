@@ -5,7 +5,7 @@ describe('nvim-config comment helpers', function()
     comments = require('config.comments')
   end)
 
-  it('keeps the legacy InsertInlineComment() entrypoint working', function()
+  it('inserts an inline fold comment at the end of the current line', function()
     require('config.commands')
 
     vim.cmd('enew')
@@ -14,7 +14,7 @@ describe('nvim-config comment helpers', function()
     vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'local value = 1' })
     vim.api.nvim_win_set_cursor(0, { 1, 0 })
 
-    vim.cmd([[call InsertInlineComment('2')]])
+    comments.insert_inline_comment('2')
 
     assert.are.same({ 'local value = 1 -- {{{2' }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
 

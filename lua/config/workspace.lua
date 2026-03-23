@@ -30,32 +30,4 @@ function M.get_todos()
   end
 end
 
-function M.register_legacy_functions()
-  _G.nvim_config_workspace_edit_common_file_legacy = function(filename)
-    M.edit_common_file(filename)
-  end
-
-  _G.nvim_config_workspace_get_buffer_list_legacy = function()
-    return M.get_buffer_list()
-  end
-
-  _G.nvim_config_workspace_get_todos_legacy = function()
-    M.get_todos()
-  end
-
-  vim.cmd([[
-function! EditCommonFile(filename) abort
-  call v:lua.nvim_config_workspace_edit_common_file_legacy(a:filename)
-endfunction
-
-function! GetBufferList() abort
-  return v:lua.nvim_config_workspace_get_buffer_list_legacy()
-endfunction
-
-function! GetTODOs() abort
-  call v:lua.nvim_config_workspace_get_todos_legacy()
-endfunction
-]])
-end
-
 return M

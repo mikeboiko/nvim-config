@@ -1,5 +1,7 @@
 local M = {}
 
+local functions = require('config.functions')
+
 function M.call_global(name, ...)
   local callback = vim.g[name]
   if type(callback) ~= 'function' then
@@ -12,11 +14,7 @@ function M.call_global(name, ...)
 end
 
 function M.prompt_rename(visual)
-  if visual then
-    return M.call_global('FancyPromptRename', 'RenameWord', 'New Word', 1)
-  end
-
-  return M.call_global('FancyPromptRename', 'RenameWord', 'New Word')
+  functions.fancy_prompt_rename(functions.rename_word, 'New Word', visual and true or nil)
 end
 
 local navigation = require('config.keymaps.navigation')

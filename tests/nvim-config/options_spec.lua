@@ -7,7 +7,7 @@ local function load_options()
 end
 
 describe('nvim-config option preservation', function()
-  it('keeps the remaining legacy globals and editor defaults in Lua', function()
+  it('sets expected globals and editor defaults', function()
     load_options()
 
     assert.are.equal('$HOME/git', vim.env.CODE)

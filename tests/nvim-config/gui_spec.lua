@@ -6,7 +6,7 @@ describe('nvim-config gui helpers', function()
     gui = require('config.gui')
   end)
 
-  it('runs the legacy GUIEnter behavior with wmctrl on unix', function()
+  it('maximizes the window with wmctrl on unix', function()
     local original_run_command = gui.run_command
     local original_run_system = gui.run_system
     local commands = {}
@@ -28,7 +28,7 @@ describe('nvim-config gui helpers', function()
     gui.run_system = original_run_system
   end)
 
-  it('runs the legacy GUIEnter behavior with simalt on non-unix systems', function()
+  it('maximizes the window with simalt on non-unix systems', function()
     local original_run_command = gui.run_command
     local original_run_system = gui.run_system
     local commands = {}

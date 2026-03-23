@@ -1,7 +1,4 @@
 local opt = vim.opt
-local tabline = require('config.tabline')
-
-tabline.register_legacy_functions()
 
 opt.number = true
 opt.scrolloff = 8
@@ -12,8 +9,8 @@ opt.lazyredraw = true
 opt.linebreak = true
 opt.laststatus = 2
 
-vim.cmd([[set shada=!,'2000,<50,s10,h]])
-vim.cmd([[set shada^=rterm://,rfugitive,rman:,rhealth:,r/mnt/]])
+opt.shada = { '!', "'2000", '<50', 's10', 'h' }
+opt.shada:prepend({ 'rterm://', 'rfugitive', 'rman:', 'rhealth:', 'r/mnt/' })
 
 opt.timeoutlen = 500
 opt.ttimeoutlen = 0
@@ -66,12 +63,12 @@ opt.hlsearch = true
 opt.ignorecase = true
 opt.smartcase = true
 
--- Enable persistant undo
-UNDODIR = '/home/' .. USER .. '/.cache/nvim/undo//'
-if vim.fn.isdirectory(UNDODIR) == 0 then
-  vim.fn.mkdir(UNDODIR, 'p', '0o700')
+-- Persistent undo
+local undodir = vim.fn.stdpath('cache') .. '/undo'
+if vim.fn.isdirectory(undodir) == 0 then
+  vim.fn.mkdir(undodir, 'p', '0o700')
 end
-opt.undodir = UNDODIR
+opt.undodir = undodir
 opt.undofile = true
 
 opt.termguicolors = true
@@ -82,8 +79,7 @@ if vim.fn.executable('ag') == 1 then
   opt.grepformat = '%f:%l:%c:%m'
 end
 
--- opt.foldcolumn = '1' -- '0' is not bad
-opt.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+opt.foldlevel = 99
 opt.foldlevelstart = 99
 opt.foldenable = true
 opt.foldmethod = 'expr'
@@ -92,47 +88,13 @@ opt.showtabline = 2
 opt.tabline = "%!v:lua.require'config.tabline'.render()"
 opt.foldtext = "v:lua.require'config.folds'.fold_text()"
 
--- -- Show/hide virtual lines for diagnostics
--- local og_virt_text
--- local og_virt_line
--- vim.api.nvim_create_autocmd({ 'CursorMoved', 'DiagnosticChanged' }, {
---   group = vim.api.nvim_create_augroup('diagnostic_only_virtlines', {}),
---   callback = function()
---     if og_virt_line == nil then
---       og_virt_line = vim.diagnostic.config().virtual_lines
---     end
-
---     -- ignore if virtual_lines.current_line is disabled
---     if not (og_virt_line and og_virt_line.current_line) then
---       if og_virt_text then
---         vim.diagnostic.config({ virtual_text = og_virt_text })
---         og_virt_text = nil
---       end
---       return
---     end
-
---     if og_virt_text == nil then
---       og_virt_text = vim.diagnostic.config().virtual_text
---     end
-
---     local lnum = vim.api.nvim_win_get_cursor(0)[1] - 1
-
---     if vim.tbl_isempty(vim.diagnostic.get(0, { lnum = lnum })) then
---       vim.diagnostic.config({ virtual_text = og_virt_text })
---     else
---       vim.diagnostic.config({ virtual_text = false })
---     end
---   end,
--- })
-
 vim.diagnostic.config({
   virtual_text = true,
-  -- virtual_lines = { current_line = true },
   virtual_lines = false,
   underline = true,
   update_in_insert = false,
 })
 
 -- Enable project-specific settings
-vim.opt.exrc = true
-vim.opt.secure = true
+opt.exrc = true
+opt.secure = true

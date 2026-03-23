@@ -24,24 +24,4 @@ function M.render()
   return table.concat(parts)
 end
 
-function M.register_legacy_functions()
-  _G.nvim_config_tab_label_legacy = function(tabnr)
-    return M.label(tabnr)
-  end
-
-  _G.nvim_config_tabline_legacy = function()
-    return M.render()
-  end
-
-  vim.cmd([[
-function! MyTabLabel(n) abort
-  return v:lua.nvim_config_tab_label_legacy(a:n)
-endfunction
-
-function! MyTabLine() abort
-  return v:lua.nvim_config_tabline_legacy()
-endfunction
-]])
-end
-
 return M

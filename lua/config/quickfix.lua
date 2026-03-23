@@ -80,24 +80,4 @@ function M.close_window_if_last()
   end
 end
 
-function M.register_legacy_functions()
-  _G.nvim_config_toggle_list_legacy = function(prefix)
-    M.toggle_list(prefix)
-  end
-
-  _G.nvim_config_close_quickfix_window_legacy = function()
-    M.close_window_if_last()
-  end
-
-  vim.cmd([[
-function! ToggleList(bufname, pfx) abort
-  call v:lua.nvim_config_toggle_list_legacy(a:pfx)
-endfunction
-
-function! CloseQuickFixWindow() abort
-  call v:lua.nvim_config_close_quickfix_window_legacy()
-endfunction
-]])
-end
-
 return M

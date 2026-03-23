@@ -15,17 +15,18 @@ describe('nvim-config quickfix helpers', function()
     }
   end
 
-  it('keeps the legacy ToggleList() entrypoint working for quickfix', function()
+  it('toggles quickfix list open and closed', function()
     require('config.commands')
+    local quickfix = require('config.quickfix')
 
     vim.fn.setqflist(quickfix_items(), 'r')
 
     assert.are.equal(0, vim.fn.getqflist({ winid = 0 }).winid)
 
-    vim.cmd([[call ToggleList('Quickfix List', 'c')]])
+    quickfix.toggle_list('c')
     assert.is_true(vim.fn.getqflist({ winid = 0 }).winid ~= 0)
 
-    vim.cmd([[call ToggleList('Quickfix List', 'c')]])
+    quickfix.toggle_list('c')
     assert.are.equal(0, vim.fn.getqflist({ winid = 0 }).winid)
   end)
 

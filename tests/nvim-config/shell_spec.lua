@@ -14,7 +14,7 @@ describe('nvim-config shell helpers', function()
     end
   end
 
-  it('keeps the legacy Figlet() entrypoint working and comments inserted lines', function()
+  it('inserts figlet output as commented lines below the cursor', function()
     local original_figlet_lines = shell.figlet_lines
 
     require('config.commands')
@@ -30,7 +30,7 @@ describe('nvim-config shell helpers', function()
     vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'seed' })
     vim.api.nvim_win_set_cursor(0, { 1, 0 })
 
-    vim.cmd([[call Figlet('Hello')]])
+    shell.figlet('Hello')
 
     assert.are.same({ 'seed', '-- AA', '-- BB' }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
 

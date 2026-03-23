@@ -1,5 +1,5 @@
 describe('nvim-config window helpers', function()
-  it('keeps the legacy :call CloseAll() entrypoint working', function()
+  it('closes quickfix and location list windows via close_all()', function()
     require('config.commands')
 
     vim.fn.setqflist({
@@ -13,7 +13,7 @@ describe('nvim-config window helpers', function()
     vim.cmd('lopen')
 
     assert.has_no.errors(function()
-      vim.cmd('call CloseAll()')
+      require('config.windows').close_all()
     end)
 
     assert.are.equal(0, vim.fn.getqflist({ winid = 0 }).winid)

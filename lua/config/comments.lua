@@ -99,45 +99,6 @@ function M.prompt_and_comment(inline_comment, prompt_text, comment_prefix)
   return true
 end
 
-function M.register_legacy_functions()
-  _G.nvim_config_get_commentstring_legacy = function()
-    return M.get_commentstring()
-  end
-
-  _G.nvim_config_comment_yank_legacy = function()
-    M.comment_yank()
-  end
-
-  _G.nvim_config_insert_inline_comment_legacy = function(fold_marker)
-    M.insert_inline_comment(fold_marker)
-  end
-
-  _G.nvim_config_prompt_and_comment_legacy = function(inline_comment, prompt_text, comment_prefix)
-    M.prompt_and_comment(inline_comment == 1 or inline_comment == true, prompt_text, comment_prefix)
-  end
-
-  vim.cmd([[
-function! GetCommentString() abort
-  return v:lua.nvim_config_get_commentstring_legacy()
-endfunction
-
-function! CommentYank() abort
-  call v:lua.nvim_config_comment_yank_legacy()
-endfunction
-
-function! InsertInlineComment(fold_marker) abort
-  call v:lua.nvim_config_insert_inline_comment_legacy(a:fold_marker)
-endfunction
-
-function! PromptAndComment(inline_comment, prompt_text, comment_prefix) abort
-  call v:lua.nvim_config_prompt_and_comment_legacy(a:inline_comment, a:prompt_text, a:comment_prefix)
-endfunction
-]])
-end
-
--- TODO prompt function
-
----@param cb function: callback function receiving the todo text
 local function todo_prompt(cb)
   local input = require('snacks.input')
   input({
@@ -148,7 +109,6 @@ local function todo_prompt(cb)
     },
   }, function(text)
     if text and text ~= '' then
-      -- prefix with TODO and current date
       local todo = string.format('TODO: %s', text)
       if cb then
         cb(todo)
@@ -157,23 +117,16 @@ local function todo_prompt(cb)
   end)
 end
 
--- Create command to insert TODO at cursor position
 vim.api.nvim_create_user_command('TodoPrompt', function()
   todo_prompt(function(todo)
     local line_nr = vim.api.nvim_win_get_cursor(0)[1] - 1
-    -- Get indentation of current line
     local current_line = vim.api.nvim_get_current_line()
     local indent = current_line:match('^%s+') or ''
-    -- Insert the todo on a new line above current line with proper indentation
     vim.api.nvim_buf_set_lines(0, line_nr, line_nr, false, { indent .. todo })
-    -- Comment the newly inserted line
     M.toggle_comment_lines(line_nr + 1, line_nr + 1)
   end)
 end, {})
 
--- Make the function available globally
 M.todo_prompt = todo_prompt
-vim.g.todo_prompt = todo_prompt
-vim.keymap.set('n', '<leader>ti', ':TodoPrompt<CR>', { noremap = true, silent = true, desc = 'Insert TODO at cursor' })
 
 return M

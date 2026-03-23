@@ -5,7 +5,7 @@ describe('nvim-config clipboard helpers', function()
     clipboard = require('config.clipboard')
   end)
 
-  it('keeps the legacy PasteClipboard() entrypoint working for text', function()
+  it('pastes clipboard text below the current line', function()
     local original_targets = clipboard.clipboard_targets
     local original_register = vim.fn.getreg('+')
     local original_register_type = vim.fn.getregtype('+')
@@ -21,7 +21,7 @@ describe('nvim-config clipboard helpers', function()
     vim.api.nvim_win_set_cursor(0, { 1, 0 })
     vim.fn.setreg('+', 'clipboard text')
 
-    vim.cmd('call PasteClipboard()')
+    clipboard.paste_clipboard()
 
     assert.are.same({ 'current line', 'clipboard text' }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
 

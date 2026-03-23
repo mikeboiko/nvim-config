@@ -51,16 +51,4 @@ function M.copy_current_file_dir()
   return path
 end
 
-function M.register_legacy_functions()
-  _G.nvim_config_paste_clipboard_legacy = function()
-    return M.paste_clipboard()
-  end
-
-  vim.cmd([[
-function! PasteClipboard() abort
-  call v:lua.nvim_config_paste_clipboard_legacy()
-endfunction
-]])
-end
-
 return M

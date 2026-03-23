@@ -11,7 +11,7 @@ describe('nvim-config editor helpers', function()
     end
   end
 
-  it('keeps the legacy BufDo() entrypoint working and restores the current buffer', function()
+  it('runs a command across all buffers and restores the current buffer', function()
     require('config.commands')
 
     vim.cmd('enew')
@@ -21,7 +21,7 @@ describe('nvim-config editor helpers', function()
     local buffer_two = vim.api.nvim_get_current_buf()
 
     vim.api.nvim_set_current_buf(buffer_one)
-    vim.cmd([[call BufDo("let b:nvim_config_editor_iterated = 1")]])
+    editor.bufdo('let b:nvim_config_editor_iterated = 1')
 
     assert.are.equal(buffer_one, vim.api.nvim_get_current_buf())
     assert.are.equal(1, vim.api.nvim_buf_get_var(buffer_one, 'nvim_config_editor_iterated'))
@@ -167,9 +167,7 @@ describe('nvim-config editor helpers', function()
     assert.are.equal('Consolas:h13', editor.adjust_guifont_size('Consolas:h14', -1, false))
   end)
 
-  it('keeps the legacy FontSizePlus()/FontSizeMinus() entrypoints working', function()
-    require('config.commands')
-
+  it('calls font_size_plus and font_size_minus', function()
     local original_plus = editor.font_size_plus
     local original_minus = editor.font_size_minus
     local calls = {}
@@ -182,8 +180,8 @@ describe('nvim-config editor helpers', function()
       table.insert(calls, 'minus')
     end
 
-    vim.cmd('call FontSizePlus()')
-    vim.cmd('call FontSizeMinus()')
+    editor.font_size_plus()
+    editor.font_size_minus()
 
     assert.are.same({ 'plus', 'minus' }, calls)
 
