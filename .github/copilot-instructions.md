@@ -38,6 +38,7 @@
 - Copilot workflow mappings now live in `lua/config/keymaps.lua` too, and the module includes a tested helper for safely invoking plugin-provided globals like `CopilotQuickChat` / `CopilotCommitMsg`.
 - External launcher/report maps now use tested helpers in `lua/config/shell.lua` for things like git diff terminals, markdown preview, Explorer launchers, and report tabs.
 - Fugitive/Git prompt maps and the prompt-based rename workflow now live in `lua/config/keymaps.lua` as well; `keymaps.prompt_rename()` uses the same tested global-callback bridge used for other prompt-driven workflows.
+- Small utility maps such as append-at-EOL helpers, path-copy shortcuts, close helpers, rerun-command/command-history entry, and paragraph commenting now live in Lua too, and the old `<leader>redo` compatibility mapping has been removed.
 - Plugin-local startup globals are being moved into plugin spec `init` blocks instead of staying in `vimscript/init.vim`; `nvim-tree`, markdown preview, and img-paste already follow this pattern.
 - The repo now has a lightweight test harness under `tests/`; `tests/minimal_init.lua` prepends the repo and Plenary to `runtimepath`, and specs under `tests/nvim-config/` intentionally cover Lua modules and repo-owned behavior without depending on a full interactive session.
 - Filetype behavior is layered:

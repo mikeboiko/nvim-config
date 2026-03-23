@@ -68,8 +68,6 @@ end, { silent = true, desc = 'AI-generated commit message (ag)' })
 delete_keymap_if_present('n', '<C-W><C-D>')
 delete_keymap_if_present('n', '<C-W>d')
 
-vim.keymap.set('n', '<leader>redo', '<Plug>(RepeatRedo)', { remap = true, desc = 'Redo with repeat.vim' })
-
 -- Resize window using <ctrl> arrow keys
 vim.keymap.set('n', '<C-Up>', '<cmd>resize +2<cr>', { desc = 'Increase Window Height' })
 vim.keymap.set('n', '<C-Down>', '<cmd>resize -2<cr>', { desc = 'Decrease Window Height' })
@@ -115,6 +113,36 @@ vim.keymap.set('n', 'co', function()
   vim.cmd('normal! k$')
   vim.cmd('startinsert!')
 end, { desc = 'Add empty comment above' })
+
+vim.keymap.set('n', '<leader>a:', function()
+  editor.append_to_current_line(':')
+end, { silent = true, desc = 'Append colon at end of line' })
+
+vim.keymap.set('n', '<leader>a,', function()
+  editor.append_to_current_line(',')
+end, { silent = true, desc = 'Append comma at end of line' })
+
+vim.keymap.set('n', '<leader>a.', function()
+  editor.append_to_current_line('.')
+end, { silent = true, desc = 'Append period at end of line' })
+
+vim.keymap.set('n', '<leader>a;', function()
+  editor.append_to_current_line(';')
+end, { silent = true, desc = 'Append semicolon at end of line' })
+
+vim.keymap.set('n', '<leader>cfp', function()
+  clipboard.copy_current_file_path()
+end, { silent = true, desc = 'Copy current file path to clipboard' })
+
+vim.keymap.set('n', '<leader>cwd', function()
+  clipboard.copy_current_file_dir()
+end, { silent = true, desc = 'Copy current file directory to clipboard' })
+
+vim.keymap.set('n', '<leader>ct', ':CloseToggle<CR>', { silent = true, desc = 'Toggle terminal auto-close' })
+vim.keymap.set('n', '<leader>ca', ':call CloseAll()<CR>', { silent = true, desc = 'Close helper windows and lists' })
+vim.keymap.set('n', 'qr', '@:', { desc = 'Rerun last command-line command' })
+vim.keymap.set('n', 'q;', 'q:', { desc = 'Open command-line window' })
+vim.keymap.set('n', 'cp', 'mzgcap`z', { remap = true, desc = 'Comment paragraph and restore cursor' })
 
 vim.keymap.set('n', '<leader>ac', ':CopilotChatToggle<CR>', { silent = true, desc = 'Toggle Copilot chat' })
 vim.keymap.set(

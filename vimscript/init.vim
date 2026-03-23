@@ -316,44 +316,31 @@ let mapleader="\<space>"
 
 " Colon
 " inoremap :: <esc>mzA:<esc>`z
-nnoremap <leader>a: mzA:<esc>`z
 
 " Comma
 " inoremap ,, <esc>mzA,<esc>`z
-nnoremap <leader>a, mzA,<esc>`z
 
 " Period
-nnoremap <leader>a. mzA.<esc>`z
 
 " Semi-Colon
 " inoremap ;; <esc>mzA;<esc>`z
-nnoremap <leader>a; mzA;<esc>`z
 
 " Clipboard {{{2
 
-nnoremap <leader>cfp :let @+ = expand("%:p:~")<CR>
-nnoremap <leader>cwd :let @+ = expand("%:p:~:h")<CR>
-
 " Close Toggle {{{2
 " Toggle between ++close and ++noclose when running term <leader>rr
-nnoremap <leader>ct :CloseToggle<CR>
 
 " Close all location lists {{{2
-
-nnoremap <leader>ca :call CloseAll()<CR>
 
 " Commands {{{2
 
 " Rerun last command
-nnoremap qr @:
 
 " Get into command history
-nnoremap q; q:
 
 " Comment {{{2
 
 " Main Comment Mappings
-nnoremap cp :normal mzgcap<CR>`z
 
 " Copilot {{{2
 

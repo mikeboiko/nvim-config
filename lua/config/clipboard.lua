@@ -39,6 +39,18 @@ function M.paste_clipboard()
   return 'text'
 end
 
+function M.copy_current_file_path()
+  local path = vim.fn.expand('%:p:~')
+  vim.fn.setreg('+', path)
+  return path
+end
+
+function M.copy_current_file_dir()
+  local path = vim.fn.expand('%:p:~:h')
+  vim.fn.setreg('+', path)
+  return path
+end
+
 function M.register_legacy_functions()
   _G.nvim_config_paste_clipboard_legacy = function()
     return M.paste_clipboard()

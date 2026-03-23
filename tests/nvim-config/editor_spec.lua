@@ -143,6 +143,20 @@ describe('nvim-config editor helpers', function()
     wipe_if_valid(buffer)
   end)
 
+  it('appends punctuation to the current line while preserving the cursor', function()
+    vim.cmd('enew')
+    local buffer = vim.api.nvim_get_current_buf()
+    vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'alpha', 'beta' })
+    vim.api.nvim_win_set_cursor(0, { 1, 2 })
+
+    editor.append_to_current_line(':')
+
+    assert.are.same({ 'alpha:', 'beta' }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
+    assert.are.same({ 1, 2 }, vim.api.nvim_win_get_cursor(0))
+
+    wipe_if_valid(buffer)
+  end)
+
   it('yanks the whole buffer and restores the current view', function()
     vim.cmd('enew')
     local buffer = vim.api.nvim_get_current_buf()

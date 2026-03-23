@@ -114,6 +114,13 @@ function M.insert_blank_line_around()
   restore_cursor({ cursor[1] + 1, cursor[2] })
 end
 
+function M.append_to_current_line(suffix)
+  local cursor = vim.api.nvim_win_get_cursor(0)
+  local line = vim.api.nvim_get_current_line()
+  vim.api.nvim_set_current_line(line .. suffix)
+  restore_cursor(cursor)
+end
+
 function M.yank_all()
   local view = vim.fn.winsaveview()
   local ok, result = xpcall(function()
