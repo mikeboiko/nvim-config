@@ -100,6 +100,10 @@ function M.prompt_and_comment(inline_comment, prompt_text, comment_prefix)
 end
 
 function M.register_legacy_functions()
+  _G.nvim_config_get_commentstring_legacy = function()
+    return M.get_commentstring()
+  end
+
   _G.nvim_config_comment_yank_legacy = function()
     M.comment_yank()
   end
@@ -113,6 +117,10 @@ function M.register_legacy_functions()
   end
 
   vim.cmd([[
+function! GetCommentString() abort
+  return v:lua.nvim_config_get_commentstring_legacy()
+endfunction
+
 function! CommentYank() abort
   call v:lua.nvim_config_comment_yank_legacy()
 endfunction

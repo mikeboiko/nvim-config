@@ -49,34 +49,6 @@ else
     endfunction
 endif
 
-function! EditCommonFile(filename) " {{{2
-    " Open file in new teb
-    let current_filename = expand('%:t')
-    let openfilestring = 'tabedit ' . a:filename
-    silent exec openfilestring
-endfunction
-
-function! GetBufferList() " {{{2
-    " load all current buffers into a list
-    redir =>buflist
-    silent! ls!
-    redir END
-    return buflist
-endfunction
-
-function! GetCommentString() "{{{2
-  return luaeval("require('config.comments').get_commentstring()")
-endfunction
-
-function! GetTODOs() " {{{2
-    " TODO [171103] - Add current file ONLY option
-    " Binary files that can be ignored
-    set wildignore+=*.jpg,*.docx,*.xlsm,*.mp4
-    " Seacrch the CWD to find all of your current TODOs
-    vimgrep /TODO-MB \[\d\{6}]/ **/* **/.* | cw 5
-    " Un-ignore the binary files
-    set wildignore-=*.jpg,*.docx,*.xlsm,*.mp4
-endfunction
 " Commands {{{1
 " Figlet {{{2
 " Draw ascii art comments
@@ -284,10 +256,6 @@ set modelines=5
 
 set autoread
 
-augroup CustomOptions
-  autocmd!
-augroup end
-
 " Spelling
 set spellfile=$HOME/git/Notes/Main/en.utf-8.add
 
@@ -340,15 +308,6 @@ set undofile
 " Language/Project Specific{{{1
 " Comma/Pipe/Tab Seperated Values{{{2
 " autocmd BufReadPost *.tsv,*.csv,*.psv execute 'Tabularize /,'
-augroup CustomFileTypes
-  autocmd!
-  " autocmd BufReadPost *.csv 1sp
-  " autocmd BufReadPost *.psv 1sp
-  " autocmd BufReadPost *.tsv 1sp
-  " Markdown -Fix the syntax highlighting that randomly stops
-  " autocmd FileType markdown set foldexpr=NestedMarkdownFolds()
-augroup end
-
 " Mappings{{{1
 " Leader key {{{2
 let mapleader="\<space>"
