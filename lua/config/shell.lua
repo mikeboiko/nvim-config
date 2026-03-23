@@ -3,6 +3,8 @@ local comments = require('config.comments')
 local M = {}
 
 M.mani_config = vim.fn.expand('~/git/Linux/config/mani.yaml')
+M.tables_report_command = 'cd ~/git/Tables; uv run finances balances print_balances'
+M.weather_report_url = 'wttr.in/Calgary?m'
 
 function M.run_ex(command)
   vim.cmd(command)
@@ -110,6 +112,28 @@ end
 
 function M.grep_current_word_in_current_file()
   M.grep(M.get_current_word() .. ' %')
+end
+
+function M.open_git_diff_in_terminal()
+  M.run_ex('terminal git --no-pager diff')
+end
+
+function M.open_explorer()
+  M.run_ex('silent !explorer.exe .')
+  M.run_ex('redraw!')
+end
+
+function M.open_markdown_preview()
+  M.run_ex('MarkdownPreview')
+end
+
+function M.open_tables_report()
+  M.run_ex('tabe term://' .. M.tables_report_command)
+  M.run_ex('$')
+end
+
+function M.open_weather_report()
+  M.run_ex('tabe term://curl ' .. M.weather_report_url)
 end
 
 function M.replace_m_with_blank()

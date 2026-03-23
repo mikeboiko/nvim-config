@@ -216,6 +216,26 @@ vim.keymap.set('n', 'ql', '<C-W>l', { desc = 'Move to right window' })
 vim.keymap.set('n', '<C-h>', '<C-W>h', { desc = 'Move to left window' })
 vim.keymap.set('n', '<C-l>', '<C-W>l', { desc = 'Move to right window' })
 
+vim.keymap.set('n', '<leader>rd', function()
+  shell.open_git_diff_in_terminal()
+end, { silent = true, desc = 'Open git diff in a terminal split' })
+
+vim.keymap.set('n', '<leader>oe', function()
+  shell.open_explorer()
+end, { silent = true, desc = 'Open current directory in Explorer' })
+
+vim.keymap.set('n', '<leader>ob', function()
+  shell.open_markdown_preview()
+end, { silent = true, desc = 'Open markdown preview' })
+
+vim.keymap.set('n', '<leader>tp', function()
+  shell.open_tables_report()
+end, { silent = true, desc = 'Open balances report terminal tab' })
+
+vim.keymap.set('n', '<leader>cw', function()
+  shell.open_weather_report()
+end, { silent = true, desc = 'Open Calgary weather report terminal tab' })
+
 vim.keymap.set('n', '<leader>ms', function()
   shell.mani_git_status()
 end, { silent = true, desc = 'Mani git status' })

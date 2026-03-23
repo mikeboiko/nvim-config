@@ -36,6 +36,7 @@
 - Core editing maps are also moving into `lua/config/keymaps.lua`, with stateful behavior such as fileformat reloads and blank-line insertion routed through tested helpers in `lua/config/editor.lua`.
 - Terminal navigation maps are no longer wired through a `v:lua` global shim; `lua/config/autocmds.lua` now calls `require('config.keymaps').set_terminal_keymaps(...)` directly on `TermOpen`.
 - Copilot workflow mappings now live in `lua/config/keymaps.lua` too, and the module includes a tested helper for safely invoking plugin-provided globals like `CopilotQuickChat` / `CopilotCommitMsg`.
+- External launcher/report maps now use tested helpers in `lua/config/shell.lua` for things like git diff terminals, markdown preview, Explorer launchers, and report tabs.
 - Plugin-local startup globals are being moved into plugin spec `init` blocks instead of staying in `vimscript/init.vim`; `nvim-tree`, markdown preview, and img-paste already follow this pattern.
 - The repo now has a lightweight test harness under `tests/`; `tests/minimal_init.lua` prepends the repo and Plenary to `runtimepath`, and specs under `tests/nvim-config/` intentionally cover Lua modules and repo-owned behavior without depending on a full interactive session.
 - Filetype behavior is layered:

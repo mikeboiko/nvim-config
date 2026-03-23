@@ -193,6 +193,33 @@ describe('nvim-config shell helpers', function()
     shell.mani = original_mani
   end)
 
+  it('runs external workflow helpers with the expected commands', function()
+    local original_run_ex = shell.run_ex
+    local calls = {}
+
+    shell.run_ex = function(command)
+      table.insert(calls, command)
+    end
+
+    shell.open_git_diff_in_terminal()
+    shell.open_explorer()
+    shell.open_markdown_preview()
+    shell.open_tables_report()
+    shell.open_weather_report()
+
+    assert.are.same({
+      'terminal git --no-pager diff',
+      'silent !explorer.exe .',
+      'redraw!',
+      'MarkdownPreview',
+      'tabe term://' .. shell.tables_report_command,
+      '$',
+      'tabe term://curl ' .. shell.weather_report_url,
+    }, calls)
+
+    shell.run_ex = original_run_ex
+  end)
+
   it('starts an async job and reports its exit code', function()
     local original_jobstart = shell.jobstart
     local original_echo = shell.echo

@@ -394,7 +394,6 @@ nnoremap <leader>gdt :Git difftool -y --diff-filter=ACMRTUXB<Space>
 nnoremap <leader>gs :Git<CR>
 
 " Display git diff in terminal
-nnoremap <leader>rd :terminal git --no-pager diff<CR>
 
 " Mani commands
 
@@ -454,13 +453,8 @@ set mouse-=a
 " Open File/Folder {{{2
 
 " Explorer
-nnoremap <leader>oe :silent !explorer.exe .<CR>:redraw!<CR>
 
 " Browser
-nnoremap <leader>ob :MarkdownPreview<CR>
-
-" Double Commander
-nnoremap <leader>od :Start -wait=never "C:\Program Files\Double Commander\doublecmd.exe" %:p:h<CR>:redraw!<CR>
 
 " QuickFix/Location Lists {{{2
 
@@ -490,12 +484,6 @@ vnoremap <silent> <leader>rw :<C-u>silent lua vim.g.FancyPromptRename("RenameWor
 
 " Reports {{{2
 
-if has('nvim')
-  nnoremap <leader>tp :tabe term://cd ~/git/Tables; uv run finances balances print_balances<CR>:$<CR>
-  nnoremap <leader>cw :tabe term://curl wttr.in/Calgary?m"<CR>
-else
-  nnoremap <leader>cw :tabe<CR>:terminal ++curwin bash -c "curl wttr.in/Calgary"<CR>
-endif
 
 " Save Buffer {{{2
 
