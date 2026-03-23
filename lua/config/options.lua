@@ -88,6 +88,7 @@ opt.foldlevelstart = 99
 opt.foldenable = true
 opt.foldmethod = 'expr'
 opt.foldexpr = 'nvim_treesitter#foldexpr()'
+opt.showtabline = 2
 opt.tabline = "%!v:lua.require'config.tabline'.render()"
 opt.foldtext = "v:lua.require'config.folds'.fold_text()"
 

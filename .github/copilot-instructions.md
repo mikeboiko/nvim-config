@@ -36,6 +36,7 @@
 - `lua/config/autocmds.lua` calls `require('config.keymaps').set_terminal_keymaps(...)` directly on `TermOpen`, and those terminal maps are intentionally buffer-local.
 - Core editing behavior such as fileformat reloads, blank-line insertion, whole-buffer yanks, spell toggles, and GUI font resizing is routed through `lua/config/editor.lua`.
 - Search, quickfix, Git, Copilot, and external workflow bindings live in the keymap modules and defer to helpers like `shell.lua`, `quickfix.lua`, and `folds.lua` where appropriate.
+- The custom tabline renderer in `lua/config/tabline.lua` is intentionally always visible via `showtabline=2`, even with a single tab open.
 - Help lookup for `help`/`vim` buffers now lives in `after/ftplugin/help.lua` and `after/ftplugin/vim.lua`; buffer-local editor behavior is configured from Lua.
 - Startup globals, options, clipboard provider settings, and GUI enter behavior now live in `lua/config/{constants,options,autocmds,gui,editor}.lua`.
 - Markdown/sebol filetype behavior and the AutoHotkey syntax setup live in Lua through `lua/config/filetypes.lua` plus `after/ftplugin/*.lua`.
