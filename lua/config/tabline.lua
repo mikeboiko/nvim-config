@@ -5,7 +5,8 @@ function M.label(tabnr)
   local window_number = vim.fn.tabpagewinnr(tabnr)
   local buffer_name = vim.fn.bufname(buffers[window_number])
 
-  return vim.fn.fnamemodify(buffer_name, ':t')
+  local tail = vim.fn.fnamemodify(buffer_name, ':t')
+  return tail ~= '' and tail or '[No Name]'
 end
 
 function M.render()

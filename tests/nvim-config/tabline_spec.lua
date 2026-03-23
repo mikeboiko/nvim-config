@@ -9,6 +9,11 @@ describe('nvim-config tabline helpers', function()
     pcall(vim.cmd, 'tabonly!')
   end)
 
+  it('labels unnamed buffers as [No Name]', function()
+    vim.cmd('enew')
+    assert.are.equal('[No Name]', tabline.label(1))
+  end)
+
   it('renders tab labels using buffer basenames', function()
     local prefix = tostring(vim.loop.hrtime())
 
