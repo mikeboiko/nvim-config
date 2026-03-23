@@ -359,18 +359,6 @@ nnoremap cp :normal mzgcap<CR>`z
 
 " nnoremap <leader>ag :CopilotChatCommit<CR>
 
-nnoremap <leader>ac :CopilotChatToggle<CR>
-nnoremap <leader>af :CopilotChatFixDiagnostic<CR>
-nnoremap <leader>aq :silent lua vim.g.CopilotQuickChat("Buffer")<CR>
-nnoremap <leader>at :CopilotChatTests<CR>
-vnoremap <leader>ac :<C-u>CopilotChatToggle<CR>
-vnoremap <leader>ad :CopilotChatDocs<CR>
-vnoremap <leader>ae :CopilotChatExplainBrief<CR>
-vnoremap <leader>af :CopilotChatFix<CR>
-vnoremap <leader>ao :CopilotChatOptimize<CR>
-vnoremap <leader>aq :<C-u>silent lua vim.g.CopilotQuickChat("Visual")<CR>
-vnoremap <leader>ar :CopilotChatReview<CR>
-
 " Conflicts {{{2
 
 " This is to fix a <C-r> conflict

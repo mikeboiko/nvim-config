@@ -15,6 +15,21 @@ function M.set_terminal_keymaps(buffer)
   vim.keymap.set('t', '<C-l>', '<C-W>l')
 end
 
+function M.call_global(name, ...)
+  local callback = vim.g[name]
+  if type(callback) ~= 'function' then
+    vim.notify('Missing global callback: ' .. name, vim.log.levels.ERROR)
+    return false
+  end
+
+  callback(...)
+  return true
+end
+
+function M.copilot_quick_chat(mode)
+  return M.call_global('CopilotQuickChat', mode)
+end
+
 local function delete_keymap_if_present(mode, lhs)
   if vim.fn.maparg(lhs, mode) ~= '' then
     vim.keymap.del(mode, lhs)
@@ -38,7 +53,7 @@ vim.keymap.set('n', '<leader>ag', function()
     return
   end
   vim.fn.system('git -C ' .. git_dir .. ' add -A')
-  vim.g.CopilotCommitMsg(git_dir)
+  M.call_global('CopilotCommitMsg', git_dir)
 end, { silent = true, desc = 'AI-generated commit message (ag)' })
 
 -- Delete keymaps
@@ -90,6 +105,32 @@ vim.keymap.set('n', 'co', function()
   vim.cmd('normal! k$')
   vim.cmd('startinsert!')
 end, { desc = 'Add empty comment above' })
+
+vim.keymap.set('n', '<leader>ac', ':CopilotChatToggle<CR>', { silent = true, desc = 'Toggle Copilot chat' })
+vim.keymap.set(
+  'n',
+  '<leader>af',
+  ':CopilotChatFixDiagnostic<CR>',
+  { silent = true, desc = 'Fix diagnostics with Copilot' }
+)
+vim.keymap.set('n', '<leader>aq', function()
+  M.copilot_quick_chat('Buffer')
+end, { silent = true, desc = 'Ask Copilot about the current buffer' })
+vim.keymap.set('n', '<leader>at', ':CopilotChatTests<CR>', { silent = true, desc = 'Generate tests with Copilot' })
+vim.keymap.set('v', '<leader>ac', ':<C-u>CopilotChatToggle<CR>', { silent = true, desc = 'Toggle Copilot chat' })
+vim.keymap.set('v', '<leader>ad', ':CopilotChatDocs<CR>', { silent = true, desc = 'Document selection with Copilot' })
+vim.keymap.set('v', '<leader>ae', ':CopilotChatExplainBrief<CR>', { silent = true, desc = 'Explain selection briefly' })
+vim.keymap.set('v', '<leader>af', ':CopilotChatFix<CR>', { silent = true, desc = 'Fix selection with Copilot' })
+vim.keymap.set(
+  'v',
+  '<leader>ao',
+  ':CopilotChatOptimize<CR>',
+  { silent = true, desc = 'Optimize selection with Copilot' }
+)
+vim.keymap.set('v', '<leader>aq', function()
+  M.copilot_quick_chat('Visual')
+end, { silent = true, desc = 'Ask Copilot about the selection' })
+vim.keymap.set('v', '<leader>ar', ':CopilotChatReview<CR>', { silent = true, desc = 'Review selection with Copilot' })
 
 vim.keymap.set('n', 'cii', function()
   comments.prompt_and_comment(true, 'Comment Text: ', '')
