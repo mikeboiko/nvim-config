@@ -19,12 +19,30 @@ local function get_buffer_var(buf, name)
   return nil
 end
 
+function M.is_terminal(buf)
+  return vim.api.nvim_buf_is_valid(buf) and vim.bo[buf].buftype == 'terminal'
+end
+
 function M.is_gap_terminal(buf)
   return get_buffer_name(buf):find(gap_path, 1, true) ~= nil
 end
 
 function M.is_flow_terminal(buf)
   return get_buffer_var(buf, 'nvim_flow_terminal') == 1 or get_buffer_name(buf):find('/tmp/flow', 1, true) ~= nil
+end
+
+function M.is_running(buf)
+  if not M.is_terminal(buf) then
+    return false
+  end
+
+  local job_id = get_buffer_var(buf, 'terminal_job_id')
+  if job_id == nil then
+    return false
+  end
+
+  local ok, status = pcall(vim.fn.jobwait, { job_id }, 0)
+  return ok and type(status) == 'table' and status[1] == -1
 end
 
 function M.get_exit_status(buf)

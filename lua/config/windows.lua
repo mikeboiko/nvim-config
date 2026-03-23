@@ -1,4 +1,5 @@
 local M = {}
+local terminal = require('config.terminal')
 
 local function run(command)
   pcall(vim.cmd, 'silent! ' .. command)
@@ -33,7 +34,10 @@ local function delete_buffers(buffers, force)
   local command = force and 'bdelete!' or 'bdelete'
 
   for _, buf in ipairs(buffers) do
-    run(command .. ' ' .. buf)
+    -- Preserve running terminals so CloseAll matches the old interactive behavior.
+    if not terminal.is_running(buf) then
+      run(command .. ' ' .. buf)
+    end
   end
 end
 
