@@ -13,6 +13,7 @@ My neovim config files
 - Reusable migrated helpers are starting to live in focused `lua/config/*.lua` modules such as `windows.lua`, `quickfix.lua`, `folds.lua`, `comments.lua`, `terminal.lua`, `clipboard.lua`, `tabline.lua`, `editor.lua`, `shell.lua`, `buffers.lua`, and `workspace.lua`.
 - The ongoing keymap migration is moving repo-owned search and workflow maps into `lua/config/keymaps.lua` on top of those helper modules, instead of leaving behavior split across Vimscript remaps and Lua commands.
 - Core editing behaviors such as fileformat conversion and blank-line insertion are also moving behind tested helpers in `lua/config/editor.lua`, with `lua/config/keymaps.lua` owning the user-facing maps.
+- Terminal navigation maps now route through a Lua helper as well: `lua/config/autocmds.lua` calls `lua/config/keymaps.lua` on `TermOpen` instead of relying on a legacy global function.
 - Plugin-local bootstrap and setup live in `lua/plugins/`.
 - Filetype-local overrides live in `after/ftplugin/` and custom detection in `after/ftdetect/`.
 - Legacy Vimscript is still sourced during the migration, but low-risk startup settings are being moved into Lua as each stage is completed.

@@ -114,6 +114,19 @@ function M.insert_blank_line_around()
   restore_cursor({ cursor[1] + 1, cursor[2] })
 end
 
+function M.yank_all()
+  local view = vim.fn.winsaveview()
+  local ok, result = xpcall(function()
+    vim.cmd('silent normal! ggyG')
+  end, debug.traceback)
+
+  vim.fn.winrestview(view)
+
+  if not ok then
+    error(result)
+  end
+end
+
 function M.toggle_spell()
   local enabled = not vim.wo.spell
   vim.opt_local.spell = enabled

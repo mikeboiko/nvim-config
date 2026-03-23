@@ -563,22 +563,8 @@ inoremap <c-y> <Esc><C-r>
 " Windows {{{2
 
 " Move between windows/panes
-nnoremap qj <C-W>j
-nnoremap qk <C-W>k
-nnoremap qh <C-W>h
-nnoremap ql <C-W>l
-nnoremap <C-h> <C-W>h
-nnoremap <C-l> <C-W>l
-
-tnoremap <C-g> <C-W>:tabp<CR>
-tnoremap <C-j> <C-W>j
-tnoremap <C-k> <C-W>k
-tnoremap <C-h> <C-W>h
-tnoremap <C-l> <C-W>l
 
 " Yank {{{2
 " Yank till the end of the line
-nnoremap Y y$
 
 " Yank all
-nnoremap <leader>ya mzggyG`z

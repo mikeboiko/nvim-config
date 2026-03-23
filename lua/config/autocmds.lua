@@ -58,10 +58,7 @@ vim.api.nvim_create_autocmd('TermOpen', {
   group = terminal_group,
   pattern = 'term://*',
   callback = function(args)
-    if type(_G.set_terminal_keymaps) == 'function' then
-      _G.set_terminal_keymaps()
-    end
-
+    require('config.keymaps').set_terminal_keymaps(args.buf)
     terminal.on_term_open(args.buf)
   end,
 })

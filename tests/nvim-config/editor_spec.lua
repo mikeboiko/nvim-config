@@ -143,6 +143,21 @@ describe('nvim-config editor helpers', function()
     wipe_if_valid(buffer)
   end)
 
+  it('yanks the whole buffer and restores the current view', function()
+    vim.cmd('enew')
+    local buffer = vim.api.nvim_get_current_buf()
+    vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'alpha', 'beta', 'gamma' })
+    vim.api.nvim_win_set_cursor(0, { 2, 1 })
+
+    editor.yank_all()
+
+    assert.are.equal('alpha\nbeta\ngamma\n', vim.fn.getreg('"'))
+    assert.are.equal('V', vim.fn.getregtype('"'))
+    assert.are.same({ 2, 1 }, vim.api.nvim_win_get_cursor(0))
+
+    wipe_if_valid(buffer)
+  end)
+
   it('sets command-window quit maps on CmdwinEnter', function()
     package.loaded['config.autocmds'] = nil
 

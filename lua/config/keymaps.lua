@@ -1,3 +1,5 @@
+local M = {}
+
 local clipboard = require('config.clipboard')
 local comments = require('config.comments')
 local editor = require('config.editor')
@@ -5,14 +7,12 @@ local folds = require('config.folds')
 local quickfix = require('config.quickfix')
 local shell = require('config.shell')
 
-function _G.set_terminal_keymaps()
+function M.set_terminal_keymaps(buffer)
+  vim.keymap.set('t', '<C-g>', '<C-W>:tabp<CR>')
   vim.keymap.set('t', '<C-j>', '<C-W>j')
   vim.keymap.set('t', '<C-k>', '<C-W>k')
   vim.keymap.set('t', '<C-h>', '<C-W>h')
   vim.keymap.set('t', '<C-l>', '<C-W>l')
-  -- local opts = { noremap = true }
-  -- vim.api.nvim_buf_set_keymap(0, 't', '<Esc>', [[<C-\><C-n>]], opts)
-  -- vim.api.nvim_buf_set_keymap(0, 't', 'jk', [[<C-\><C-n>]], opts)
 end
 
 local function delete_keymap_if_present(mode, lhs)
@@ -168,6 +168,13 @@ vim.keymap.set('n', '<leader>al', function()
   editor.insert_blank_line_around()
 end, { silent = true, desc = 'Insert blank lines around current line' })
 
+vim.keymap.set('n', 'qj', '<C-W>j', { desc = 'Move to window below' })
+vim.keymap.set('n', 'qk', '<C-W>k', { desc = 'Move to window above' })
+vim.keymap.set('n', 'qh', '<C-W>h', { desc = 'Move to left window' })
+vim.keymap.set('n', 'ql', '<C-W>l', { desc = 'Move to right window' })
+vim.keymap.set('n', '<C-h>', '<C-W>h', { desc = 'Move to left window' })
+vim.keymap.set('n', '<C-l>', '<C-W>l', { desc = 'Move to right window' })
+
 vim.keymap.set('n', '<leader>ms', function()
   shell.mani_git_status()
 end, { silent = true, desc = 'Mani git status' })
@@ -209,6 +216,10 @@ vim.keymap.set('n', 'Q', ':q!<CR>', { silent = true, desc = 'Force quit current 
 vim.keymap.set('n', 'qw', ':w<CR>', { silent = true, desc = 'Write buffer' })
 vim.keymap.set('n', '<C-s>', ':w<CR>', { silent = true, desc = 'Write buffer' })
 vim.keymap.set('i', '<C-s>', '<Esc>:w<CR>', { silent = true, desc = 'Write buffer' })
+vim.keymap.set('n', 'Y', 'y$', { desc = 'Yank to end of line' })
+vim.keymap.set('n', '<leader>ya', function()
+  editor.yank_all()
+end, { silent = true, desc = 'Yank entire buffer' })
 
 vim.keymap.set({ 'n', 'v' }, 'K', '5k', { desc = 'Move up 5 lines' })
 vim.keymap.set({ 'n', 'v' }, 'J', '5j', { desc = 'Move down 5 lines' })
@@ -225,3 +236,5 @@ end, { silent = true, desc = 'Quickfix previous' })
 
 -- Fix standard Ctrl-i mapping. Not sure which of my plugins is breaking it.
 vim.keymap.set('n', '<C-i>', '<C-i>')
+
+return M
