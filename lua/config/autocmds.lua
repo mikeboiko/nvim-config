@@ -1,5 +1,6 @@
 local buffers = require('config.buffers')
 local editor = require('config.editor')
+local folds = require('config.folds')
 local git = require('config.git')
 local gui = require('config.gui')
 local terminal = require('config.terminal')
@@ -147,5 +148,22 @@ vim.api.nvim_create_autocmd('FileType', {
   },
   callback = function()
     buffers.set_two_space_indent()
+  end,
+})
+
+vim.api.nvim_create_autocmd({ 'InsertLeave', 'TextChanged' }, {
+  group = editor_group,
+  pattern = '*',
+  desc = 'Refresh markdown folds after edits',
+  callback = function(args)
+    if vim.api.nvim_get_current_buf() ~= args.buf then
+      return
+    end
+
+    if vim.bo[args.buf].buftype ~= '' or vim.bo[args.buf].filetype ~= 'markdown' then
+      return
+    end
+
+    folds.refresh_folds()
   end,
 })

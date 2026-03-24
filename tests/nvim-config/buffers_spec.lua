@@ -1,9 +1,11 @@
 describe('nvim-config buffer helpers', function()
   local buffers
+  local folds
   local git
 
   before_each(function()
     buffers = require('config.buffers')
+    folds = require('config.folds')
     git = require('config.git')
   end)
 
@@ -124,6 +126,32 @@ describe('nvim-config buffer helpers', function()
     assert.are.equal('nvim-config', vim.b.git_repo_name)
 
     git.get_repo_name = original_get_repo_name
+    wipe_current_buffer()
+  end)
+
+  it('refreshes markdown folds after edit events through Lua autocmds', function()
+    local calls = 0
+    local original_refresh_folds = folds.refresh_folds
+
+    package.loaded['config.autocmds'] = nil
+    require('config.autocmds')
+
+    folds.refresh_folds = function()
+      calls = calls + 1
+      return true
+    end
+
+    vim.cmd('enew')
+    vim.cmd('setfiletype markdown')
+
+    vim.api.nvim_exec_autocmds('InsertLeave', { buffer = 0, modeline = false })
+    assert.are.equal(1, calls)
+
+    vim.bo.filetype = 'lua'
+    vim.api.nvim_exec_autocmds('TextChanged', { buffer = 0, modeline = false })
+    assert.are.equal(1, calls)
+
+    folds.refresh_folds = original_refresh_folds
     wipe_current_buffer()
   end)
 end)

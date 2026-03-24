@@ -15,9 +15,10 @@ A Lua-only Neovim configuration focused on fast navigation, solid language tooli
 ## Selected plugins
 
 - Plugin management: `lazy.nvim`
-- Navigation and UI: `fzf-lua`, `nvim-tree.lua`, `aerial.nvim`, `treesitter-context.nvim`, `lualine.nvim`, `snacks.nvim`
+- Navigation and UI: `fzf-lua`, `nvim-tree.lua`, `aerial.nvim`, `treesitter-context.nvim`, `lualine.nvim`, `snacks.nvim`, `nvim-origami`
 - Completion and editing: `blink.cmp`, `copilot.lua`, `blink-cmp-copilot`, `nvim-autopairs`, `nvim-surround`, `substitute.nvim`
 - Markdown workflow: `selimacerbas/markdown-preview.nvim`, `img-paste.vim`
+- Markdown folds use `nvim-origami` with a `zx` refresh on markdown `InsertLeave` and `TextChanged` events to recover clean fold state after edits.
 - Language tooling: `nvim-lspconfig`, `mason.nvim`, `conform.nvim`, `nvim-treesitter`
 - Testing and debugging: `neotest`, `neotest-dotnet`, `neotest-python`, `nvim-dap`, `nvim-dap-ui`
 - Git and diffing: `vim-fugitive`, `vim-rhubarb`, `gv.vim`

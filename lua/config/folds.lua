@@ -26,6 +26,20 @@ function M.open_current_fold()
   end
 end
 
+function M.refresh_folds(winid)
+  local target_win = winid or vim.api.nvim_get_current_win()
+
+  if not vim.api.nvim_win_is_valid(target_win) then
+    return false
+  end
+
+  local ok = pcall(vim.api.nvim_win_call, target_win, function()
+    vim.cmd('silent! keepjumps normal! zx')
+  end)
+
+  return ok
+end
+
 function M.find_fold_start(line_num, level)
   local current_line = line_num or vim.fn.line('.')
   local target_level = level or fold_level(current_line)
