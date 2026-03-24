@@ -38,6 +38,21 @@ describe('nvim-config core Lua modules', function()
     assert.is_true(vim.o.tabline:find('config.tabline', 1, true) ~= nil)
   end)
 
+  it('keeps the legacy CloseAll() function available for plugin workflows', function()
+    require_core_modules()
+
+    vim.fn.setqflist({
+      { bufnr = vim.api.nvim_get_current_buf(), lnum = 1, col = 1, text = 'quickfix item' },
+    })
+    vim.cmd('copen')
+
+    assert.are.equal(1, vim.fn.exists('*CloseAll'))
+    assert.has_no.errors(function()
+      vim.cmd('silent call CloseAll()')
+    end)
+    assert.are.equal(0, vim.fn.getqflist({ winid = 0 }).winid)
+  end)
+
   it('registers migrated toggle commands with the same state changes', function()
     require_core_modules()
 

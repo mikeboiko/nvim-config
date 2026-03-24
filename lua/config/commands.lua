@@ -6,9 +6,19 @@ local windows = require('config.windows')
 local workspace = require('config.workspace')
 local quickfix = require('config.quickfix')
 
-vim.api.nvim_create_user_command('CloseAll', function()
+local M = {}
+
+function M.close_all()
   windows.close_all()
-end, {})
+end
+
+vim.api.nvim_create_user_command('CloseAll', M.close_all, {})
+
+vim.cmd([[
+function! CloseAll() abort
+  lua require('config.commands').close_all()
+endfunction
+]])
 
 vim.api.nvim_create_user_command('FoldOpen', function()
   folds.open_current_fold()
@@ -110,3 +120,5 @@ vim.api.nvim_create_user_command('StartAsyncNeoVim', function(opts)
 end, {
   nargs = 1,
 })
+
+return M

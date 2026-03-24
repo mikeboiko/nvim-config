@@ -39,6 +39,7 @@ This config is set up for everyday work across:
 
 - `init.lua` bootstraps the config and loads `lazy.nvim`.
 - `lua/config/` contains shared editor behavior, commands, autocmds, and focused helper modules for buffers, terminals, windows, and keymap facades.
+- `lua/config/commands.lua` also preserves legacy function-style entrypoints when plugin workflows still call them directly.
 - `lua/plugins/` contains one Lazy spec per plugin or plugin group.
 - `after/ftplugin/` and `after/ftdetect/` contain filetype-local behavior.
 - `tests/` contains the Plenary test harness and a focused set of repo-level behavior tests.
