@@ -22,6 +22,31 @@ describe('nvim-config clipboard helpers', function()
     clipboard.paste_clipboard()
 
     assert.are.same({ 'current line', 'clipboard text' }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
+    assert.are.same({ 2, 0 }, vim.api.nvim_win_get_cursor(0))
+
+    vim.fn.setreg('+', original_register, original_register_type)
+    clipboard.clipboard_targets = original_targets
+    vim.cmd('bwipe!')
+  end)
+
+  it('keeps the cursor on the first pasted line for multi-line clipboard text', function()
+    local original_targets = clipboard.clipboard_targets
+    local original_register = vim.fn.getreg('+')
+    local original_register_type = vim.fn.getregtype('+')
+
+    clipboard.clipboard_targets = function()
+      return {}
+    end
+
+    vim.cmd('enew')
+    vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'current line' })
+    vim.api.nvim_win_set_cursor(0, { 1, 0 })
+    vim.fn.setreg('+', { 'first line', 'second line' }, 'V')
+
+    clipboard.paste_clipboard()
+
+    assert.are.same({ 'current line', 'first line', 'second line' }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
+    assert.are.same({ 2, 0 }, vim.api.nvim_win_get_cursor(0))
 
     vim.fn.setreg('+', original_register, original_register_type)
     clipboard.clipboard_targets = original_targets

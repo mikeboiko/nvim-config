@@ -25,7 +25,7 @@ function M.paste_text()
     return false
   end
 
-  vim.api.nvim_put(lines, 'l', true, true)
+  vim.api.nvim_put(lines, 'l', true, false)
   return true
 end
 
