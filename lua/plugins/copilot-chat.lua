@@ -36,7 +36,7 @@ return {
       debug = false,
       -- https://docs.github.com/en/copilot/reference/ai-models/supported-models#supported-ai-models-per-copilot-plan
       -- model = 'gpt-5.4',
-      model = 'oswe-vscode-prime', -- free model
+      model = 'claude-haiku-4.5',
       chat_autocomplete = false,
       auto_follow_cursor = false,
       -- auto_insert_mode = true,
