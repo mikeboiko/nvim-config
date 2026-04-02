@@ -19,11 +19,8 @@ function M.toggle_comment_lines(line_start, line_end)
   require('mini.comment').toggle_lines(line_start, line_end)
 end
 
-function M.user_input(prompt)
-  vim.fn.inputsave()
-  local reply = vim.fn.input(prompt)
-  vim.fn.inputrestore()
-  return reply
+function M.user_input(prompt, callback)
+  require('config.functions').ui_input({ prompt = prompt }, callback)
 end
 
 local function render_comment(text)
@@ -70,33 +67,39 @@ function M.comment_yank()
   vim.api.nvim_win_set_cursor(0, { cursor[1] + 1, cursor[2] })
 end
 
-function M.prompt_and_comment(inline_comment, prompt_text, comment_prefix)
-  local prompt = M.user_input(prompt_text)
-  if prompt == nil or prompt == '' then
-    return false
-  end
-
-  local comment = render_comment((comment_prefix or '') .. prompt)
-
-  with_autopairs_disabled(function()
-    if inline_comment then
-      local cursor = vim.api.nvim_win_get_cursor(0)
-      local line = vim.api.nvim_get_current_line()
-      vim.api.nvim_set_current_line(line .. ' ' .. comment)
-      vim.api.nvim_win_set_cursor(0, { cursor[1], #vim.api.nvim_get_current_line() })
+function M.prompt_and_comment(inline_comment, prompt_text, comment_prefix, callback)
+  M.user_input(prompt_text, function(prompt)
+    if prompt == nil or prompt == '' then
+      if callback then
+        callback(false)
+      end
       return
     end
 
-    local current_line = vim.api.nvim_get_current_line()
-    local indent = current_line:match('^%s*') or ''
-    local row = vim.api.nvim_win_get_cursor(0)[1] - 1
-    local commented_line = indent .. comment
+    local comment = render_comment((comment_prefix or '') .. prompt)
 
-    vim.api.nvim_buf_set_lines(0, row, row, false, { commented_line })
-    vim.api.nvim_win_set_cursor(0, { row + 1, #commented_line })
+    with_autopairs_disabled(function()
+      if inline_comment then
+        local cursor = vim.api.nvim_win_get_cursor(0)
+        local line = vim.api.nvim_get_current_line()
+        vim.api.nvim_set_current_line(line .. ' ' .. comment)
+        vim.api.nvim_win_set_cursor(0, { cursor[1], #vim.api.nvim_get_current_line() })
+        return
+      end
+
+      local current_line = vim.api.nvim_get_current_line()
+      local indent = current_line:match('^%s*') or ''
+      local row = vim.api.nvim_win_get_cursor(0)[1] - 1
+      local commented_line = indent .. comment
+
+      vim.api.nvim_buf_set_lines(0, row, row, false, { commented_line })
+      vim.api.nvim_win_set_cursor(0, { row + 1, #commented_line })
+    end)
+
+    if callback then
+      callback(true)
+    end
   end)
-
-  return true
 end
 
 local function todo_prompt(cb)

@@ -126,6 +126,16 @@ return {
 
     -- TODO: Move these functions to csharp lua fle
     local funcs = require('config.functions')
+    local function prompt_input(prompt, callback)
+      funcs.ui_input({ prompt = prompt }, function(input)
+        if input == nil then
+          return
+        end
+
+        callback(input)
+      end)
+    end
+
     vim.g.dotnet_build_project = function()
       local repo_root = funcs.get_repo_root()
       local cmd = 'dotnet build -c Debug ' .. repo_root .. ' > /dev/null'
@@ -206,7 +216,7 @@ return {
         end,
         args = function()
           -- Optional: Prompt for arguments
-          local input = vim.fn.input('Run arguments: ')
+          local input = funcs.ui_input_sync({ prompt = 'Run arguments: ' }) or ''
           return vim.split(input, ' ')
         end,
       },
@@ -251,10 +261,14 @@ return {
       require('neotest').run.run({ strategy = 'dap' })
     end, { silent = true })
     vim.keymap.set('n', '<leader>B', function()
-      dap.set_breakpoint(vim.fn.input('Breakpoint condition: '))
+      prompt_input('Breakpoint condition: ', function(input)
+        dap.set_breakpoint(input)
+      end)
     end, { silent = true })
     vim.keymap.set('n', '<leader>lp', function()
-      dap.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))
+      prompt_input('Log point message: ', function(input)
+        dap.set_breakpoint(nil, nil, input)
+      end)
     end, { silent = true })
     vim.keymap.set('n', '<leader>dr', function()
       vim.cmd('wa')

@@ -51,12 +51,32 @@ describe('nvim-config comment helpers', function()
     comments.toggle_comment_lines = original_toggle
   end)
 
+  it('routes comment prompts through vim.ui.input', function()
+    local original_ui_input = vim.ui.input
+    local seen_opts
+    local seen_input
+
+    vim.ui.input = function(opts, callback)
+      seen_opts = opts
+      callback('note')
+    end
+
+    comments.user_input('Comment Text: ', function(input)
+      seen_input = input
+    end)
+
+    assert.are.equal('note', seen_input)
+    assert.are.same({ prompt = 'Comment Text: ' }, seen_opts)
+
+    vim.ui.input = original_ui_input
+  end)
+
   it('prompts for an inline comment and restores autopairs state', function()
     local original_user_input = comments.user_input
 
-    comments.user_input = function(prompt)
+    comments.user_input = function(prompt, callback)
       assert.are.equal('Comment Text: ', prompt)
-      return 'note'
+      callback('note')
     end
 
     vim.cmd('enew')
@@ -65,10 +85,14 @@ describe('nvim-config comment helpers', function()
     vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'local value = 1' })
     vim.api.nvim_buf_set_var(0, 'autopairs_enabled', 1)
 
-    assert.is_true(comments.prompt_and_comment(true, 'Comment Text: ', ''))
+    local completed = false
+    comments.prompt_and_comment(true, 'Comment Text: ', '', function(success)
+      completed = success
+    end)
 
     assert.are.same({ 'local value = 1 -- note' }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
     assert.are.equal(1, vim.api.nvim_buf_get_var(0, 'autopairs_enabled'))
+    assert.is_true(completed)
 
     vim.cmd('bwipe!')
     comments.user_input = original_user_input
@@ -77,8 +101,8 @@ describe('nvim-config comment helpers', function()
   it('does nothing when the prompt is cancelled', function()
     local original_user_input = comments.user_input
 
-    comments.user_input = function()
-      return ''
+    comments.user_input = function(_, callback)
+      callback('')
     end
 
     vim.cmd('enew')
@@ -86,8 +110,12 @@ describe('nvim-config comment helpers', function()
     vim.bo.commentstring = '-- %s'
     vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'local value = 1' })
 
-    assert.is_false(comments.prompt_and_comment(true, 'Comment Text: ', ''))
+    local completed = true
+    comments.prompt_and_comment(true, 'Comment Text: ', '', function(success)
+      completed = success
+    end)
     assert.are.same({ 'local value = 1' }, vim.api.nvim_buf_get_lines(0, 0, -1, false))
+    assert.is_false(completed)
 
     vim.cmd('bwipe!')
     comments.user_input = original_user_input

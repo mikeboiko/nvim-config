@@ -27,6 +27,30 @@ function M.rename_word(new, original)
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
 end
 
+function M.ui_input(opts, callback)
+  vim.ui.input(opts, callback)
+end
+
+function M.ui_input_sync(opts)
+  local ok, result
+  local prompt = opts.prompt or ''
+  local default = opts.default or ''
+
+  vim.fn.inputsave()
+  if opts.completion ~= nil then
+    ok, result = pcall(vim.fn.input, prompt, default, opts.completion)
+  else
+    ok, result = pcall(vim.fn.input, prompt, default)
+  end
+  vim.fn.inputrestore()
+
+  if not ok then
+    error(result)
+  end
+
+  return result
+end
+
 function M.fancy_prompt_rename(func, prompt, visual)
   local original
   if visual then
@@ -34,7 +58,7 @@ function M.fancy_prompt_rename(func, prompt, visual)
   else
     original = vim.fn.expand('<cword>')
   end
-  vim.ui.input({ prompt = prompt, default = original }, function(query)
+  M.ui_input({ prompt = prompt, default = original }, function(query)
     if query == nil then
       return
     end
