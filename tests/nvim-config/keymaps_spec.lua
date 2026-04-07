@@ -47,4 +47,28 @@ describe('nvim-config keymap helpers', function()
     vim.cmd('bwipe!')
     vim.fn.delete(file)
   end)
+
+  it('routes <C-q> through the save-before-quit helper', function()
+    local editor = require('config.editor')
+    local calls = {}
+    local original_update_before_quit = editor.update_before_quit
+    local original_quit = editor.quit
+    local normal_map = vim.fn.maparg('<C-q>', 'n', false, true)
+
+    editor.update_before_quit = function()
+      table.insert(calls, 'update_before_quit')
+      return true
+    end
+
+    editor.quit = function()
+      table.insert(calls, 'quit')
+    end
+
+    normal_map.callback()
+
+    editor.update_before_quit = original_update_before_quit
+    editor.quit = original_quit
+
+    assert.are.same({ 'update_before_quit', 'quit' }, calls)
+  end)
 end)

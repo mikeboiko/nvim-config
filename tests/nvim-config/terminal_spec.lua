@@ -21,6 +21,32 @@ describe('nvim-config terminal helpers', function()
     vim.cmd('bwipe!')
   end)
 
+  it('falls back to terminal channel exit metadata when no marker line is present', function()
+    vim.cmd('enew')
+    local buf = vim.api.nvim_get_current_buf()
+    local original_get_chan_info = vim.api.nvim_get_chan_info
+
+    vim.api.nvim_buf_set_name(buf, 'term://test/flow')
+    vim.api.nvim_buf_set_var(buf, 'terminal_job_id', 42)
+    vim.api.nvim_buf_set_lines(0, 0, -1, false, {
+      'running command',
+      '',
+      '',
+    })
+
+    vim.api.nvim_get_chan_info = function(channel)
+      assert.are.equal(42, channel)
+      return { exitcode = 7 }
+    end
+
+    local ok, exit_code = pcall(terminal.get_exit_status, buf)
+    vim.api.nvim_get_chan_info = original_get_chan_info
+
+    assert.is_true(ok)
+    assert.are.equal(7, exit_code)
+    vim.cmd('bwipe!')
+  end)
+
   it('auto-closes a flow terminal when CloseToggle is enabled and the exit code is zero', function()
     vim.cmd('enew')
     local buf = vim.api.nvim_get_current_buf()

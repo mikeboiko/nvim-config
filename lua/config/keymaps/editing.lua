@@ -18,12 +18,12 @@ end
 function M.register(api)
   vim.keymap.set('i', '<C-q>', function()
     vim.cmd('stopinsert')
-    vim.cmd('update')
+    editor.update_before_quit()
     editor.quit()
   end, { silent = true, desc = 'Save and quit current window' })
 
   vim.keymap.set('n', '<C-q>', function()
-    vim.cmd('update')
+    editor.update_before_quit()
     editor.quit()
   end, { silent = true, desc = 'Save and quit current window' })
 

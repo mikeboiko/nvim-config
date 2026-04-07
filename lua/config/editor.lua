@@ -34,6 +34,20 @@ local function has_preview_window()
   return false
 end
 
+local updatable_buftypes = {
+  [''] = true,
+  acwrite = true,
+}
+
+function M.update_before_quit()
+  if not updatable_buftypes[vim.bo.buftype] then
+    return false
+  end
+
+  vim.cmd('update')
+  return true
+end
+
 function M.quit()
   if not vim.wo.previewwindow and has_preview_window() then
     vim.cmd('pclose')

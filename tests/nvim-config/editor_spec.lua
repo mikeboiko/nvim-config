@@ -68,6 +68,49 @@ describe('nvim-config editor helpers', function()
     wipe_if_valid(buffer)
   end)
 
+  it('updates normal file buffers before quit flows', function()
+    vim.cmd('enew')
+    local buffer = vim.api.nvim_get_current_buf()
+    local commands = {}
+    local original_cmd = vim.cmd
+
+    vim.cmd = function(command)
+      table.insert(commands, command)
+    end
+
+    local ok, wrote = pcall(editor.update_before_quit)
+
+    vim.cmd = original_cmd
+
+    assert.is_true(ok)
+    assert.is_true(wrote)
+    assert.are.same({ 'update' }, commands)
+
+    wipe_if_valid(buffer)
+  end)
+
+  it('skips special buffers before quit flows', function()
+    vim.cmd('enew')
+    local buffer = vim.api.nvim_get_current_buf()
+    local commands = {}
+    local original_cmd = vim.cmd
+
+    vim.bo[buffer].buftype = 'nofile'
+    vim.cmd = function(command)
+      table.insert(commands, command)
+    end
+
+    local ok, wrote = pcall(editor.update_before_quit)
+
+    vim.cmd = original_cmd
+
+    assert.is_true(ok)
+    assert.is_false(wrote)
+    assert.are.same({}, commands)
+
+    wipe_if_valid(buffer)
+  end)
+
   it('reloads the buffer with a requested fileformat and preserves the cursor', function()
     local original_run_ex = editor.run_ex
     local original_replace_m_with_blank = editor.replace_m_with_blank

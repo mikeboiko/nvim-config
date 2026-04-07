@@ -45,6 +45,14 @@ function M.get_exit_status(buf)
     end
   end
 
+  local job_id = buffers.get_var(buf, 'terminal_job_id')
+  if job_id ~= nil then
+    local ok, info = pcall(vim.api.nvim_get_chan_info, job_id)
+    if ok and type(info) == 'table' and type(info.exitcode) == 'number' then
+      return info.exitcode
+    end
+  end
+
   error('Could not determine exit status for buffer, ' .. buffers.get_name(buf))
 end
 
