@@ -9,7 +9,7 @@ A Lua-only Neovim configuration focused on fast navigation, solid language tooli
 - Completion and AI tooling with `blink.cmp`, `copilot.lua`, `blink-cmp-copilot`, and `CopilotChat.nvim`.
 - Language tooling powered by `nvim-lspconfig`, `mason.nvim`, `conform.nvim`, and `nvim-treesitter`.
 - Testing and debugging workflows via `neotest`, `nvim-dap`, and `nvim-dap-ui`.
-- Git and review workflow with `vim-fugitive`, `vim-rhubarb`, `gv.vim`, quickfix helpers, and repo-aware shell helpers.
+- Git and review workflow with `vim-fugitive`, `vim-rhubarb`, `gv.vim`, quickfix helpers, repo-aware shell helpers, and shell-parity shortcuts like `<leader>ga` for `git add -A` with a completion notification.
 - Local automation with `lefthook` and a Plenary-based headless test suite.
 
 ## Selected plugins

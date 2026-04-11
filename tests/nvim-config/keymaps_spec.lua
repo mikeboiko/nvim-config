@@ -71,4 +71,67 @@ describe('nvim-config keymap helpers', function()
 
     assert.are.same({ 'update_before_quit', 'quit' }, calls)
   end)
+
+  it('routes <leader>ga through git.add_all', function()
+    local git = require('config.git')
+    local calls = 0
+    local notifications = {}
+    local original_add_all = git.add_all
+    local original_notify = vim.notify
+    local git_add_map = vim.fn.maparg('<Space>ga', 'n', false, true)
+
+    git.add_all = function()
+      calls = calls + 1
+      return true, '/tmp/repo'
+    end
+
+    vim.notify = function(message, level)
+      table.insert(notifications, { message = message, level = level })
+    end
+
+    git_add_map.callback()
+
+    git.add_all = original_add_all
+    vim.notify = original_notify
+
+    assert.are.equal(1, calls)
+    assert.are.same({
+      { message = 'Staged all changes in repo (git add -A)', level = nil },
+    }, notifications)
+  end)
+
+  it('routes <leader>ag through git.add_all before the commit helper', function()
+    local git = require('config.git')
+    local calls = {}
+    local original_notify = vim.notify
+    local original_add_all = git.add_all
+    local original_call_global = keymaps.call_global
+    local ai_commit_map = vim.fn.maparg('<Space>ag', 'n', false, true)
+
+    git.add_all = function()
+      table.insert(calls, 'add_all')
+      return true, '/tmp/repo'
+    end
+
+    keymaps.call_global = function(name, ...)
+      table.insert(calls, { name, ... })
+      return true
+    end
+
+    vim.notify = function(message)
+      table.insert(calls, { 'notify', message })
+    end
+
+    ai_commit_map.callback()
+
+    vim.notify = original_notify
+    git.add_all = original_add_all
+    keymaps.call_global = original_call_global
+
+    assert.are.same({
+      'add_all',
+      { 'notify', 'Staged all changes in repo (git add -A)' },
+      { 'CopilotCommitMsg', '/tmp/repo' },
+    }, calls)
+  end)
 end)
