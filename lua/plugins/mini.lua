@@ -8,8 +8,7 @@ return {
         options = {
           -- Function to compute custom 'commentstring' (optional)
           custom_commentstring = function()
-            local ok, cs = pcall(require('ts_context_commentstring').calculate_commentstring)
-            return (ok and cs) or vim.bo.commentstring
+            return require('config.comments').get_commentstring()
           end,
 
           -- Whether to ignore blank lines when commenting

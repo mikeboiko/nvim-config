@@ -71,6 +71,24 @@ describe('nvim-config comment helpers', function()
     vim.ui.input = original_ui_input
   end)
 
+  it('falls back to the buffer commentstring when Tree-sitter context comments fail', function()
+    local original_ts_context_commentstring = package.loaded['ts_context_commentstring']
+
+    package.loaded['ts_context_commentstring'] = {
+      calculate_commentstring = function()
+        error('missing parser')
+      end,
+    }
+
+    vim.cmd('enew')
+    vim.bo.commentstring = '# %s'
+
+    assert.are.equal('# %s', comments.get_commentstring())
+
+    vim.cmd('bwipe!')
+    package.loaded['ts_context_commentstring'] = original_ts_context_commentstring
+  end)
+
   it('prompts for an inline comment and restores autopairs state', function()
     local original_user_input = comments.user_input
 

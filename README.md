@@ -6,6 +6,7 @@ A Lua-only Neovim configuration focused on fast navigation, solid language tooli
 
 - Lua-first structure with shared config in `lua/config/`, plugin specs in `lua/plugins/`, and filetype overrides in `after/`.
 - Strong code-navigation workflow built around `fzf-lua`, `nvim-tree`, `aerial.nvim`, Tree-sitter, and a custom always-visible tabline that keeps the current tab visible when crowded.
+- Comment helpers stay usable in non-Tree-sitter buffers by falling back to the buffer-local `commentstring`, so mappings like `co` still work in files such as `.env`.
 - Completion and AI tooling with `blink.cmp`, `copilot.lua`, `blink-cmp-copilot`, and `CopilotChat.nvim`.
 - Language tooling powered by `nvim-lspconfig`, `mason.nvim`, `conform.nvim`, and `nvim-treesitter`.
 - Testing and debugging workflows via `neotest`, `nvim-dap`, and `nvim-dap-ui`.

@@ -1,12 +1,21 @@
 local M = {}
 
-function M.get_commentstring()
-  local commentstring
+local function get_context_commentstring()
   local ok, ts_context_commentstring = pcall(require, 'ts_context_commentstring')
-
-  if ok then
-    commentstring = ts_context_commentstring.calculate_commentstring()
+  if not ok then
+    return nil
   end
+
+  local calculated_ok, commentstring = pcall(ts_context_commentstring.calculate_commentstring)
+  if not calculated_ok then
+    return nil
+  end
+
+  return commentstring
+end
+
+function M.get_commentstring()
+  local commentstring = get_context_commentstring()
 
   if commentstring == nil or commentstring == vim.NIL then
     commentstring = vim.bo.commentstring
