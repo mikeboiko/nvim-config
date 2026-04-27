@@ -11,6 +11,7 @@ A Lua-only Neovim configuration focused on fast navigation, solid language tooli
 - Language tooling powered by `nvim-lspconfig`, `mason.nvim`, `conform.nvim`, and `nvim-treesitter`.
 - Testing and debugging workflows via `neotest`, `nvim-dap`, and `nvim-dap-ui`.
 - Git and review workflow with `vim-fugitive`, `vim-rhubarb`, `gv.vim`, quickfix helpers, repo-aware shell helpers, and shell-parity shortcuts like `<leader>ga` for `git add -A` with a completion notification.
+- The save-and-quit helper behind `<C-q>` only writes buffers that are actually writable, so readonly diff and review windows still close cleanly.
 - Local automation with `lefthook` and a Plenary-based headless test suite.
 
 ## Selected plugins

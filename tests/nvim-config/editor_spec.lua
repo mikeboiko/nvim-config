@@ -111,6 +111,57 @@ describe('nvim-config editor helpers', function()
     wipe_if_valid(buffer)
   end)
 
+  it('skips readonly buffers before quit flows', function()
+    local file = vim.fn.tempname() .. '.txt'
+    local fh = assert(io.open(file, 'w'))
+    local commands = {}
+    local original_cmd = vim.cmd
+
+    fh:write('alpha\n')
+    fh:close()
+
+    vim.cmd('edit ' .. vim.fn.fnameescape(file))
+    local buffer = vim.api.nvim_get_current_buf()
+    vim.bo[buffer].readonly = true
+    vim.bo[buffer].modified = true
+    vim.cmd = function(command)
+      table.insert(commands, command)
+    end
+
+    local ok, wrote = pcall(editor.update_before_quit)
+
+    vim.cmd = original_cmd
+
+    assert.is_true(ok)
+    assert.is_false(wrote)
+    assert.are.same({}, commands)
+
+    wipe_if_valid(buffer)
+    vim.fn.delete(file)
+  end)
+
+  it('skips non-modifiable buffers before quit flows', function()
+    vim.cmd('enew')
+    local buffer = vim.api.nvim_get_current_buf()
+    local commands = {}
+    local original_cmd = vim.cmd
+
+    vim.bo[buffer].modifiable = false
+    vim.cmd = function(command)
+      table.insert(commands, command)
+    end
+
+    local ok, wrote = pcall(editor.update_before_quit)
+
+    vim.cmd = original_cmd
+
+    assert.is_true(ok)
+    assert.is_false(wrote)
+    assert.are.same({}, commands)
+
+    wipe_if_valid(buffer)
+  end)
+
   it('reloads the buffer with a requested fileformat and preserves the cursor', function()
     local original_run_ex = editor.run_ex
     local original_replace_m_with_blank = editor.replace_m_with_blank

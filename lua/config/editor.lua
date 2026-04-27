@@ -40,7 +40,7 @@ local updatable_buftypes = {
 }
 
 function M.update_before_quit()
-  if not updatable_buftypes[vim.bo.buftype] then
+  if not updatable_buftypes[vim.bo.buftype] or not vim.bo.modifiable or vim.bo.readonly then
     return false
   end
 
