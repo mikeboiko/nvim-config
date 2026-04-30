@@ -38,6 +38,8 @@ This config is set up for everyday work across:
 - Markdown
 - YAML / JSON / TOML / Bash
 
+Roslyn powers the C# workflow. The optional Razor/CSHTML Roslyn extension stays disabled by default, so regular `.cs` editing works without requiring the extra Razor DLLs from the VS Code C# toolchain.
+
 ## Repository layout
 
 - `init.lua` bootstraps the config and loads `lazy.nvim`.

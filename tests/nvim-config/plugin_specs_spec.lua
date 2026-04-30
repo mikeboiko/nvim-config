@@ -19,4 +19,13 @@ describe('nvim-config plugin specs', function()
       load_plugin(module)
     end
   end)
+
+  it('disables the roslyn razor extension by default', function()
+    local spec = load_plugin('plugins.roslyn')
+
+    assert.is_table(spec.opts)
+    assert.is_table(spec.opts.extensions)
+    assert.is_table(spec.opts.extensions.razor)
+    assert.is_false(spec.opts.extensions.razor.enabled)
+  end)
 end)
