@@ -5,7 +5,7 @@ return {
 
   -- For Troubleshooting/Help, run:
   -- :LspLog
-  -- :LspInfo
+  -- :checkhealth vim.lsp
 
   -- To see what capabilities are available, you can run the following command in
   -- a buffer with a connected LSP client:
@@ -24,6 +24,8 @@ return {
     vim.opt.signcolumn = 'yes'
   end,
   config = function()
+    local python = require('config.python')
+
     -- I couldn't figure out how to disable roslyn formatting in a cleaner way
     vim.api.nvim_create_autocmd('LspAttach', {
       group = vim.api.nvim_create_augroup('UserLspConfig', {}),
@@ -52,8 +54,43 @@ return {
     })
     vim.lsp.enable('ruff')
 
-    -- Note: install basedpyright in each virtual-env
+    -- Prefer a project-local .venv when present so imports resolve against
+    -- the same environment used to run the code.
     vim.lsp.config('basedpyright', {
+      root_markers = vim.fn.has('nvim-0.11.3') == 1 and {
+        {
+          'pyproject.toml',
+          'uv.lock',
+          '.venv',
+          'setup.py',
+          'setup.cfg',
+          'requirements.txt',
+          'Pipfile',
+          '.git',
+          'pyrightconfig.json',
+        },
+      } or {
+        'pyproject.toml',
+        'uv.lock',
+        '.venv',
+        'setup.py',
+        'setup.cfg',
+        'requirements.txt',
+        'Pipfile',
+        '.git',
+        'pyrightconfig.json',
+      },
+      before_init = function(_, config)
+        python.apply_basedpyright_settings(config, config.root_dir)
+      end,
+      cmd = function(dispatchers, config)
+        local cmd = python.project_basedpyright_cmd(config.root_dir) or { 'basedpyright-langserver', '--stdio' }
+        return vim.lsp.rpc.start(cmd, dispatchers, {
+          cwd = config.cmd_cwd,
+          env = config.cmd_env,
+          detached = config.detached,
+        })
+      end,
       settings = {
         autoImportCompletions = true,
         disableOrganizeImports = true, -- use ruff instead
