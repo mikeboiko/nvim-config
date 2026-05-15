@@ -22,6 +22,7 @@ return {
   config = function()
     local mp = require('markdown_preview')
     mp.setup({
+      instance_mode = 'multi',
       mermaid_renderer = 'rust',
     })
 

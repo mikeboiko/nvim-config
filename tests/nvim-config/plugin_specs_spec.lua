@@ -28,4 +28,32 @@ describe('nvim-config plugin specs', function()
     assert.is_table(spec.opts.extensions.razor)
     assert.is_false(spec.opts.extensions.razor.enabled)
   end)
+
+  it('runs markdown preview in multi-instance mode', function()
+    local spec = load_plugin('plugins.markdown-preview')
+    local original_markdown_preview = package.loaded['markdown_preview']
+    local original_create_autocmd = vim.api.nvim_create_autocmd
+    local original_create_augroup = vim.api.nvim_create_augroup
+    local setup_opts
+
+    package.loaded['markdown_preview'] = {
+      setup = function(opts)
+        setup_opts = opts
+      end,
+    }
+    vim.api.nvim_create_autocmd = function() end
+    vim.api.nvim_create_augroup = function()
+      return 1
+    end
+
+    spec.config()
+
+    vim.api.nvim_create_autocmd = original_create_autocmd
+    vim.api.nvim_create_augroup = original_create_augroup
+    package.loaded['markdown_preview'] = original_markdown_preview
+
+    assert.is_table(setup_opts)
+    assert.equal('multi', setup_opts.instance_mode)
+    assert.equal('rust', setup_opts.mermaid_renderer)
+  end)
 end)
