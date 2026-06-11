@@ -8,6 +8,7 @@ return {
     terminal_height = 15,
     terminal_position = 'top',
     edit_open_command = 'tabedit',
+    -- output_mode = 'terminal',
     stop_at_home = true,
     show_command = true,
     keymaps = {
