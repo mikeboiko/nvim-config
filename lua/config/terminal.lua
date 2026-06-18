@@ -16,17 +16,25 @@ function M.is_flow_terminal(buf)
 end
 
 function M.is_running(buf)
-  if not M.is_terminal(buf) then
-    return false
+  if M.is_terminal(buf) then
+    local job_id = buffers.get_var(buf, 'terminal_job_id')
+    if job_id == nil then
+      return false
+    end
+
+    local ok, status = pcall(vim.fn.jobwait, { job_id }, 0)
+    return ok and type(status) == 'table' and status[1] == -1
   end
 
-  local job_id = buffers.get_var(buf, 'terminal_job_id')
-  if job_id == nil then
-    return false
+  -- Buffer-mode flow output runs its job in a normal (non-terminal) buffer, so
+  -- Neovim's native "job still running" protection does not apply. Ask the
+  -- plugin whether the buffer-mode job is still alive.
+  local ok, runner = pcall(require, 'nvim-flow.runner')
+  if ok and type(runner.is_buffer_job_running) == 'function' then
+    return runner.is_buffer_job_running(buf)
   end
 
-  local ok, status = pcall(vim.fn.jobwait, { job_id }, 0)
-  return ok and type(status) == 'table' and status[1] == -1
+  return false
 end
 
 function M.get_exit_status(buf)
