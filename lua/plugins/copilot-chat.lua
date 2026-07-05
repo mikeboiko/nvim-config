@@ -35,8 +35,8 @@ return {
     require('CopilotChat').setup({
       debug = false,
       -- https://docs.github.com/en/copilot/reference/ai-models/supported-models#supported-ai-models-per-copilot-plan
-      -- model = 'gpt-5.4',
-      model = 'claude-haiku-4.5',
+      model = 'gpt-5.4-mini',
+      -- model = 'gemini-3.5-flash',
       chat_autocomplete = false,
       auto_follow_cursor = false,
       -- auto_insert_mode = true,
