@@ -15,6 +15,11 @@ return {
       autoFold = {
         enabled = false,
       },
+      foldtext = {
+        -- disabled: neither gitsigns.nvim nor mini.diff is installed, and origami
+        -- crashes in its foldtext decoration provider when this is on without either
+        gitsignsCount = false,
+      },
     }
   end,
 }
