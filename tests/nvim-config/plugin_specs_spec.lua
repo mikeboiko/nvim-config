@@ -20,13 +20,44 @@ describe('nvim-config plugin specs', function()
     end
   end)
 
-  it('disables the roslyn razor extension by default', function()
+  it('points the roslyn LSP command at the Mason binary', function()
     local spec = load_plugin('plugins.roslyn')
 
-    assert.is_table(spec.opts)
-    assert.is_table(spec.opts.extensions)
-    assert.is_table(spec.opts.extensions.razor)
-    assert.is_false(spec.opts.extensions.razor.enabled)
+    -- The deprecated `extensions` option lived under `opts`; it must be gone.
+    assert.is_nil(spec.opts)
+    assert.is_function(spec.config)
+
+    local original_roslyn = package.loaded['roslyn']
+    local original_executable = vim.fn.executable
+    local original_lsp_config = vim.lsp.config
+    local setup_called = false
+    local configured
+
+    package.loaded['roslyn'] = {
+      setup = function()
+        setup_called = true
+      end,
+    }
+    vim.fn.executable = function()
+      return 1
+    end
+    vim.lsp.config = function(name, cfg)
+      if name == 'roslyn' then
+        configured = cfg
+      end
+    end
+
+    spec.config()
+
+    package.loaded['roslyn'] = original_roslyn
+    vim.fn.executable = original_executable
+    vim.lsp.config = original_lsp_config
+
+    assert.is_true(setup_called)
+    assert.is_table(configured)
+    assert.is_table(configured.cmd)
+    assert.matches('mason/bin/roslyn$', configured.cmd[1])
+    assert.equal('--stdio', configured.cmd[2])
   end)
 
   it('runs markdown preview in multi-instance mode', function()
