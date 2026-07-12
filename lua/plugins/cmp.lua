@@ -63,8 +63,17 @@ return { -- blink.cmp
       nerd_font_variant = 'mono',
     },
 
-    -- Only show the documentation popup when manually triggered
-    completion = { documentation = { auto_show = true } },
+    -- Auto-show the documentation popup for the selected item. Suppress the
+    -- completion menu entirely for markdown so suggestions from every source
+    -- don't pop up while writing prose (manual triggers still work).
+    completion = {
+      documentation = { auto_show = true },
+      menu = {
+        auto_show = function()
+          return vim.bo.filetype ~= 'markdown'
+        end,
+      },
+    },
 
     -- Default list of enabled providers defined so that you can extend it
     -- elsewhere in your config, without redefining it, due to `opts_extend`
