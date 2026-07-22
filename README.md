@@ -11,6 +11,7 @@ A Lua-only Neovim configuration focused on fast navigation, solid language tooli
 - Language tooling powered by `nvim-lspconfig`, `mason.nvim`, `conform.nvim`, and `nvim-treesitter`.
 - Testing and debugging workflows via `neotest`, `nvim-dap`, and `nvim-dap-ui`.
 - Git and review workflow with `vim-fugitive`, `vim-rhubarb`, `gv.vim`, quickfix helpers, repo-aware shell helpers, and shell-parity shortcuts like `<leader>ga` for `git add -A` with a completion notification.
+- `<leader>gt` prefills the custom `:GDifftool` command, which behaves like plain `git diff` (same optional revision argument, e.g. `:GDifftool HEAD` to include staged changes) but opens each changed file as a diff tab and additionally opens Git-added and untracked files in their own tabs, avoiding fugitive's "exists on disk, but not in `<sha>`" error for files with no prior version to diff against.
 - The save-and-quit helper behind `<C-q>` only writes buffers that are actually writable, so readonly diff and review windows still close cleanly.
 - Local automation with `lefthook` and a Plenary-based headless test suite.
 
