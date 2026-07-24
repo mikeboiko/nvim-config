@@ -102,6 +102,10 @@ function M.register(api)
     editor.toggle_spell()
   end, { silent = true, desc = 'Toggle spell check' })
 
+  vim.keymap.set('n', '<leader>cm', function()
+    editor.toggle_conceallevel()
+  end, { silent = true, desc = 'Toggle conceal level' })
+
   vim.keymap.set('n', '<leader>ctd', function()
     editor.reload_with_fileformat('dos')
   end, { silent = true, desc = 'Reload buffer as DOS fileformat' })

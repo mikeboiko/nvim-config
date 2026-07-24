@@ -190,4 +190,11 @@ function M.toggle_spell()
   return enabled
 end
 
+function M.toggle_conceallevel()
+  local enabled = vim.wo.conceallevel == 0
+  vim.opt_local.conceallevel = enabled and 2 or 0
+  echo(enabled and 'Conceal enabled' or 'Conceal disabled')
+  return enabled
+end
+
 return M
