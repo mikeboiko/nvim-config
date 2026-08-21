@@ -43,7 +43,11 @@ This config is set up for everyday work across:
 
 Roslyn powers the C# workflow. The optional Razor/CSHTML Roslyn extension stays disabled by default, so regular `.cs` editing works without requiring the extra Razor DLLs from the VS Code C# toolchain.
 
-Python uses Ruff for linting/import cleanup and basedpyright for type checking. When a project root contains a `.venv`, basedpyright automatically uses that environment's interpreter and local language server, so different Python project roots can use different virtual environments in the same Neovim session.
+Python uses Ruff for linting/import cleanup and basedpyright for type checking. Each
+project owns its `pyrightconfig.json`, including its type-checking mode and scope. When
+a project root contains a `.venv`, basedpyright automatically uses that environment's
+interpreter and local language server, so different Python project roots can use
+different virtual environments in the same Neovim session.
 
 ## Repository layout
 
