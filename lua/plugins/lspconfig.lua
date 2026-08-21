@@ -95,9 +95,6 @@ return {
         autoImportCompletions = true,
         disableOrganizeImports = true, -- use ruff instead
         basedpyright = {
-          analysis = {
-            typeCheckingMode = 'basic',
-          },
           settings = {},
         },
       },
