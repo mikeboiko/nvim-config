@@ -1,5 +1,5 @@
 return {
-  'mikeboiko/nvim-flow',
+  'bytehound-labs/nvim-flow',
   dir = '~/git/nvim-flow',
   event = { 'BufReadPost', 'BufNewFile' },
   cmd = { 'FlowRun', 'FlowDebug', 'FlowEdit', 'FlowToggleLock', 'FlowPreview', 'FlowQuickfix' },
