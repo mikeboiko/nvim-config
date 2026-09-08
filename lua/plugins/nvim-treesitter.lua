@@ -55,6 +55,7 @@ return {
           'powershell',
           'python',
           'sql',
+          'ssh_config',
           'toml',
           'tsx',
           'typescript',
