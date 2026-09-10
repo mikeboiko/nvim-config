@@ -20,6 +20,62 @@ describe('nvim-config plugin specs', function()
     end
   end)
 
+  it('automatically installs roslyn when Mason does not have it', function()
+    local spec = load_plugin('plugins.mason')
+    local original_mason = package.loaded.mason
+    local original_registry = package.loaded['mason-registry']
+    local setup_opts
+    local install_called = false
+
+    package.loaded.mason = {
+      setup = function(opts)
+        setup_opts = opts
+      end,
+    }
+    package.loaded['mason-registry'] = {
+      is_installed = function(name)
+        assert.equal('roslyn', name)
+        return false
+      end,
+      refresh = function(callback)
+        callback(true)
+      end,
+      has_package = function(name)
+        assert.equal('roslyn', name)
+        return true
+      end,
+      get_package = function(name)
+        assert.equal('roslyn', name)
+        return {
+          is_installed = function()
+            return false
+          end,
+          is_installing = function()
+            return false
+          end,
+          install = function(_, opts, callback)
+            assert.same({}, opts)
+            install_called = true
+            callback(true)
+          end,
+        }
+      end,
+    }
+
+    spec.config()
+
+    package.loaded.mason = original_mason
+    package.loaded['mason-registry'] = original_registry
+
+    assert.same({
+      registries = {
+        'github:mason-org/mason-registry',
+        'github:Crashdummyy/mason-registry',
+      },
+    }, setup_opts)
+    assert.is_true(install_called)
+  end)
+
   it('points the roslyn LSP command at the Mason binary', function()
     local spec = load_plugin('plugins.roslyn')
 

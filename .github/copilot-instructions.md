@@ -22,7 +22,8 @@
   - `<leader>fi`
   - `:ConformInfo`
 - C# Roslyn setup is handled through Mason:
-  - `:MasonInstall roslyn`
+  - The configured Mason registries are refreshed at startup when needed.
+  - The `roslyn` package is installed automatically when it is missing.
 
 ## High-level architecture
 
@@ -49,7 +50,7 @@
   - snippet definitions registered from `snippets/package.json`
 - Language tooling is spread across a few focused files:
   - `lua/plugins/lspconfig.lua` enables and configures LSP servers with `vim.lsp.config(...)` / `vim.lsp.enable(...)`
-  - `lua/plugins/mason.lua` configures Mason registries, but it is not the source of truth for per-server settings
+  - `lua/plugins/mason.lua` configures Mason registries and ensures the `roslyn` package is installed, but it is not the source of truth for per-server settings
   - `lua/plugins/conform.lua` owns formatter selection and format-on-save behavior
   - `lua/plugins/nvim-treesitter.lua` installs parsers after `LazyDone` and starts Tree-sitter per filetype
   - `lua/plugins/neotest.lua`, `lua/plugins/dap-ui.lua`, and `lua/config/dap/functions.lua` provide test and debug workflows
