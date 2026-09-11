@@ -44,6 +44,7 @@ return {
           'go',
           'gomod',
           'html',
+          'ini',
           'javascript',
           'json',
           'jsx',

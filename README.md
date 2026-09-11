@@ -39,7 +39,10 @@ This config is set up for everyday work across:
 - Go
 - SQL
 - Markdown
+- INI / DOSINI
 - YAML / JSON / TOML / Bash
+
+Generic `.conf` filenames are detected as `conf`; INI-style files should include `# vim: set ft=dosini:` to select the `dosini` filetype and its `ini` Tree-sitter parser.
 
 Roslyn powers the C# workflow. Mason automatically refreshes the configured registries and installs the `roslyn` package when it is missing. The optional Razor/CSHTML Roslyn extension stays disabled by default, so regular `.cs` editing works without requiring the extra Razor DLLs from the VS Code C# toolchain.
 
