@@ -70,6 +70,7 @@ different virtual environments in the same Neovim session.
 
 - Neovim `0.11.x` stable or newer
 - `git`
+- `ctags` for the Gutentags tag workflow
 - `make` for building `CopilotChat.nvim`
 - `mmdr` (`cargo install mermaid-rs-renderer`) for Rust-backed Mermaid rendering in `markdown-preview.nvim`
 - `tree-sitter` CLI for compiling Tree-sitter parsers
