@@ -88,6 +88,10 @@ $HOME/.local/share/nvim/lazy/plenary.nvim
 
 Override with `PLENARY_PATH` if needed.
 
+The test harness sets `nvim_config_test` and uses a temporary file-backed
+clipboard provider, so the headless suite does not require a desktop clipboard
+session or the production `clipsy` helper.
+
 The suite is intentionally biased toward startup, module-loading, commands, and stateful editor behaviors instead of exhaustive snapshots of every option or keymap.
 The plugin-spec tests mock Mason's registry, so the automatic Roslyn installation path is validated without downloading packages.
 

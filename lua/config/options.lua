@@ -26,18 +26,20 @@ elseif vim.fn.has('unix') == 1 then
   opt.clipboard = 'unnamedplus'
 end
 
-vim.g.clipboard = {
-  name = 'xsel clipboard',
-  copy = {
-    ['+'] = { 'clipsy', 'copy' },
-    ['*'] = { 'clipsy', 'copy' },
-  },
-  paste = {
-    ['+'] = { 'clipsy', 'paste' },
-    ['*'] = { 'clipsy', 'paste' },
-  },
-  cache_enabled = 1,
-}
+if vim.g.nvim_config_test ~= true then
+  vim.g.clipboard = {
+    name = 'xsel clipboard',
+    copy = {
+      ['+'] = { 'clipsy', 'copy' },
+      ['*'] = { 'clipsy', 'copy' },
+    },
+    paste = {
+      ['+'] = { 'clipsy', 'paste' },
+      ['*'] = { 'clipsy', 'paste' },
+    },
+    cache_enabled = 1,
+  }
+end
 
 opt.splitright = true
 opt.autochdir = true
