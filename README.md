@@ -72,6 +72,8 @@ different virtual environments in the same Neovim session.
 - `git`
 - `make` for building `CopilotChat.nvim`
 - `mmdr` (`cargo install mermaid-rs-renderer`) for Rust-backed Mermaid rendering in `markdown-preview.nvim`
+- `tree-sitter` CLI for compiling Tree-sitter parsers
+- `unzip` for extracting Mason packages
 - .NET SDK for the C# Roslyn language server
 - Language servers / formatters installed through Mason or system packages, depending on the tool
 
