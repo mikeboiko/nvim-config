@@ -20,13 +20,21 @@ describe('nvim-config plugin specs', function()
     end
   end)
 
-  it('automatically installs roslyn when Mason does not have it', function()
+  it('automatically installs the available Roslyn package after refreshing Mason', function()
     local spec = load_plugin('plugins.mason')
     local original_mason = package.loaded.mason
     local original_registry = package.loaded['mason-registry']
+    local original_schedule = vim.schedule
+    local original_list_uis = vim.api.nvim_list_uis
     local setup_opts
     local install_called = false
 
+    vim.schedule = function(callback)
+      callback()
+    end
+    vim.api.nvim_list_uis = function()
+      return { {} }
+    end
     package.loaded.mason = {
       setup = function(opts)
         setup_opts = opts
@@ -34,18 +42,18 @@ describe('nvim-config plugin specs', function()
     }
     package.loaded['mason-registry'] = {
       is_installed = function(name)
-        assert.equal('roslyn', name)
+        assert.is_true(name == 'roslyn-nightly' or name == 'roslyn')
         return false
       end,
       refresh = function(callback)
         callback(true)
       end,
       has_package = function(name)
-        assert.equal('roslyn', name)
+        assert.equal('roslyn-nightly', name)
         return true
       end,
       get_package = function(name)
-        assert.equal('roslyn', name)
+        assert.equal('roslyn-nightly', name)
         return {
           is_installed = function()
             return false
@@ -61,9 +69,9 @@ describe('nvim-config plugin specs', function()
         }
       end,
     }
-
     spec.config()
-
+    vim.schedule = original_schedule
+    vim.api.nvim_list_uis = original_list_uis
     package.loaded.mason = original_mason
     package.loaded['mason-registry'] = original_registry
 
@@ -74,6 +82,72 @@ describe('nvim-config plugin specs', function()
       },
     }, setup_opts)
     assert.is_true(install_called)
+  end)
+
+  it('schedules Mason failure notifications outside fast callbacks', function()
+    local spec = load_plugin('plugins.mason')
+    local original_mason = package.loaded.mason
+    local original_registry = package.loaded['mason-registry']
+    local original_schedule = vim.schedule
+    local original_list_uis = vim.api.nvim_list_uis
+    local original_notify = vim.notify
+    local scheduled = {}
+    local notifications = {}
+
+    vim.schedule = function(callback)
+      table.insert(scheduled, callback)
+    end
+    vim.api.nvim_list_uis = function()
+      return { {} }
+    end
+    vim.notify = function(message)
+      table.insert(notifications, message)
+    end
+    package.loaded.mason = {
+      setup = function() end,
+    }
+    package.loaded['mason-registry'] = {
+      is_installed = function()
+        return false
+      end,
+      refresh = function(callback)
+        callback(true)
+      end,
+      has_package = function(name)
+        return name == 'roslyn-nightly'
+      end,
+      get_package = function()
+        return {
+          is_installed = function()
+            return false
+          end,
+          is_installing = function()
+            return false
+          end,
+          install = function(_, _, callback)
+            callback(false, 'download failed')
+          end,
+        }
+      end,
+    }
+
+    spec.config()
+    assert.equal(1, #scheduled)
+    scheduled[1]()
+    assert.equal(2, #scheduled)
+    scheduled[2]()
+    assert.equal(3, #scheduled)
+    assert.equal(0, #notifications)
+    scheduled[3]()
+
+    vim.schedule = original_schedule
+    vim.api.nvim_list_uis = original_list_uis
+    vim.notify = original_notify
+    package.loaded.mason = original_mason
+    package.loaded['mason-registry'] = original_registry
+
+    assert.equal(1, #notifications)
+    assert.matches('Mason failed to install roslyn%-nightly: download failed', notifications[1])
   end)
 
   it('points the roslyn LSP command at the Mason binary', function()

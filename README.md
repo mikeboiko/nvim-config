@@ -44,7 +44,12 @@ This config is set up for everyday work across:
 
 Generic `.conf` filenames are detected as `conf`; INI-style files should include `# vim: set ft=dosini:` to select the `dosini` filetype and its `ini` Tree-sitter parser.
 
-Roslyn powers the C# workflow. Mason automatically refreshes the configured registries and installs the `roslyn` package when it is missing. The optional Razor/CSHTML Roslyn extension stays disabled by default, so regular `.cs` editing works without requiring the extra Razor DLLs from the VS Code C# toolchain.
+Roslyn powers the C# workflow. Mason refreshes the configured registries and installs
+the available `roslyn-nightly` package (falling back to `roslyn`) when it is
+missing. The install is deferred until an interactive UI is ready, and headless
+startup checks do not start network installs. The optional Razor/CSHTML Roslyn
+extension stays disabled by default, so regular `.cs` editing works without
+requiring the extra Razor DLLs from the VS Code C# toolchain.
 
 Python uses Ruff for linting/import cleanup and basedpyright for type checking. Each
 project owns its `pyrightconfig.json`, including its type-checking mode and scope. When
@@ -92,7 +97,7 @@ ln -s /path/to/this/repo ~/.config/nvim
 ```
 
 Then start Neovim to let `lazy.nvim` bootstrap itself and install plugins.
-Mason installs the C# Roslyn package automatically during startup.
+Mason installs the C# Roslyn package automatically after the interactive UI starts.
 
 Useful follow-up commands:
 
