@@ -70,6 +70,8 @@ different virtual environments in the same Neovim session.
 
 - Neovim `0.11.x` stable or newer
 - `git`
+- `lua` for hook syntax checks
+- `stylua` for Lua formatting and style checks
 - `ctags` for the Gutentags tag workflow
 - `make` for building `CopilotChat.nvim`
 - `mmdr` (`cargo install mermaid-rs-renderer`) for Rust-backed Mermaid rendering in `markdown-preview.nvim`
