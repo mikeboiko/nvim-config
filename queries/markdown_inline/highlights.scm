@@ -20,8 +20,8 @@
   "\\" @conceal)
   (#set! conceal ""))
 
-; Conceal emphasis delimiters. config.markdown adds alignment padding for
-; pipe-table cells without moving the visible value within its column.
+; Conceal emphasis, code-span, and link markup. config.markdown adds
+; alignment padding for pipe-table cells without moving the visible value.
 ((code_span_delimiter) @conceal
   (#set! conceal ""))
 

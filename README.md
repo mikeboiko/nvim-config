@@ -22,7 +22,7 @@ A Lua-only Neovim configuration focused on fast navigation, solid language tooli
 - Completion and editing: `blink.cmp`, `copilot.lua`, `blink-cmp-copilot`, `nvim-autopairs`, `nvim-surround`, `substitute.nvim`
 - Markdown workflow: `selimacerbas/markdown-preview.nvim`, `img-paste.vim`
 - Markdown preview uses per-instance servers, so `:MarkdownPreview` always opens a fresh preview instead of silently attaching to an older Neovim session.
-- Markdown conceal hides emphasis delimiters and adds table-aware inline padding so bold and italic text stays aligned in pipe-table columns.
+- Markdown conceal hides emphasis, inline-code, and link markup and adds table-aware inline padding so pipe-table columns stay aligned.
 - Markdown folds use `nvim-origami` with a `zx` refresh on markdown `InsertLeave` and `TextChanged` events to recover clean fold state after edits.
 - The `blink.cmp` completion menu is suppressed for markdown, so suggestions from every source stay hidden while writing prose (manual completion triggers still work).
 - Language tooling: `nvim-lspconfig`, `mason.nvim`, `conform.nvim`, `nvim-treesitter`

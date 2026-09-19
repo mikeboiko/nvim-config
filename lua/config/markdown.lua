@@ -5,31 +5,41 @@ local M = {}
 local padding_namespace = api.nvim_create_namespace('nvim-config-markdown-table-padding')
 local autocmd_group = api.nvim_create_augroup('nvim-config-markdown-padding', { clear = true })
 
-local emphasis_query
+local inline_query
 local table_query
 local refresh_scheduled = {}
 
 local function get_queries()
-  if emphasis_query and table_query then
-    return emphasis_query, table_query
+  if inline_query and table_query then
+    return inline_query, table_query
   end
 
-  local ok_emphasis, parsed_emphasis = pcall(
+  local ok_inline, parsed_inline = pcall(
     vim.treesitter.query.parse,
     'markdown_inline',
     [[
-      [(emphasis) (strong_emphasis) (strikethrough)] @emphasis
+      [
+        (code_span)
+        (emphasis)
+        (strong_emphasis)
+        (strikethrough)
+        (inline_link)
+        (image)
+        (shortcut_link)
+        (full_reference_link)
+        (collapsed_reference_link)
+      ] @span
     ]]
   )
   local ok_table, parsed_table = pcall(vim.treesitter.query.parse, 'markdown', '(pipe_table) @table')
 
-  if not ok_emphasis or not ok_table then
+  if not ok_inline or not ok_table then
     return nil
   end
 
-  emphasis_query = parsed_emphasis
+  inline_query = parsed_inline
   table_query = parsed_table
-  return emphasis_query, table_query
+  return inline_query, table_query
 end
 
 local function row_cells(row, cell_type)
@@ -106,7 +116,11 @@ local function find_cell(tables, row, column)
       for index, cell in ipairs(table.cells_by_row[row] or {}) do
         local _, start_column, _, end_column = cell:range()
         if column >= start_column and column < end_column then
-          return table.alignments[index] or 'left'
+          return {
+            alignment = table.alignments[index] or 'left',
+            start_column = start_column,
+            end_column = end_column,
+          }
         end
       end
     end
@@ -132,56 +146,98 @@ local function add_padding(padding, row, column, count)
   end
 end
 
+local link_span_types = {
+  collapsed_reference_link = true,
+  full_reference_link = true,
+  image = true,
+  inline_link = true,
+  shortcut_link = true,
+}
+
+local link_concealed_types = {
+  ['!'] = true,
+  ['['] = true,
+  [']'] = true,
+  ['('] = true,
+  [')'] = true,
+  link_destination = true,
+  link_label = true,
+}
+
+local function is_concealed_child(span_type, node)
+  local typ = node:type()
+  if typ:find('delimiter', 1, true) then
+    return true
+  end
+  return link_span_types[span_type] == true and link_concealed_types[typ] == true
+end
+
+local function span_concealed_width(span, bufnr)
+  local span_type = span:type()
+  local width = 0
+
+  for child in span:iter_children() do
+    if is_concealed_child(span_type, child) then
+      width = width + vim.fn.strdisplaywidth(vim.treesitter.get_node_text(child, bufnr))
+    end
+  end
+
+  return width
+end
+
 local function collect_padding(parser, bufnr, tables, query)
-  local padding = {}
+  local cells = {}
 
   parser:for_each_tree(function(tree, language_tree)
     if language_tree._lang ~= 'markdown_inline' then
       return
     end
 
-    for _, emphasis in query:iter_captures(tree:root(), bufnr, 0, -1) do
-      local start_row, start_column, end_row = emphasis:range()
+    for _, span in query:iter_captures(tree:root(), bufnr, 0, -1) do
+      local start_row, start_column, end_row = span:range()
       if start_row ~= end_row then
         goto continue
       end
 
-      local alignment = find_cell(tables, start_row, start_column)
-      if not alignment then
+      local cell = find_cell(tables, start_row, start_column)
+      if not cell then
         goto continue
       end
 
-      local delimiters = {}
-      for child in emphasis:iter_children() do
-        if child:type():find('delimiter', 1, true) then
-          table.insert(delimiters, child)
-        end
-      end
-
-      if #delimiters == 0 then
+      local concealed_width = span_concealed_width(span, bufnr)
+      if concealed_width == 0 then
         goto continue
       end
 
-      local _, first_column = delimiters[1]:range()
-      local _, _, _, last_column = delimiters[#delimiters]:range()
-      local delimiter_width = 0
-      for _, delimiter in ipairs(delimiters) do
-        delimiter_width = delimiter_width + vim.fn.strdisplaywidth(vim.treesitter.get_node_text(delimiter, bufnr))
-      end
-
-      if alignment == 'right' then
-        add_padding(padding, start_row, first_column, delimiter_width)
-      elseif alignment == 'center' then
-        local before = math.floor(delimiter_width / 2)
-        add_padding(padding, start_row, first_column, before)
-        add_padding(padding, start_row, last_column, delimiter_width - before)
+      local key = start_row .. ':' .. cell.start_column
+      if cells[key] then
+        cells[key].width = cells[key].width + concealed_width
       else
-        add_padding(padding, start_row, last_column, delimiter_width)
+        cells[key] = {
+          row = start_row,
+          alignment = cell.alignment,
+          start_column = cell.start_column,
+          end_column = cell.end_column,
+          width = concealed_width,
+        }
       end
 
       ::continue::
     end
   end)
+
+  local padding = {}
+  for _, cell in pairs(cells) do
+    if cell.alignment == 'right' then
+      add_padding(padding, cell.row, cell.start_column, cell.width)
+    elseif cell.alignment == 'center' then
+      local before = math.floor(cell.width / 2)
+      add_padding(padding, cell.row, cell.start_column, before)
+      add_padding(padding, cell.row, cell.end_column, cell.width - before)
+    else
+      add_padding(padding, cell.row, cell.end_column, cell.width)
+    end
+  end
 
   local result = {}
   for _, item in pairs(padding) do
@@ -199,8 +255,8 @@ local function collect_padding(parser, bufnr, tables, query)
 end
 
 function M.compute_padding(bufnr)
-  local emphasis, tables = get_queries()
-  if not emphasis or not tables then
+  local spans, tables = get_queries()
+  if not spans or not tables then
     return {}
   end
 
@@ -210,7 +266,7 @@ function M.compute_padding(bufnr)
   end
 
   parser:parse(true)
-  return collect_padding(parser, bufnr, collect_tables(parser, bufnr, tables), emphasis)
+  return collect_padding(parser, bufnr, collect_tables(parser, bufnr, tables), spans)
 end
 
 local function conceal_is_active()
