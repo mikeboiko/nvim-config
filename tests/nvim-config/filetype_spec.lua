@@ -134,4 +134,21 @@ describe('nvim-config custom filetypes', function()
     vim.cmd('bwipe!')
     vim.fn.delete(file)
   end)
+
+  it('uses the table-safe Markdown inline highlight query', function()
+    local source = debug.getinfo(1, 'S').source:sub(2)
+    local root = vim.fn.fnamemodify(source, ':p:h:h:h')
+    local query_path = root .. '/queries/markdown_inline/highlights.scm'
+    local query_file = assert(io.open(query_path, 'r'))
+    local query_text = query_file:read('*a')
+    query_file:close()
+
+    assert.matches('%(code_span_delimiter%) @conceal', query_text)
+    assert.matches('%(emphasis_delimiter%) @conceal', query_text)
+    assert.matches('#set! conceal ""', query_text)
+    assert.equal(
+      vim.fn.resolve(query_path),
+      vim.fn.resolve(vim.treesitter.query.get_files('markdown_inline', 'highlights')[1])
+    )
+  end)
 end)

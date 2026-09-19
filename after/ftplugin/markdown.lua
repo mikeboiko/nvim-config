@@ -4,6 +4,7 @@ vim.cmd([[syntax match markdownError "\w\@<=\w\@="]])
 vim.opt_local.spell = true
 vim.opt_local.conceallevel = 2
 vim.opt_local.concealcursor = 'nc'
+require('config.markdown').setup_buffer(0)
 
 vim.keymap.set('n', 'ys`', function()
   filetypes.surround_markdown_paragraph_with_backticks()
