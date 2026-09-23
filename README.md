@@ -164,12 +164,11 @@ nvim --headless -u init.lua -c "qa"
 ## Automation
 
 - Install hooks with `lefthook install`
-- Run the local automation stack with `lefthook run pre-commit`
+- Run all local automation with `lefthook run pre-commit --all-files`
 
 The `pre-commit` hook runs:
 
 - staged Lua formatting
-- `stylua --check`
-- Lua syntax checks
-- the focused Plenary suite
-- a headless startup smoke test
+- staged Markdown, JSON, and YAML formatting with Prettier
+- on Lua changes: `stylua --check`, Lua syntax checks, the focused Plenary suite,
+  and a headless startup smoke test

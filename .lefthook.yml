@@ -6,16 +6,25 @@ pre-commit:
     - rebase
   commands:
     stylua-format:
+      glob: '**/*.lua'
       run: |
         staged_lua_files="$(git diff --name-only --cached --diff-filter=ACMR -- '*.lua')"
         if [ -n "$staged_lua_files" ]; then
           stylua $staged_lua_files
         fi
       stage_fixed: true
+    prettier-format:
+      glob: '**/*.{md,json,yaml,yml}'
+      run: |
+        echo "Formatting Markdown and data files with prettier..."
+        npx prettier --write {staged_files}
+      stage_fixed: true
     stylua-check:
+      glob: '**/*.lua'
       run: stylua --check init.lua lua after tests
 
     lua-syntax-check:
+      glob: '**/*.lua'
       run: |
         tmpfile="$(mktemp)"
         trap 'rm -f "$tmpfile"' EXIT
@@ -26,6 +35,7 @@ pre-commit:
         done < "$tmpfile"
 
     plenary-tests:
+      glob: '**/*.lua'
       run: |
         export PLENARY_PATH="${PLENARY_PATH:-$HOME/.local/share/nvim/lazy/plenary.nvim}"
         if [ ! -d "$PLENARY_PATH" ]; then
@@ -37,4 +47,5 @@ pre-commit:
           -c "qa"
 
     startup-smoke:
+      glob: '**/*.lua'
       run: nvim --headless -u init.lua -c "qa"
