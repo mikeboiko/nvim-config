@@ -111,6 +111,7 @@ return {
     -- Generate a commit message in this Copilot session, then run the shared gap workflow.
     vim.g.CopilotCommitMsg = function(dir)
       local gap_script = vim.fn.expand('~/git/Linux/git/gap')
+      local terminal = require('config.terminal')
       if vim.fn.executable(gap_script) ~= 1 then
         vim.notify('git/gap is not executable: ' .. gap_script, vim.log.levels.ERROR)
         return
@@ -127,11 +128,12 @@ return {
               return
             end
 
-            local opened, terminal_buf = pcall(function()
+            local opened, terminal_buf, terminal_win = pcall(function()
               vim.cmd('botright new')
               local buf = vim.api.nvim_get_current_buf()
+              local win = vim.api.nvim_get_current_win()
               vim.api.nvim_buf_set_var(buf, 'nvim_gap_terminal', 1)
-              return buf
+              return buf, win
             end)
             if not opened then
               local message = 'Could not open a terminal split for git/gap: ' .. tostring(terminal_buf)
@@ -143,35 +145,41 @@ return {
             local ok, job_id = pcall(vim.fn.termopen, command, {
               cwd = dir,
               on_exit = function(_, code)
-                if code == 0 then
-                  local repo = vim.fn.fnamemodify(dir, ':t')
-                  local title
-                  for line in commit_message:gmatch('[^\r\n]+') do
-                    if line:match('%S') and not line:match('^```') then
-                      title = line
-                      break
+                vim.schedule(function()
+                  if code == 0 then
+                    local repo = vim.fn.fnamemodify(dir, ':t')
+                    local title
+                    for line in commit_message:gmatch('[^\r\n]+') do
+                      if line:match('%S') and not line:match('^```') then
+                        title = line
+                        break
+                      end
                     end
-                  end
 
-                  local output = ''
-                  if vim.api.nvim_buf_is_valid(terminal_buf) then
-                    output = table.concat(vim.api.nvim_buf_get_lines(terminal_buf, 0, -1, false), '\n')
-                  end
+                    local output = ''
+                    if vim.api.nvim_buf_is_valid(terminal_buf) then
+                      output = table.concat(vim.api.nvim_buf_get_lines(terminal_buf, 0, -1, false), '\n')
+                    end
 
-                  if output:find('No changes to commit.', 1, true) then
-                    vim.notify(string.format('Gap completed (%s); no changes to commit.', repo), vim.log.levels.INFO)
+                    terminal.close_gap_terminal(terminal_buf, terminal_win)
+
+                    if output:find('No changes to commit.', 1, true) then
+                      vim.notify(string.format('Gap completed (%s); no changes to commit.', repo), vim.log.levels.INFO)
+                    else
+                      vim.notify(
+                        string.format('Gap completed (%s):\n%s', repo, title or '(no commit title)'),
+                        vim.log.levels.INFO
+                      )
+                    end
                   else
-                    vim.notify(
-                      string.format('Gap completed (%s):\n%s', repo, title or '(no commit title)'),
-                      vim.log.levels.INFO
-                    )
+                    local summary = 'git/gap failed (exit code '
+                      .. code
+                      .. '); full output remains in the terminal split.'
+                    report_gap_failure(summary)
                   end
-                else
-                  local summary = 'git/gap failed (exit code '
-                    .. code
-                    .. '); full output remains in the terminal split.'
-                  report_gap_failure(summary)
-                end
+
+                  chat.close()
+                end)
               end,
             })
 

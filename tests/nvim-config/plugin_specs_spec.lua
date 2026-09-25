@@ -41,11 +41,15 @@ describe('nvim-config plugin specs', function()
     local launches = {}
     local notifications = {}
     local echoes = {}
+    local chat_close_count = 0
     local message = 'feat(test): use session context\n\nCommit the generated message.'
 
     package.loaded.CopilotChat = {
       setup = function(options)
         setup_options = options
+      end,
+      close = function()
+        chat_close_count = chat_close_count + 1
       end,
       ask = function(chat_prompt, opts)
         prompt = chat_prompt
@@ -140,12 +144,20 @@ describe('nvim-config plugin specs', function()
       assert.are.equal(1, vim.api.nvim_buf_get_var(launches[1].buffer, 'nvim_gap_terminal'))
       assert.are.equal('Waiting for Copilot commit message.', notifications[1][1])
       assert.are.equal('Running git/gap in a terminal split.', notifications[2][1])
+      assert.are.equal(0, chat_close_count)
 
       launches[1].options.on_exit(42, 0)
+      assert.is_false(vim.api.nvim_win_is_valid(launches[1].window))
+      assert.is_false(vim.api.nvim_buf_is_valid(launches[1].buffer))
+      assert.are.equal(1, chat_close_count)
 
       vim.g.CopilotCommitMsg('/tmp/repo')
       ask_options.callback({ content = message })
+      assert.are.equal(1, chat_close_count)
       launches[2].options.on_exit(42, 1)
+      assert.is_true(vim.api.nvim_win_is_valid(launches[2].window))
+      assert.is_true(vim.api.nvim_buf_is_valid(launches[2].buffer))
+      assert.are.equal(2, chat_close_count)
     end)
 
     for index = #launches, 1, -1 do

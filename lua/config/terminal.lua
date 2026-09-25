@@ -11,6 +11,25 @@ function M.is_gap_terminal(buf)
   return buffers.get_var(buf, 'nvim_gap_terminal', 0) == 1 or buffers.get_name(buf):find(gap_path, 1, true) ~= nil
 end
 
+function M.close_gap_terminal(buf, win)
+  if not M.is_gap_terminal(buf) then
+    return false
+  end
+
+  if win and vim.api.nvim_win_is_valid(win) and vim.api.nvim_win_get_buf(win) == buf then
+    local tabpage = vim.api.nvim_win_get_tabpage(win)
+    if #vim.api.nvim_tabpage_list_wins(tabpage) > 1 then
+      vim.api.nvim_win_close(win, true)
+    end
+  end
+
+  if #vim.fn.win_findbuf(buf) == 0 then
+    return buffers.delete(buf, { force = true })
+  end
+
+  return false
+end
+
 function M.is_flow_terminal(buf)
   return buffers.get_var(buf, 'nvim_flow_terminal', 0) == 1 or buffers.get_name(buf):find('/tmp/flow', 1, true) ~= nil
 end
