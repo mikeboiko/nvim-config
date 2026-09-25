@@ -32,10 +32,29 @@ return {
   config = function()
     local chat = require('CopilotChat')
     local select = require('CopilotChat.select')
+    local luna_model = 'gpt-6-luna'
+    -- CopilotChat.nvim does not expose reasoning effort in its setup options.
+    local providers = vim.deepcopy(require('CopilotChat.config.providers'))
+    local prepare_copilot_input = providers.copilot.prepare_input
+    providers.copilot.prepare_input = function(inputs, options)
+      local request, extra_headers = prepare_copilot_input(inputs, options)
+
+      if options.model.id == luna_model then
+        if not options.model.use_responses then
+          error('GPT-6 Luna max reasoning requires the Responses API')
+        end
+
+        request.reasoning = vim.tbl_extend('force', request.reasoning or {}, { effort = 'max' })
+      end
+
+      return request, extra_headers
+    end
+
     require('CopilotChat').setup({
       debug = false,
       -- https://docs.github.com/en/copilot/reference/ai-models/supported-models#supported-ai-models-per-copilot-plan
-      model = 'gpt-6-luna',
+      model = luna_model,
+      providers = providers,
       chat_autocomplete = false,
       auto_follow_cursor = false,
       -- auto_insert_mode = true,

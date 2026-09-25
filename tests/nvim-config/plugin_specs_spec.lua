@@ -24,6 +24,7 @@ describe('nvim-config plugin specs', function()
     local spec = load_plugin('plugins.copilot-chat')
     local original_chat = package.loaded.CopilotChat
     local original_select = package.loaded['CopilotChat.select']
+    local original_providers = package.loaded['CopilotChat.config.providers']
     local original_commit_callback = vim.g.CopilotCommitMsg
     local original_quick_chat = vim.g.CopilotQuickChat
     local original_expand = vim.fn.expand
@@ -34,6 +35,7 @@ describe('nvim-config plugin specs', function()
     local original_schedule = vim.schedule
     local original_window = vim.api.nvim_get_current_win()
     local existing_commands = vim.api.nvim_get_commands({})
+    local setup_options
     local prompt
     local ask_options
     local launches = {}
@@ -42,11 +44,23 @@ describe('nvim-config plugin specs', function()
     local message = 'feat(test): use session context\n\nCommit the generated message.'
 
     package.loaded.CopilotChat = {
-      setup = function() end,
+      setup = function(options)
+        setup_options = options
+      end,
       ask = function(chat_prompt, opts)
         prompt = chat_prompt
         ask_options = opts
       end,
+    }
+    package.loaded['CopilotChat.config.providers'] = {
+      copilot = {
+        prepare_input = function(inputs, options)
+          return {
+            model = options.model.id,
+            input = inputs,
+          }, { ['x-test-header'] = 'preserved' }
+        end,
+      },
     }
     package.loaded['CopilotChat.select'] = {
       buffer = function() end,
@@ -81,6 +95,29 @@ describe('nvim-config plugin specs', function()
 
     local ok, err = pcall(function()
       spec.config()
+      assert.are.equal('gpt-6-luna', setup_options.model)
+
+      local luna_request, extra_headers = setup_options.providers.copilot.prepare_input({}, {
+        model = { id = 'gpt-6-luna', use_responses = true },
+      })
+      assert.are.same({
+        model = 'gpt-6-luna',
+        input = {},
+        reasoning = { effort = 'max' },
+      }, luna_request)
+      assert.are.same({ ['x-test-header'] = 'preserved' }, extra_headers)
+
+      local other_model_request = setup_options.providers.copilot.prepare_input({}, {
+        model = { id = 'gpt-5-mini', use_responses = true },
+      })
+      assert.are.same({ model = 'gpt-5-mini', input = {} }, other_model_request)
+
+      local supports_luna_effort, effort_error = pcall(setup_options.providers.copilot.prepare_input, {}, {
+        model = { id = 'gpt-6-luna', use_responses = false },
+      })
+      assert.is_false(supports_luna_effort)
+      assert.is_truthy(effort_error:find('requires the Responses API', 1, true))
+
       vim.g.CopilotCommitMsg('/tmp/repo')
 
       assert.is_truthy(prompt:find('#gitdiff:staged', 1, true))
@@ -122,6 +159,7 @@ describe('nvim-config plugin specs', function()
     end
     package.loaded.CopilotChat = original_chat
     package.loaded['CopilotChat.select'] = original_select
+    package.loaded['CopilotChat.config.providers'] = original_providers
     vim.g.CopilotCommitMsg = original_commit_callback
     vim.g.CopilotQuickChat = original_quick_chat
     vim.fn.expand = original_expand

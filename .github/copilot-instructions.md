@@ -76,5 +76,6 @@
   - `copilot-lua.lua` enables the service but disables Copilot's own suggestion UI
   - `blink-cmp-copilot.lua` feeds Copilot into `blink.cmp`
   - `copilot-chat.lua` configures chat prompts and commit-message helpers separately
+- CopilotChat defaults to GPT-6 Luna at maximum reasoning effort; its provider wrapper adds `reasoning.effort = 'max'` to Responses API requests because CopilotChat.nvim has no native effort option.
 - Project-local overrides are expected. `lua/config/options.lua` enables both `exrc` and `secure`, so `.nvim.lua` files in other repositories can affect runtime behavior during debugging.
 - Snippets are JSON-based and registered through `snippets/package.json`; completion pulls them in through `blink.cmp` plus `friendly-snippets`.
