@@ -82,91 +82,92 @@ return {
       end)
     end
 
-    -- Automated git commit messages
+    local function report_gap_failure(message)
+      vim.notify(message, vim.log.levels.ERROR, { title = 'git/gap' })
+      vim.schedule(function()
+        vim.api.nvim_echo({ { message, 'ErrorMsg' } }, true, {})
+      end)
+    end
+
+    -- Generate a commit message in this Copilot session, then run the shared gap workflow.
     vim.g.CopilotCommitMsg = function(dir)
+      local gap_script = vim.fn.expand('~/git/Linux/git/gap')
+      if vim.fn.executable(gap_script) ~= 1 then
+        vim.notify('git/gap is not executable: ' .. gap_script, vim.log.levels.ERROR)
+        return
+      end
+
+      vim.notify('Waiting for Copilot commit message.', vim.log.levels.INFO, { title = 'git/gap' })
       chat.ask(
-        "#gitdiff:staged Write commit message for the change with commitizen convention. Make sure the title has maximum 50 characters and message is wrapped at 72 characters. Don't include any text except for the commit message in your output, because this text will be used for automated git commit messages. Don't wrap in ```",
+        '#gitdiff:staged Write a Conventional Commit message for the staged changes. Keep the title to at most 50 characters and wrap body lines at 72 characters. Output only the commit message, without code fences or a Co-authored-by: Copilot trailer.',
         {
-          -- sticky = { '#gitdiff:unstaged' },
-          -- model = 'gpt-4.1',
           callback = function(response)
-            -- Save response to a file
-            local file_path = '/tmp/COMMIT_EDITMSG'
-            local file = io.open(file_path, 'w')
-            if file then
-              if file:write(response.content) then
-                file:close()
-              else
-                vim.notify('Failed to write to file', vim.log.levels.ERROR)
-              end
-            else
-              vim.notify('Failed to open file', vim.log.levels.ERROR)
+            local commit_message = type(response) == 'table' and response.content or nil
+            if type(commit_message) ~= 'string' or vim.trim(commit_message) == '' then
+              vim.notify('Copilot returned an empty commit message', vim.log.levels.ERROR)
+              return
             end
 
-            local stdout = {}
-            local stderr = {}
-            vim.fn.jobstart({
-              'bash',
-              '-c',
-              'unset PYTEST_ADDOPTS; git -C '
-                .. vim.fn.shellescape(dir)
-                .. ' -C '
-                .. vim.fn.shellescape(dir)
-                .. ' commit -F '
-                .. file_path
-                .. ' && git -C '
-                .. vim.fn.shellescape(dir)
-                .. ' push',
-            }, {
-              on_stdout = function(_, data)
-                if data then
-                  for _, line in ipairs(data) do
-                    if line ~= '' then
-                      table.insert(stdout, line)
-                    end
-                  end
-                end
-              end,
-              on_stderr = function(_, data)
-                if data then
-                  for _, line in ipairs(data) do
-                    if line ~= '' then
-                      table.insert(stderr, line)
-                    end
-                  end
-                end
-              end,
+            local opened, terminal_buf = pcall(function()
+              vim.cmd('botright new')
+              local buf = vim.api.nvim_get_current_buf()
+              vim.api.nvim_buf_set_var(buf, 'nvim_gap_terminal', 1)
+              return buf
+            end)
+            if not opened then
+              local message = 'Could not open a terminal split for git/gap: ' .. tostring(terminal_buf)
+              report_gap_failure(message)
+              return
+            end
+
+            local command = { 'env', '-u', 'PYTEST_ADDOPTS', gap_script, '-m', commit_message }
+            local ok, job_id = pcall(vim.fn.termopen, command, {
+              cwd = dir,
               on_exit = function(_, code)
                 if code == 0 then
                   local repo = vim.fn.fnamemodify(dir, ':t')
                   local title
-                  for line in (response.content or ''):gmatch('[^\r\n]+') do
+                  for line in commit_message:gmatch('[^\r\n]+') do
                     if line:match('%S') and not line:match('^```') then
                       title = line
                       break
                     end
                   end
-                  vim.notify(
-                    string.format('Copilot commit (%s):\n%s', repo, title or '(no commit title)'),
-                    vim.log.levels.INFO
-                  )
+
+                  local output = ''
+                  if vim.api.nvim_buf_is_valid(terminal_buf) then
+                    output = table.concat(vim.api.nvim_buf_get_lines(terminal_buf, 0, -1, false), '\n')
+                  end
+
+                  if output:find('No changes to commit.', 1, true) then
+                    vim.notify(string.format('Gap completed (%s); no changes to commit.', repo), vim.log.levels.INFO)
+                  else
+                    vim.notify(
+                      string.format('Gap completed (%s):\n%s', repo, title or '(no commit title)'),
+                      vim.log.levels.INFO
+                    )
+                  end
                 else
-                  local err_msg = table.concat(stderr, '\n')
-                  if err_msg == '' then
-                    err_msg = table.concat(stdout, '\n')
-                  end
-                  if err_msg == '' then
-                    err_msg = 'Unknown error (exit code ' .. code .. ')'
-                  end
-                  vim.notify('Copilot commit failed:\n' .. err_msg, vim.log.levels.ERROR)
+                  local summary = 'git/gap failed (exit code '
+                    .. code
+                    .. '); full output remains in the terminal split.'
+                  report_gap_failure(summary)
                 end
               end,
             })
-            -- vim.cmd("silent Git -C " .. dir .. "push")
+
+            if not ok then
+              local message = 'Failed to start git/gap: ' .. tostring(job_id)
+              report_gap_failure(message)
+            elseif job_id <= 0 then
+              local message = 'Failed to start git/gap (job ID ' .. job_id .. ').'
+              report_gap_failure(message)
+            else
+              vim.notify('Running git/gap in a terminal split.', vim.log.levels.INFO, { title = 'git/gap' })
+            end
           end,
         }
       )
-      -- chat.close()
     end
   end,
 }

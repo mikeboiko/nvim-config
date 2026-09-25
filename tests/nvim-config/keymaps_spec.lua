@@ -25,7 +25,10 @@ describe('nvim-config keymap helpers', function()
     vim.api.nvim_buf_delete(terminal_buffer, { force = true })
   end)
 
-  it('opens a tab and jumps to the last insert position for gI', function()
+  it('opens a tab and jumps to the last insert mark for gI', function()
+    local original_virtualedit = vim.o.virtualedit
+    vim.o.virtualedit = 'all'
+
     local file = vim.fn.tempname() .. '.txt'
     local fh = assert(io.open(file, 'w'))
     fh:write('alpha\nbeta\n')
@@ -36,16 +39,18 @@ describe('nvim-config keymap helpers', function()
     vim.cmd('normal! Axyz')
     vim.cmd('stopinsert')
     vim.cmd('normal! gg0')
+    local last_insert_position = vim.api.nvim_buf_get_mark(0, '^')
 
     vim.cmd('normal gI')
 
     assert.are.equal(2, vim.fn.tabpagenr('$'))
     assert.are.equal('n', vim.api.nvim_get_mode().mode)
-    assert.are.same({ 1, 7 }, vim.api.nvim_win_get_cursor(0))
+    assert.are.same(last_insert_position, vim.api.nvim_win_get_cursor(0))
 
     vim.cmd('tabonly!')
     vim.cmd('bwipe!')
     vim.fn.delete(file)
+    vim.o.virtualedit = original_virtualedit
   end)
 
   it('routes <C-q> through the save-before-quit helper', function()
@@ -100,13 +105,22 @@ describe('nvim-config keymap helpers', function()
     }, notifications)
   end)
 
-  it('routes <leader>ag through git.add_all before the commit helper', function()
+  it('saves and stages before requesting a Copilot commit message', function()
     local git = require('config.git')
     local calls = {}
+    local original_cmd = vim.cmd
     local original_notify = vim.notify
     local original_add_all = git.add_all
     local original_call_global = keymaps.call_global
     local ai_commit_map = vim.fn.maparg('<Space>ag', 'n', false, true)
+
+    vim.cmd = function(command)
+      if command == 'wa' then
+        table.insert(calls, 'write_all')
+      else
+        original_cmd(command)
+      end
+    end
 
     git.add_all = function()
       table.insert(calls, 'add_all')
@@ -124,11 +138,13 @@ describe('nvim-config keymap helpers', function()
 
     ai_commit_map.callback()
 
+    vim.cmd = original_cmd
     vim.notify = original_notify
     git.add_all = original_add_all
     keymaps.call_global = original_call_global
 
     assert.are.same({
+      'write_all',
       'add_all',
       { 'notify', 'Staged all changes in repo (git add -A)' },
       { 'CopilotCommitMsg', '/tmp/repo' },

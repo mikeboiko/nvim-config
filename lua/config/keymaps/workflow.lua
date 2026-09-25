@@ -25,13 +25,15 @@ function M.register(api)
   end, { silent = true, desc = 'Git add/commit/push (gap)' })
 
   vim.keymap.set('n', '<leader>ag', function()
+    vim.cmd('wa')
+
     local git_dir = git_add_all_or_notify()
     if not git_dir then
       return
     end
 
     api.call_global('CopilotCommitMsg', git_dir)
-  end, { silent = true, desc = 'AI-generated commit message (ag)' })
+  end, { silent = true, desc = 'Copilot commit and push via gap (ag)' })
 
   vim.keymap.set('n', '<leader>rd', function()
     shell.open_git_diff_in_terminal()

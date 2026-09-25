@@ -8,7 +8,7 @@ function M.is_terminal(buf)
 end
 
 function M.is_gap_terminal(buf)
-  return buffers.get_name(buf):find(gap_path, 1, true) ~= nil
+  return buffers.get_var(buf, 'nvim_gap_terminal', 0) == 1 or buffers.get_name(buf):find(gap_path, 1, true) ~= nil
 end
 
 function M.is_flow_terminal(buf)

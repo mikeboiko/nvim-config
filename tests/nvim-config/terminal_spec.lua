@@ -85,6 +85,45 @@ describe('nvim-config terminal helpers', function()
     end))
   end)
 
+  it('auto-closes a marked gap terminal with a zero exit code', function()
+    vim.cmd('enew')
+    local buf = vim.api.nvim_get_current_buf()
+    vim.api.nvim_buf_set_name(buf, 'term://test//env')
+    vim.api.nvim_buf_set_var(buf, 'nvim_gap_terminal', 1)
+    vim.api.nvim_buf_set_lines(0, 0, -1, false, {
+      'running gap',
+      '[Process exited 0]',
+      '',
+    })
+
+    terminal.on_term_close(buf)
+
+    assert.is_true(vim.wait(200, function()
+      return not vim.api.nvim_buf_is_valid(buf)
+    end))
+  end)
+
+  it('keeps a failed marked gap terminal open', function()
+    vim.cmd('enew')
+    local buf = vim.api.nvim_get_current_buf()
+    vim.api.nvim_buf_set_name(buf, 'term://test//env')
+    vim.api.nvim_buf_set_var(buf, 'nvim_gap_terminal', 1)
+    vim.api.nvim_buf_set_lines(0, 0, -1, false, {
+      'commit hook failed',
+      '[Process exited 1]',
+      '',
+    })
+
+    terminal.on_term_close(buf)
+
+    assert.is_false(vim.wait(80, function()
+      return not vim.api.nvim_buf_is_valid(buf)
+    end))
+    assert.is_true(vim.api.nvim_buf_is_valid(buf))
+
+    vim.cmd('bwipe!')
+  end)
+
   it('keeps a flow terminal buffer when the exit code is non-zero', function()
     vim.cmd('enew')
     local buf = vim.api.nvim_get_current_buf()
