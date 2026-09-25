@@ -31,7 +31,6 @@ describe('nvim-config plugin specs', function()
     local original_executable = vim.fn.executable
     local original_termopen = vim.fn.termopen
     local original_notify = vim.notify
-    local original_echo = vim.api.nvim_echo
     local original_schedule = vim.schedule
     local original_window = vim.api.nvim_get_current_win()
     local existing_commands = vim.api.nvim_get_commands({})
@@ -40,7 +39,6 @@ describe('nvim-config plugin specs', function()
     local ask_options
     local launches = {}
     local notifications = {}
-    local echoes = {}
     local chat_close_count = 0
     local message = 'feat(test): use session context\n\nCommit the generated message.'
 
@@ -87,11 +85,8 @@ describe('nvim-config plugin specs', function()
       })
       return 42
     end
-    vim.notify = function(text, level)
-      table.insert(notifications, { text, level })
-    end
-    vim.api.nvim_echo = function(chunks, history, opts)
-      table.insert(echoes, { chunks, history, opts })
+    vim.notify = function(text, level, opts)
+      table.insert(notifications, { text, level, opts })
     end
     vim.schedule = function(callback)
       callback()
@@ -142,22 +137,32 @@ describe('nvim-config plugin specs', function()
       }, launches[1].command)
       assert.are.equal('/tmp/repo', launches[1].options.cwd)
       assert.are.equal(1, vim.api.nvim_buf_get_var(launches[1].buffer, 'nvim_gap_terminal'))
-      assert.are.equal('Waiting for Copilot commit message.', notifications[1][1])
-      assert.are.equal('Running git/gap in a terminal split.', notifications[2][1])
+      assert.are.equal(0, #notifications)
       assert.are.equal(0, chat_close_count)
 
       launches[1].options.on_exit(42, 0)
       assert.is_false(vim.api.nvim_win_is_valid(launches[1].window))
       assert.is_false(vim.api.nvim_buf_is_valid(launches[1].buffer))
       assert.are.equal(1, chat_close_count)
+      assert.are.same({
+        'Gap completed (repo):\nfeat(test): use session context',
+        vim.log.levels.INFO,
+        { title = 'git/gap' },
+      }, notifications[1])
 
       vim.g.CopilotCommitMsg('/tmp/repo')
       ask_options.callback({ content = message })
+      assert.are.equal(1, #notifications)
       assert.are.equal(1, chat_close_count)
       launches[2].options.on_exit(42, 1)
       assert.is_true(vim.api.nvim_win_is_valid(launches[2].window))
       assert.is_true(vim.api.nvim_buf_is_valid(launches[2].buffer))
       assert.are.equal(2, chat_close_count)
+      assert.are.same({
+        'git/gap failed (exit code 1); full output remains in the terminal split.',
+        vim.log.levels.ERROR,
+        { title = 'git/gap' },
+      }, notifications[2])
     end)
 
     for index = #launches, 1, -1 do
@@ -178,7 +183,6 @@ describe('nvim-config plugin specs', function()
     vim.fn.executable = original_executable
     vim.fn.termopen = original_termopen
     vim.notify = original_notify
-    vim.api.nvim_echo = original_echo
     vim.schedule = original_schedule
     if not existing_commands.CopilotChatBuffer then
       pcall(vim.api.nvim_del_user_command, 'CopilotChatBuffer')
@@ -188,18 +192,7 @@ describe('nvim-config plugin specs', function()
     end
 
     assert.is_true(ok, err)
-    assert.are.same({
-      { 'Waiting for Copilot commit message.', vim.log.levels.INFO },
-      { 'Running git/gap in a terminal split.', vim.log.levels.INFO },
-      { 'Gap completed (repo):\nfeat(test): use session context', vim.log.levels.INFO },
-      { 'Waiting for Copilot commit message.', vim.log.levels.INFO },
-      { 'Running git/gap in a terminal split.', vim.log.levels.INFO },
-    }, { notifications[1], notifications[2], notifications[3], notifications[4], notifications[5] })
-    assert.is_truthy(notifications[6][1]:find('git/gap failed (exit code 1)', 1, true))
-    assert.is_truthy(notifications[6][1]:find('full output remains in the terminal split', 1, true))
-    assert.are.equal(vim.log.levels.ERROR, notifications[6][2])
-    assert.is_true(echoes[1][2])
-    assert.is_truthy(echoes[1][1][1][1]:find('terminal split', 1, true))
+    assert.are.equal(2, #notifications)
   end)
 
   it('automatically installs the available Roslyn package after refreshing Mason', function()

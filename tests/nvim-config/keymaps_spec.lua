@@ -146,7 +146,6 @@ describe('nvim-config keymap helpers', function()
     assert.are.same({
       'write_all',
       'add_all',
-      { 'notify', 'Staged all changes in repo (git add -A)' },
       { 'CopilotCommitMsg', '/tmp/repo' },
     }, calls)
   end)

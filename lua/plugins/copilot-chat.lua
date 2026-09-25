@@ -103,9 +103,6 @@ return {
 
     local function report_gap_failure(message)
       vim.notify(message, vim.log.levels.ERROR, { title = 'git/gap' })
-      vim.schedule(function()
-        vim.api.nvim_echo({ { message, 'ErrorMsg' } }, true, {})
-      end)
     end
 
     -- Generate a commit message in this Copilot session, then run the shared gap workflow.
@@ -113,18 +110,17 @@ return {
       local gap_script = vim.fn.expand('~/git/Linux/git/gap')
       local terminal = require('config.terminal')
       if vim.fn.executable(gap_script) ~= 1 then
-        vim.notify('git/gap is not executable: ' .. gap_script, vim.log.levels.ERROR)
+        report_gap_failure('git/gap is not executable: ' .. gap_script)
         return
       end
 
-      vim.notify('Waiting for Copilot commit message.', vim.log.levels.INFO, { title = 'git/gap' })
       chat.ask(
         '#gitdiff:staged Write a Conventional Commit message for the staged changes. Keep the title to at most 50 characters and wrap body lines at 72 characters. Output only the commit message, without code fences or a Co-authored-by: Copilot trailer.',
         {
           callback = function(response)
             local commit_message = type(response) == 'table' and response.content or nil
             if type(commit_message) ~= 'string' or vim.trim(commit_message) == '' then
-              vim.notify('Copilot returned an empty commit message', vim.log.levels.ERROR)
+              report_gap_failure('Copilot returned an empty commit message')
               return
             end
 
@@ -164,11 +160,16 @@ return {
                     terminal.close_gap_terminal(terminal_buf, terminal_win)
 
                     if output:find('No changes to commit.', 1, true) then
-                      vim.notify(string.format('Gap completed (%s); no changes to commit.', repo), vim.log.levels.INFO)
+                      vim.notify(
+                        string.format('Gap completed (%s); no changes to commit.', repo),
+                        vim.log.levels.INFO,
+                        { title = 'git/gap' }
+                      )
                     else
                       vim.notify(
                         string.format('Gap completed (%s):\n%s', repo, title or '(no commit title)'),
-                        vim.log.levels.INFO
+                        vim.log.levels.INFO,
+                        { title = 'git/gap' }
                       )
                     end
                   else
@@ -189,8 +190,6 @@ return {
             elseif job_id <= 0 then
               local message = 'Failed to start git/gap (job ID ' .. job_id .. ').'
               report_gap_failure(message)
-            else
-              vim.notify('Running git/gap in a terminal split.', vim.log.levels.INFO, { title = 'git/gap' })
             end
           end,
         }

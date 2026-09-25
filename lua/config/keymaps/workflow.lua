@@ -3,20 +3,23 @@ local shell = require('config.shell')
 
 local M = {}
 
-local function git_add_all_or_notify()
+local function stage_all_changes(notify_success)
   local ok, git_dir_or_error = git.add_all()
   if not ok then
     vim.notify(git_dir_or_error, vim.log.levels.ERROR)
     return nil
   end
 
-  vim.notify('Staged all changes in ' .. vim.fn.fnamemodify(git_dir_or_error, ':t') .. ' (git add -A)')
+  if notify_success then
+    vim.notify('Staged all changes in ' .. vim.fn.fnamemodify(git_dir_or_error, ':t') .. ' (git add -A)')
+  end
+
   return git_dir_or_error
 end
 
 function M.register(api)
   vim.keymap.set('n', '<leader>ga', function()
-    git_add_all_or_notify()
+    stage_all_changes(true)
   end, { silent = true, desc = 'Git add -A (ga)' })
 
   vim.keymap.set('n', '<leader>gap', function()
@@ -27,7 +30,7 @@ function M.register(api)
   vim.keymap.set('n', '<leader>ag', function()
     vim.cmd('wa')
 
-    local git_dir = git_add_all_or_notify()
+    local git_dir = stage_all_changes(false)
     if not git_dir then
       return
     end
