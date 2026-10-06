@@ -148,8 +148,8 @@
     "commit": "531b807b8f0d6f75016a0ee1e0cd5ce2086e9d95"
   },
   "nvim-treesitter": {
-    "branch": "my-patches",
-    "commit": "af3f2ab5a85fb2fbc4dd3992002c6e4456e9212e"
+    "branch": "main",
+    "commit": "e289100ff98969e118c702199d88b764ce9e7fdf"
   },
   "nvim-treesitter-context": {
     "branch": "master",

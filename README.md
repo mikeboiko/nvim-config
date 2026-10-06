@@ -24,7 +24,8 @@ A Lua-only Neovim configuration focused on fast navigation, solid language tooli
 - Markdown workflow: `selimacerbas/markdown-preview.nvim`, `img-paste.vim`
 - Markdown preview uses per-instance servers, so `:MarkdownPreview` always opens a fresh preview instead of silently attaching to an older Neovim session.
 - Markdown conceal hides emphasis, inline-code, and link markup and adds table-aware inline padding so pipe-table columns stay aligned.
-- Markdown folds use `nvim-origami` with a `zx` refresh on markdown `InsertLeave` and `TextChanged` events to recover clean fold state after edits.
+- Markdown prose is spell-checked while fenced and indented code blocks are excluded through Tree-sitter.
+- Markdown folds use a custom Tree-sitter section query to retain trailing blank lines, with `nvim-origami` and a `zx` refresh on markdown `InsertLeave` and `TextChanged` events.
 - The `blink.cmp` completion menu is suppressed for markdown, so suggestions from every source stay hidden while writing prose (manual completion triggers still work).
 - Language tooling: `nvim-lspconfig`, `mason.nvim`, `conform.nvim`, `nvim-treesitter`
 - Testing and debugging: `neotest`, `neotest-dotnet`, `neotest-python`, `nvim-dap`, `nvim-dap-ui`
