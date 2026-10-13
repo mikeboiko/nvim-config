@@ -390,6 +390,6 @@ describe('nvim-config plugin specs', function()
 
     assert.is_table(setup_opts)
     assert.equal('multi', setup_opts.instance_mode)
-    assert.equal('rust', setup_opts.mermaid_renderer)
+    assert.equal('js', setup_opts.mermaid_renderer)
   end)
 end)

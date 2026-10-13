@@ -23,7 +23,7 @@ return {
     local mp = require('markdown_preview')
     mp.setup({
       instance_mode = 'multi',
-      mermaid_renderer = 'rust',
+      mermaid_renderer = 'js',
     })
 
     vim.api.nvim_create_autocmd('BufDelete', {

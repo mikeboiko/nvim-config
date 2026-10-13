@@ -77,7 +77,7 @@ different virtual environments in the same Neovim session.
 - `stylua` for Lua formatting and style checks
 - `ctags` for the Gutentags tag workflow
 - `make` for building `CopilotChat.nvim`
-- `mmdr` (`cargo install mermaid-rs-renderer`) for Rust-backed Mermaid rendering in `markdown-preview.nvim`
+- Optional: `mmdr` (`cargo install mermaid-rs-renderer`) for Rust-backed Mermaid rendering in `markdown-preview.nvim`; the configured renderer uses browser-side Mermaid.js
 - `tree-sitter` CLI for compiling Tree-sitter parsers
 - `unzip` for extracting Mason packages
 - .NET SDK for the C# Roslyn language server
