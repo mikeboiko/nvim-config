@@ -49,7 +49,7 @@
   },
   "fzf-lua": {
     "branch": "main",
-    "commit": "48d7c3db291a2c7c1825905c227a6bc81c83b837"
+    "commit": "d9725e6446b82ed38186686fe9d4f9826a98c269"
   },
   "gruvbox.nvim": {
     "branch": "main",
@@ -63,10 +63,6 @@
     "branch": "master",
     "commit": "88bb395f4a8afc31f5c49352776ebbc451da8669"
   },
-  "kitehost.nvim": {
-    "branch": "main",
-    "commit": "4cb5c94a84cc653e0b32e0c9aed95465a36fc94d"
-  },
   "lazy.nvim": {
     "branch": "main",
     "commit": "306a05526ada86a7b30af95c5cc81ffba93fef97"
@@ -77,7 +73,7 @@
   },
   "live-server.nvim": {
     "branch": "main",
-    "commit": "4cb5c94a84cc653e0b32e0c9aed95465a36fc94d"
+    "commit": "c13c041aa91e6035b9a40ab531b73aaae8e0bbc0"
   },
   "log-highlight.nvim": {
     "branch": "main",
@@ -93,7 +89,7 @@
   },
   "markdown-preview.nvim": {
     "branch": "main",
-    "commit": "dded03dc6cce87364b48260b2ffbace575a6add7"
+    "commit": "fafb5c99b1cc928dc5c25d5fd49a82145d247602"
   },
   "mason.nvim": {
     "branch": "main",
@@ -109,7 +105,7 @@
   },
   "neotest-dotnet": {
     "branch": "main",
-    "commit": "e27c67a856ce67cc968b773d01a35ec07459bb8b"
+    "commit": "16e90478a11089d62171b5384f1ecd07416ce2cc"
   },
   "neotest-python": {
     "branch": "master",
@@ -133,7 +129,7 @@
   },
   "nvim-lsp-file-operations": {
     "branch": "master",
-    "commit": "ba0c27cd0dbee7b421ba7b31a4cb68770032b9fd"
+    "commit": "0b939aff068c859b6f8cdbc3b3e676d038e6e15d"
   },
   "nvim-lspconfig": {
     "branch": "master",
@@ -169,7 +165,7 @@
   },
   "nvim-web-devicons": {
     "branch": "master",
-    "commit": "58447c1fca354bbf184425e4a8d01deecbd6f3c4"
+    "commit": "ec309a0eaff6ea967e58c275996155ab5c16938d"
   },
   "one-small-step-for-vimkind": {
     "branch": "main",
@@ -193,7 +189,7 @@
   },
   "schemastore.nvim": {
     "branch": "main",
-    "commit": "a470cbcd112e717a8955efee3929bd59f7473c7b"
+    "commit": "9ec57eeac6e2e14b7b9b9e74dc8b0ca4954a684b"
   },
   "snacks.nvim": {
     "branch": "main",
