@@ -89,6 +89,25 @@ describe('nvim-config comment helpers', function()
     package.loaded['ts_context_commentstring'] = original_ts_context_commentstring
   end)
 
+  it('uses the DOSINI buffer commentstring instead of Tree-sitter context comments', function()
+    local original_ts_context_commentstring = package.loaded['ts_context_commentstring']
+
+    package.loaded['ts_context_commentstring'] = {
+      calculate_commentstring = function()
+        return '; %s'
+      end,
+    }
+
+    vim.cmd('enew')
+    vim.cmd('setfiletype dosini')
+
+    assert.are.equal('# %s', vim.bo.commentstring)
+    assert.are.equal('# %s', comments.get_commentstring())
+
+    vim.cmd('bwipe!')
+    package.loaded['ts_context_commentstring'] = original_ts_context_commentstring
+  end)
+
   it('prompts for an inline comment and restores autopairs state', function()
     local original_user_input = comments.user_input
 

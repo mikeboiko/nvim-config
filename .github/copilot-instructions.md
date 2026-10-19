@@ -71,7 +71,7 @@
   - Tree-sitter indentation is skipped for `c_sharp` in `lua/plugins/nvim-treesitter.lua`
   - `after/ftplugin/cs.lua` forces `cindent`
 - Custom filetypes can use a multi-file Lua pattern. `sebol` is the example now: detection in `after/ftdetect/sebol.lua`, filetype-local defaults in `after/ftplugin/sebol.lua`, and custom syntax loaded from `lua/config/filetypes.lua`.
-- New filetype-local defaults should land in `after/ftplugin/*.lua`; for example, custom commentstrings now live there for `kusto`, `sebol`, `autohotkey`, and `vader`.
+- New filetype-local defaults should land in `after/ftplugin/*.lua`; for example, custom commentstrings live there for `kusto`, `sebol`, `autohotkey`, `vader`, and `dosini`.
 - Copilot is split across multiple modules:
   - `copilot-lua.lua` enables the service but disables Copilot's own suggestion UI
   - `blink-cmp-copilot.lua` feeds Copilot into `blink.cmp`

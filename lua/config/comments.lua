@@ -15,6 +15,10 @@ local function get_context_commentstring()
 end
 
 function M.get_commentstring()
+  if vim.bo.filetype == 'dosini' then
+    return vim.bo.commentstring
+  end
+
   local commentstring = get_context_commentstring()
 
   if commentstring == nil or commentstring == vim.NIL then

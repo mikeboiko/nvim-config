@@ -45,7 +45,7 @@ This config is set up for everyday work across:
 - INI / DOSINI
 - YAML / JSON / TOML / Bash
 
-Generic `.conf` filenames are detected as `conf`; INI-style files should include `# vim: set ft=dosini:` to select the `dosini` filetype and its `ini` Tree-sitter parser.
+Generic `.conf` filenames are detected as `conf`; INI-style files should include `# vim: set ft=dosini:` to select the `dosini` filetype and its `ini` Tree-sitter parser. DOSINI comments use `#`.
 
 Roslyn powers the C# workflow. Mason refreshes the configured registries and installs
 the available `roslyn-nightly` package (falling back to `roslyn`) when it is
