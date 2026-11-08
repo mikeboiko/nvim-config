@@ -392,4 +392,79 @@ describe('nvim-config plugin specs', function()
     assert.equal('multi', setup_opts.instance_mode)
     assert.equal('js', setup_opts.mermaid_renderer)
   end)
+
+  it('guards csvview overlay statuscolumn lines outside the source buffer', function()
+    local spec = dofile(root .. '/lua/plugins/csvview.lua')
+    local original_csvview = package.loaded.csvview
+    local original_win_overlay = package.loaded['csvview.win_overlay']
+    local original_statuscolumn_eval = _G.csvview_statuscolumn_eval
+    local original_buf = vim.api.nvim_get_current_buf()
+    local source_win = vim.api.nvim_get_current_win()
+    local source_buf = vim.api.nvim_create_buf(false, true)
+    local overlay_buf = vim.api.nvim_create_buf(false, true)
+    local overlay_win
+    local statuscolumn_calls = 0
+    local original_statuscolumn
+
+    vim.api.nvim_buf_set_lines(source_buf, 0, -1, false, { 'one', 'two' })
+    vim.api.nvim_buf_set_lines(overlay_buf, 0, -1, false, { '1', '2', '3', '4', '5' })
+    package.loaded['csvview.win_overlay'] = {
+      statuscolumn = function()
+        statuscolumn_calls = statuscolumn_calls + 1
+        return tostring(vim.v.lnum)
+      end,
+    }
+    original_statuscolumn = package.loaded['csvview.win_overlay'].statuscolumn
+    package.loaded.csvview = { setup = function() end }
+
+    local ok, err = pcall(function()
+      spec.config()
+      assert.is_not.equal(original_statuscolumn, package.loaded['csvview.win_overlay'].statuscolumn)
+      vim.api.nvim_win_set_buf(source_win, source_buf)
+      overlay_win = vim.api.nvim_open_win(overlay_buf, false, {
+        relative = 'editor',
+        row = 0,
+        col = 0,
+        width = 20,
+        height = 5,
+      })
+
+      assert.equal(2, vim.api.nvim_buf_line_count(vim.api.nvim_win_get_buf(source_win)))
+      assert.equal(5, vim.api.nvim_buf_line_count(vim.api.nvim_win_get_buf(overlay_win)))
+      _G.csvview_statuscolumn_eval = function()
+        return package.loaded['csvview.win_overlay'].statuscolumn(source_win)
+      end
+      local format = '%{v:lua.csvview_statuscolumn_eval()}'
+      local out_of_range = vim.api.nvim_eval_statusline(format, {
+        winid = overlay_win,
+        use_statuscol_lnum = 5,
+      })
+      assert.equal('', out_of_range.str)
+      assert.equal(0, statuscolumn_calls)
+
+      local in_range = vim.api.nvim_eval_statusline(format, {
+        winid = overlay_win,
+        use_statuscol_lnum = 2,
+      })
+      assert.equal('2', in_range.str)
+      assert.equal(1, statuscolumn_calls)
+    end)
+
+    if overlay_win and vim.api.nvim_win_is_valid(overlay_win) then
+      vim.api.nvim_win_close(overlay_win, true)
+    end
+    if vim.api.nvim_win_is_valid(source_win) then
+      vim.api.nvim_win_set_buf(source_win, original_buf)
+    end
+    for _, bufnr in ipairs({ source_buf, overlay_buf }) do
+      if vim.api.nvim_buf_is_valid(bufnr) then
+        vim.api.nvim_buf_delete(bufnr, { force = true })
+      end
+    end
+    package.loaded.csvview = original_csvview
+    package.loaded['csvview.win_overlay'] = original_win_overlay
+    _G.csvview_statuscolumn_eval = original_statuscolumn_eval
+
+    assert.is_true(ok, err)
+  end)
 end)
