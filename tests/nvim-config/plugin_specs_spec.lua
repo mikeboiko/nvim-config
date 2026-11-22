@@ -4,8 +4,10 @@ local plugin_files = vim.fn.glob(root .. '/lua/plugins/*.lua', false, true)
 
 local function load_plugin(module)
   package.loaded[module] = nil
+  local plugin_name = module:match('^plugins%.(.+)$')
+  assert.is_string(plugin_name)
 
-  local ok, spec = pcall(require, module)
+  local ok, spec = pcall(dofile, root .. '/lua/plugins/' .. plugin_name .. '.lua')
   assert.is_true(ok, module)
   assert.is_table(spec)
 
@@ -18,6 +20,65 @@ describe('nvim-config plugin specs', function()
       local module = 'plugins.' .. vim.fn.fnamemodify(path, ':t:r')
       load_plugin(module)
     end
+  end)
+
+  it('configures the AutoHotkey v2 LSP with an ahk2 protocol language ID', function()
+    local spec = load_plugin('plugins.lspconfig')
+    local original_create_augroup = vim.api.nvim_create_augroup
+    local original_create_autocmd = vim.api.nvim_create_autocmd
+    local original_keymap_set = vim.keymap.set
+    local original_lsp_config = vim.lsp.config
+    local original_lsp_enable = vim.lsp.enable
+    local original_python = package.loaded['config.python']
+    local original_schemastore = package.loaded.schemastore
+    local configured = {}
+    local enabled = {}
+
+    package.loaded['config.python'] = {
+      apply_basedpyright_settings = function() end,
+      project_basedpyright_cmd = function()
+        return nil
+      end,
+    }
+    package.loaded.schemastore = {
+      json = {
+        schemas = function()
+          return {}
+        end,
+      },
+      yaml = {
+        schemas = function()
+          return {}
+        end,
+      },
+    }
+    vim.api.nvim_create_augroup = function()
+      return 1
+    end
+    vim.api.nvim_create_autocmd = function() end
+    vim.keymap.set = function() end
+    vim.lsp.config = function(name, cfg)
+      configured[name] = cfg
+    end
+    vim.lsp.enable = function(name)
+      table.insert(enabled, name)
+    end
+
+    local ok, err = pcall(spec.config)
+
+    vim.api.nvim_create_augroup = original_create_augroup
+    vim.api.nvim_create_autocmd = original_create_autocmd
+    vim.keymap.set = original_keymap_set
+    vim.lsp.config = original_lsp_config
+    vim.lsp.enable = original_lsp_enable
+    package.loaded['config.python'] = original_python
+    package.loaded.schemastore = original_schemastore
+
+    assert.is_true(ok, err)
+    assert.are.same({ 'autohotkey' }, configured.autohotkey_lsp.filetypes)
+    assert.are.equal('ahk2', configured.autohotkey_lsp.get_language_id(0, 'autohotkey'))
+    assert.are.equal('Warn', configured.autohotkey_lsp.init_options.ActionWhenV1IsDetected)
+    assert.is_truthy(vim.tbl_contains(enabled, 'autohotkey_lsp'))
   end)
 
   it('passes Copilot commit messages to git/gap from the repository root', function()

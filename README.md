@@ -39,11 +39,22 @@ This config is set up for everyday work across:
 - Python
 - TypeScript / JavaScript / Vue
 - C#
+- AutoHotkey v2 (`.ahk`, `.ah2`, `.ahk2`)
 - Go
 - SQL
 - Markdown
 - INI / DOSINI
 - YAML / JSON / TOML / Bash
+
+Install the pinned AutoHotkey v2 language server with:
+
+```vim
+:MasonInstall autohotkey_lsp@v3.1.1
+```
+
+Pinning `v3.1.1` keeps the editor on a known AutoHotkey v2 server release and
+avoids compatibility drift. The server is configured as `ahk2` and reports
+detected v1 scripts instead of silently parsing them as v2.
 
 Generic `.conf` filenames are detected as `conf`; INI-style files should include `# vim: set ft=dosini:` to select the `dosini` filetype and its `ini` Tree-sitter parser. DOSINI comments use `#`.
 

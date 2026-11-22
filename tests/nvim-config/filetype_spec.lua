@@ -2,6 +2,7 @@ local source = debug.getinfo(1, 'S').source:sub(2)
 local root = vim.fn.fnamemodify(source, ':p:h:h:h')
 local kql_ftdetect = root .. '/after/ftdetect/kql.lua'
 local sebol_ftdetect = root .. '/after/ftdetect/sebol.lua'
+local autohotkey_ftdetect = root .. '/after/ftdetect/autohotkey.lua'
 local filetypes = require('config.filetypes')
 
 local function write_file(path, contents)
@@ -11,6 +12,24 @@ local function write_file(path, contents)
 end
 
 describe('nvim-config custom filetypes', function()
+  it('detects AutoHotkey v2 extensions and preserves the existing buffer behavior', function()
+    dofile(autohotkey_ftdetect)
+
+    for _, extension in ipairs({ '.ahk', '.ah2', '.ahk2' }) do
+      local file = vim.fn.tempname() .. extension
+      write_file(file, 'MsgBox "hello"\n')
+
+      vim.cmd('edit ' .. vim.fn.fnameescape(file))
+      assert.are.equal('autohotkey', vim.bo.filetype)
+      assert.are.equal(';%s', vim.bo.commentstring)
+      assert.are.equal('autohotkey', vim.b.current_syntax)
+      assert.are.equal(1, vim.fn.hlexists('autohotkeyComment'))
+
+      vim.cmd('bwipe!')
+      vim.fn.delete(file)
+    end
+  end)
+
   it('detects sebol files and applies local tab settings', function()
     dofile(sebol_ftdetect)
 

@@ -41,6 +41,18 @@ return {
     vim.lsp.config('bashls', { filetypes = { 'bash', 'sh' } })
     vim.lsp.enable('bashls')
 
+    -- AutoHotkey v2
+    vim.lsp.config('autohotkey_lsp', {
+      filetypes = { 'autohotkey' },
+      get_language_id = function(_, _)
+        return 'ahk2'
+      end,
+      init_options = {
+        ActionWhenV1IsDetected = 'Warn',
+      },
+    })
+    vim.lsp.enable('autohotkey_lsp')
+
     -- Used for formatting and linting
     -- https://docs.astral.sh/ruff/editors/setup/#neovim
     vim.lsp.config('ruff', {
